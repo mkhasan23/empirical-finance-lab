@@ -2,7 +2,7 @@
 
 **Audit-first research software for credible, transparent, and reproducible empirical finance.**
 
-> **Stage IV / pre-alpha:** The repository now contains a validated Python numerical core that reproduces the frozen Stage III reference corpus. It is **not yet** a formal scholarly release or public web application; Pyodide/browser parity and release validation remain outstanding.
+> **Stage V CI candidate / pre-alpha:** Stage III and Stage IV remain the validated scientific baseline. A browser-runtime candidate now wraps the exact Python core through a pinned Pyodide module Web Worker. Stage V is **not accepted** until one commit passes Stage III, Stage IV, Stage V preflight, Chromium, Firefox, and WebKit.
 
 ## Scientific workflow
 
@@ -10,7 +10,7 @@
 
 The first module is the **Audit-First Event Study Analyzer** for one security and one event using daily returns. Its purpose is not merely to calculate AR/CAR, but to expose data validity, model assumptions, specification sensitivity, placebo evidence, inference assumptions, and reproducibility metadata.
 
-## Current Stage IV core
+## Current scientific core and Stage V CI candidate
 
 Implemented in `src/empirical_finance_lab/`:
 
@@ -24,7 +24,8 @@ Implemented in `src/empirical_finance_lab/`:
 - prespecified robustness matrix;
 - deterministic audit rules and Referee Mode;
 - RawFileHash, CanonicalDataHash, SpecHash, AnalysisID, and ExecutionID;
-- timeout/stale-execution lifecycle guards for later browser integration.
+- timeout/stale-execution lifecycle guards;
+- pinned Pyodide module-Worker browser candidate with cross-runtime parity/privacy gates.
 
 ## Validation authority
 
@@ -36,6 +37,7 @@ Run:
 python tools/check_corpus_integrity.py
 pytest -q
 python tools/check_stage4_gate.py
+python tools/check_stage5_static_gate.py
 ```
 
 The Stage IV CI workflow pins the Stage III reference numerical environment for the gate: Python 3.13, NumPy 2.3.5, and SciPy 1.17.0.

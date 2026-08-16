@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.0 - Stage V browser-runtime CI candidate (2026-08-16)
+
+- Added a pinned Pyodide module Web Worker around the authoritative Stage IV Python core; no second econometric implementation was created.
+- Added strict browser-vs-Node TypeScript boundaries and explicit Vitest-vs-Playwright test discovery boundaries.
+- Added SHA-256 source-bundle verification, same-origin core enforcement, row/permutation guards, cancellation, stale-result rejection, worker-error propagation, a 45-second scientific watchdog, and a 120-second progress-aware initialization stall watchdog.
+- Added representative CPython-to-Pyodide parity, zero-analysis-network privacy checks, and isolated Chromium/Firefox/WebKit CI jobs.
+- Stage V scientific browser assets are generated once in preflight under the frozen Stage IV Python environment and transferred unchanged to all browser jobs using GitHub Actions artifacts. Browser jobs perform pure Vite builds and do not regenerate CPython reference outcomes.
+- Generated Stage V browser JSON payloads are derived artifacts and are not committed as source authority.
+- Stage III validation fixtures and the Stage IV Python numerical core remain unchanged.
+- Status remains **CI candidate** until the same commit passes Stage III, Stage IV, Stage V preflight, Chromium, Firefox, and WebKit.
+
 ## 0.0.0 - Stage IV numerical core (2026-08-16)
 
 - Implemented the authoritative Python event-study numerical core against the frozen Stage III corpus.
