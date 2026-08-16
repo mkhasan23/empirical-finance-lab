@@ -85,6 +85,12 @@
       ]
     },
     "placebo": {
+      "additionalProperties": true,
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        }
+      },
       "type": "object"
     },
     "return_units": {
@@ -93,13 +99,26 @@
         "percent"
       ]
     },
+    "robustness_models": {
+      "items": {
+        "enum": [
+          "market_model",
+          "market_adjusted"
+        ]
+      },
+      "maxItems": 2,
+      "type": "array",
+      "uniqueItems": true
+    },
     "robustness_windows": {
       "items": {
         "$ref": "#/$defs/window"
       },
+      "maxItems": 3,
       "type": "array"
     },
     "schema_version": {
+      "const": "0.1.0",
       "type": "string"
     }
   },

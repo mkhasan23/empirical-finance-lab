@@ -24,6 +24,9 @@
     "results": {
       "type": "object"
     },
+    "rng": {
+      "type": "object"
+    },
     "software_version": {
       "type": "string"
     }
@@ -34,7 +37,8 @@
     "execution_id",
     "hashes",
     "analysis_specification",
-    "environment"
+    "environment",
+    "rng"
   ],
   "title": "EFL ReproducibilityManifest",
   "type": "object"

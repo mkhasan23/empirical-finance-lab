@@ -14,14 +14,26 @@ keywords = ["empirical finance", "event study", "econometrics", "reproducibility
 classifiers = [
   "Development Status :: 2 - Pre-Alpha",
   "Intended Audience :: Science/Research",
-  "License :: OSI Approved :: BSD License",
   "Programming Language :: Python :: 3",
   "Topic :: Scientific/Engineering",
 ]
-dependencies = []
+dependencies = [
+  "numpy>=2.3,<2.4",
+  "scipy>=1.17,<1.18",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest>=9,<10",
+  "coverage>=7.13,<8",
+]
 
 [project.urls]
 Repository = "https://github.com/mkhasan23/empirical-finance-lab"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
