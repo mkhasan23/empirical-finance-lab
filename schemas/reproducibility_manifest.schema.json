@@ -1,0 +1,41 @@
+{
+  "$id": "https://empirical-finance-lab.org/schemas/reproducibility_manifest.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "analysis_id": {
+      "type": "string"
+    },
+    "analysis_specification": {
+      "type": "object"
+    },
+    "citation": {
+      "type": "object"
+    },
+    "environment": {
+      "type": "object"
+    },
+    "execution_id": {
+      "type": "string"
+    },
+    "hashes": {
+      "type": "object"
+    },
+    "results": {
+      "type": "object"
+    },
+    "software_version": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "software_version",
+    "analysis_id",
+    "execution_id",
+    "hashes",
+    "analysis_specification",
+    "environment"
+  ],
+  "title": "EFL ReproducibilityManifest",
+  "type": "object"
+}

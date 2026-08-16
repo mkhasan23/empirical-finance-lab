@@ -1,0 +1,9 @@
+{
+  "defect": "Changed specification after result",
+  "expected": {
+    "new_analysis_id_required": true,
+    "new_spec_hash_required": true,
+    "prior_run_retained": true
+  },
+  "fixture_id": "FM-013"
+}

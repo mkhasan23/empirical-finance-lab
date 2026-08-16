@@ -1,0 +1,9 @@
+{
+  "defect": "No admissible placebo date",
+  "expected": {
+    "main_analysis_available": true,
+    "rule_id": "PLC_NO_ADMISSIBLE_DATES",
+    "status": "NOT_ASSESSABLE"
+  },
+  "fixture_id": "FM-012"
+}

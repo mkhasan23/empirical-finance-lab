@@ -1,0 +1,36 @@
+{
+  "invariant": "Rows are prespecified; no model is selected based on significance.",
+  "purpose": "Two-model robustness matrix",
+  "rows": [
+    {
+      "B": 20000,
+      "car": 0.030000000000000006,
+      "model": "market_model",
+      "permutation_ge_count": 68,
+      "permutation_p_value": 0.0034,
+      "sign": "positive",
+      "significant_5pct": true,
+      "window": [
+        -1,
+        1
+      ]
+    },
+    {
+      "B": 20000,
+      "car": 0.03446762424450977,
+      "model": "market_adjusted",
+      "permutation_ge_count": 41,
+      "permutation_p_value": 0.00205,
+      "sign": "positive",
+      "significant_5pct": true,
+      "window": [
+        -1,
+        1
+      ]
+    }
+  ],
+  "tolerances": {
+    "continuous_abs": 1e-12,
+    "p_value_abs": 1e-12
+  }
+}

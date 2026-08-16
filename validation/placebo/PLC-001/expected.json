@@ -1,0 +1,49 @@
+{
+  "expected": {
+    "P": 10,
+    "actual_car": 0.05,
+    "candidate_dates": [
+      "2025-03-10",
+      "2025-03-11",
+      "2025-03-12",
+      "2025-03-13",
+      "2025-03-14",
+      "2025-03-17",
+      "2025-03-18",
+      "2025-03-19",
+      "2025-03-20",
+      "2025-03-21"
+    ],
+    "candidate_indices": [
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ],
+    "extreme_count": 1,
+    "historical_placebo_tail_proportion": 0.18181818181818182,
+    "placebo_cars": [
+      0.01,
+      -0.012,
+      0.015,
+      0.06,
+      -0.008,
+      0.011,
+      -0.014,
+      0.007,
+      0.009,
+      -0.005
+    ]
+  },
+  "invariant": "All admissible pseudo-events use the same market-adjusted definition and event window [0,0].",
+  "purpose": "Hand-enumerable historical placebo history",
+  "tolerances": {
+    "continuous_abs": 1e-12
+  }
+}

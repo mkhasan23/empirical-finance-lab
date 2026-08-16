@@ -1,0 +1,11 @@
+{
+  "defect": "Insufficient estimation history",
+  "expected": {
+    "calculation_may_run": true,
+    "research_grade": false,
+    "rule_id": "EST_SHORT_HISTORY",
+    "status": "CRITICAL",
+    "usable_estimation_n": 46
+  },
+  "fixture_id": "FM-006"
+}

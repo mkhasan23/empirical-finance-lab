@@ -1,0 +1,9 @@
+{
+  "defect": "Return below -100%",
+  "expected": {
+    "calculation_blocked": true,
+    "rule_id": "DATA_INVALID_SIMPLE_RETURN",
+    "status": "CRITICAL"
+  },
+  "fixture_id": "FM-008"
+}

@@ -1,0 +1,9 @@
+{
+  "defect": "Zero benchmark variance",
+  "expected": {
+    "market_model_blocked": true,
+    "rule_id": "EST_ZERO_BENCHMARK_VARIANCE",
+    "status": "CRITICAL"
+  },
+  "fixture_id": "FM-011"
+}

@@ -1,0 +1,16 @@
+{
+  "expected": {
+    "car": 0.024999999999999998,
+    "event_ar": [
+      0.01,
+      0.02,
+      -0.005
+    ]
+  },
+  "invariant": "AR equals security return minus benchmark return at every event date.",
+  "purpose": "Market-adjusted restriction",
+  "tolerances": {
+    "continuous_abs": 1e-12,
+    "continuous_rel": 1e-10
+  }
+}

@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: >-
+  Empirical Finance Lab is currently a pre-release research-software project.
+  When you use a validated release in research, please cite the exact released
+  version and its version-specific DOI.
+title: "Empirical Finance Lab: Audit-First Tools for Credible Empirical Finance Research"
+type: software
+authors:
+  - family-names: Hasan
+    given-names: Muhammad Kamrul
+version: 0.0.0
+license: BSD-3-Clause
+repository-code: "https://github.com/mkhasan23/empirical-finance-lab"
+keywords:
+  - empirical finance
+  - event study
+  - reproducibility
+  - research software
+  - econometrics

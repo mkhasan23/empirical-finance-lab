@@ -1,0 +1,36 @@
+{
+  "$id": "https://empirical-finance-lab.org/schemas/audit_result.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "evidence": {
+      "type": "object"
+    },
+    "message": {
+      "type": "string"
+    },
+    "rule_id": {
+      "pattern": "^[A-Z]+_[A-Z0-9_]+$",
+      "type": "string"
+    },
+    "stage": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "PASS",
+        "WARNING",
+        "CRITICAL",
+        "NOT_ASSESSABLE"
+      ]
+    }
+  },
+  "required": [
+    "rule_id",
+    "stage",
+    "status",
+    "message"
+  ],
+  "title": "EFL AuditResult",
+  "type": "object"
+}

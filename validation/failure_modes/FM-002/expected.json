@@ -1,0 +1,10 @@
+{
+  "defect": "Unsorted dates",
+  "expected": {
+    "resolution": "explicit_user_sort_or_source_fix",
+    "rule_id": "DATA_UNSORTED",
+    "silent_sort_forbidden": true,
+    "status": "CRITICAL"
+  },
+  "fixture_id": "FM-002"
+}

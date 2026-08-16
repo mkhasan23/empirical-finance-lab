@@ -1,0 +1,29 @@
+name: Methodology proposal
+description: Propose a scientific-method change; implementation must wait for specification approval
+title: "[METHOD] "
+labels: ["methodology"]
+body:
+  - type: textarea
+    id: scientific_problem
+    attributes:
+      label: Scientific problem
+    validations:
+      required: true
+  - type: textarea
+    id: proposed_method
+    attributes:
+      label: Proposed methodological change
+    validations:
+      required: true
+  - type: textarea
+    id: references
+    attributes:
+      label: Primary methodological references
+    validations:
+      required: true
+  - type: textarea
+    id: numerical_impact
+    attributes:
+      label: Expected numerical/reproducibility impact
+    validations:
+      required: true

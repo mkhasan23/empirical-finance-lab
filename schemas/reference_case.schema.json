@@ -1,0 +1,35 @@
+{
+  "$id": "https://empirical-finance-lab.org/schemas/reference_case.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "category": {
+      "type": "string"
+    },
+    "files": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "fixture_id": {
+      "pattern": "^(KA|INF|PLC|ROB|FM)-[0-9]{3}$",
+      "type": "string"
+    },
+    "sha256": {
+      "additionalProperties": {
+        "pattern": "^[a-f0-9]{64}$",
+        "type": "string"
+      },
+      "type": "object"
+    }
+  },
+  "required": [
+    "fixture_id",
+    "category",
+    "files",
+    "sha256"
+  ],
+  "title": "EFL ReferenceCase",
+  "type": "object"
+}

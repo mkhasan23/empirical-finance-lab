@@ -1,0 +1,20 @@
+name: Stage III corpus integrity
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  corpus-integrity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Verify authoritative corpus
+        run: python tools/check_corpus_integrity.py

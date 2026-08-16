@@ -1,0 +1,9 @@
+{
+  "defect": "Missing event benchmark return",
+  "expected": {
+    "car_complete": false,
+    "rule_id": "EVENT_WINDOW_INCOMPLETE",
+    "status": "CRITICAL"
+  },
+  "fixture_id": "FM-005"
+}

@@ -1,0 +1,10 @@
+{
+  "defect": "Extreme positive return",
+  "expected": {
+    "automatic_winsorization": false,
+    "observation_preserved": true,
+    "rule_id": "DATA_EXTREME_RETURN",
+    "status": "WARNING"
+  },
+  "fixture_id": "FM-010"
+}

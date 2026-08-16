@@ -1,0 +1,9 @@
+{
+  "defect": "Worker returns stale ExecutionID",
+  "expected": {
+    "error_code": "RUN_STALE_EXECUTION",
+    "result_visible": false,
+    "state": "DISCARDED"
+  },
+  "fixture_id": "FM-015"
+}

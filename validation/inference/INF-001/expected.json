@@ -1,0 +1,25 @@
+{
+  "expected": {
+    "alpha": 0.001,
+    "beta": 1.2,
+    "car": 0.030000000000000006,
+    "car_se": 0.004233515576000404,
+    "car_variance": 1.792265413223803e-05,
+    "df": 119,
+    "residual_variance": 5.565514468352949e-06,
+    "t_statistic": 7.08630911152626,
+    "two_sided_p_value": 1.0513251496356568e-10
+  },
+  "formula": "Var(CAR|X)=s^2[m + x_sum^T (X_est^T X_est)^(-1) x_sum], where x_sum=sum of event design rows.",
+  "independent_reference_methods": [
+    "closed-form simple-regression forecast covariance",
+    "matrix OLS predictive covariance"
+  ],
+  "method_id": "EFL_CLASSICAL_PREDICTIVE_T_V1",
+  "purpose": "Classical market-model predictive CAR inference reference",
+  "tolerances": {
+    "continuous_abs": 1e-12,
+    "continuous_rel": 1e-10,
+    "p_value_abs": 1e-10
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "defect": "Weekend/holiday calendar event",
+  "expected": {
+    "analysis_lock_blocked": true,
+    "rule_id": "EVENT_EFFECTIVE_DATE_CONFIRMATION_REQUIRED",
+    "status": "WARNING"
+  },
+  "fixture_id": "FM-003"
+}

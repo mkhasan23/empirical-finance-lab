@@ -1,0 +1,9 @@
+phase,position,abnormal_return
+estimation,0,-0.02
+estimation,1,-0.01
+estimation,2,0
+estimation,3,0.01
+estimation,4,0.02
+estimation,5,0
+event,0,0.040000000000000001
+event,1,0.029999999999999999

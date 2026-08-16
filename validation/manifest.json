@@ -1,0 +1,350 @@
+{
+  "created": "2026-08-16",
+  "fixture_count": 24,
+  "fixtures": [
+    {
+      "category": "failure_mode",
+      "files": {
+        "data": "validation/failure_modes/FM-001/data.csv",
+        "expected": "validation/failure_modes/FM-001/expected.json",
+        "specification": "validation/failure_modes/FM-001/specification.json"
+      },
+      "fixture_id": "FM-001",
+      "sha256": {
+        "data": "f43161a66f196a6ab64bf0b5e6a926c689518f83f69355dc15ff070b6c337a9e",
+        "expected": "e61abf5061d0f78ac25f932483220decec69ad0ba71f2077ebf8ddabc90e56d8",
+        "specification": "7a980188e13256a01a193f3cb7b6724c14582457fd422809e299d63c1e40430f"
+      }
+    },
+    {
+      "category": "failure_mode",
+      "files": {
+        "data": "validation/failure_modes/FM-002/data.csv",
+        "expected": "validation/failure_modes/FM-002/expected.json",
+        "specification": "validation/failure_modes/FM-002/specification.json"
+      },
+      "fixture_id": "FM-002",
+      "sha256": {
+        "data": "5b83e12453a9fca4d67599d8b01d76894f4c6acd9f3e608a729439511c5ef65f",
+        "expected": "72015bad5ed1e049ef8c09e8dff764108443594d0e88afb4b0af5f49b2c8a71d",
+        "specification": "7a980188e13256a01a193f3cb7b6724c14582457fd422809e299d63c1e40430f"
+      }
+    },
+    {
+      "category": "failure_mode",
+      "files": {
+        "data": "validation/failure_modes/FM-003/data.csv",
+        "expected": "validation/failure_modes/FM-003/expected.json",
+        "specification": "validation/failure_modes/FM-003/specification.json"
+      },
+      "fixture_id": "FM-003",
+      "sha256": {
+        "data": "973916229c25aa65594c225c5c0260e3bccd9096cc6c15748ad80752840937a3",
+        "expected": "c6f05572ba1f0004762cbd933399d12a2a956ceea3290e650ee7aab5931b1bb9",
+        "specification": "4df50409f93f46cb707dff2194bc07a528a832e872956604b858959b6bd9303f"
+      }
+    },
+    {
+      "category": "failure_mode",
+      "files": {
+        "data": "validation/failure_modes/FM-004/data.csv",
+        "expected": "validation/failure_modes/FM-004/expected.json",
+        "specification": "validation/failure_modes/FM-004/specification.json"
+      },
+      "fixture_id": "FM-004",
+      "sha256": {
+        "data": "dc4a101b6169f2ce545d9eeea457a9fd7d2bad05be7e9b297dcf5343227bea90",
+        "expected": "316280da09169e7ea5fddc82574320e240ac4b9851c8f5bdb45d539b631df535",
+        "specification": "7a980188e13256a01a193f3cb7b6724c14582457fd422809e299d63c1e40430f"
+      }
+    },
+    {
+      "category": "failure_mode",
+      "files": {
+        "data": "validation/failure_modes/FM-005/data.csv",
+        "expected": "validation/failure_modes/FM-005/expected.json",
+        "specification": "validation/failure_modes/FM-005/specification.json"
+      },
+      "fixture_id": "FM-005",
+      "sha256": {
+        "data": "d6e5a5a10c9acba89dbe6db488aa128a705b8800d6b35cecb0ffbe0a98f606e7",
+        "expected": "627d358733b211f15e508c96336e856ff736747c143f3d6ad4aad33d41748c48",
+        "specification": "7a980188e13256a01a193f3cb7b6724c14582457fd422809e299d63c1e40430f"
+      }
+    },
+    {
+      "category": "failure_mode",
+      "files": {
+        "data": "validation/failure_modes/FM-006/data.csv",
+        "expected": "validation/failure_modes/FM-006/expected.json",
+        "specification": "validation/failure_modes/FM-006/specification.json"
+      },
+      "fixture_id": "FM-006",
+      "sha256": {
+        "data": "8837af60a2d25415a22d824eeee9b0307d3178a53fee96c8a5a13fdd19d8a463",
+        "expected": "8bbaa950e21b9e82922314ff6bf8a58da8ab623c86dc2a6ed54bbe0643e29b9f",
+        "specification": "0a27293d905cb7797a3765f43fef342a390cff1b28547dfa1f657c90b6f541fc"
+      }
+    },
+    {
+      "category": "failure_mode",
+      "files": {
+        "data": "validation/failure_modes/FM-007/data.csv",
+        "expected": "validation/failure_modes/FM-007/expected.json",
+        "specification": "validation/failure_modes/FM-007/specification.json"
+      },
+      "fixture_id": "FM-007",
+      "sha256": {
+        "data": "973916229c25aa65594c225c5c0260e3bccd9096cc6c15748ad80752840937a3",
+        "expected": "ebe546b19b35b57b15f67637e0ebe056b921360b055062d53a074c83e4f6b09b",
+        "specification": "bfe7265ac28051851120417ce23f31f9d592816208eec49f6a608e26b97ff7e0"
+      }
+    },
+    {
+      "category": "failure_mode",
+      "files": {
+        "data": "validation/failure_modes/FM-008/data.csv",
+        "expected": "validation/failure_modes/FM-008/expected.json",
+        "specification": "validation/failure_modes/FM-008/specification.json"
+      },
+      "fixture_id": "FM-008",
+      "sha256": {
+        "data": "5322cfde43315cf99fcfcbafa290b7c1fbf92d74d45f6271d55590c7de99e220",
+        "expected": "c43fdcc67eb40b619d6656ce5c286f994767a63be40da16b89b4c554c437fb56",
+        "specification": "7a980188e13256a01a193f3cb7b6724c14582457fd422809e299d63c1e40430f"
+      }
+    },
+    {
+      "category": "failure_mode",
+      "files": {
+        "data": "validation/failure_modes/FM-009/data.csv",
+        "expected": "validation/failure_modes/FM-009/expected.json",
+        "specification": "validation/failure_modes/FM-009/specification.json"
+      },
+      "fixture_id": "FM-009",
+      "sha256": {
+        "data": "973916229c25aa65594c225c5c0260e3bccd9096cc6c15748ad80752840937a3",
+        "expected": "b4d0d83ddfe924fe4d375b9c021c7a6575153eb1de0e29b8d48c6cd9259393c9",
+        "specification": "58cdc28e060bf79bef9ad8424eba8acd3e0aaecefa74e9289cda4f915771c511"
+      }
+    },
+    {
+      "category": "failure_mode",
+      "files": {
+        "data": "validation/failure_modes/FM-010/data.csv",
+        "expected": "validation/failure_modes/FM-010/expected.json",
+        "specification": "validation/failure_modes/FM-010/specification.json"
+      },
+      "fixture_id": "FM-010",
+      "sha256": {
+        "data": "60a2a1b9137443188eb944967bf0c106734690e1872fca66154a2a9eff6aa38b",
+        "expected": "3bff9035834acf0d77e1e6f244b3cbe019120fc271ddc5ff2c0809ecc7373feb",
+        "specification": "7a980188e13256a01a193f3cb7b6724c14582457fd422809e299d63c1e40430f"
+      }
+    },
+    {
+      "category": "failure_mode",
+      "files": {
+        "data": "validation/failure_modes/FM-011/data.csv",
+        "expected": "validation/failure_modes/FM-011/expected.json",
+        "specification": "validation/failure_modes/FM-011/specification.json"
+      },
+      "fixture_id": "FM-011",
+      "sha256": {
+        "data": "262600b97eedf5746dddf6ac0b9d9104637e49c9bd2f11a0f95c1eca69749312",
+        "expected": "ac7bd51295416a0c5e5d896c4b00522dae196da2f3432fe6f3ff266e940d3cd4",
+        "specification": "7a980188e13256a01a193f3cb7b6724c14582457fd422809e299d63c1e40430f"
+      }
+    },
+    {
+      "category": "failure_mode",
+      "files": {
+        "data": "validation/failure_modes/FM-012/data.csv",
+        "expected": "validation/failure_modes/FM-012/expected.json",
+        "specification": "validation/failure_modes/FM-012/specification.json"
+      },
+      "fixture_id": "FM-012",
+      "sha256": {
+        "data": "973916229c25aa65594c225c5c0260e3bccd9096cc6c15748ad80752840937a3",
+        "expected": "f4f811ec9b9053447ba566660deb0a071c16190d1755aee7c166540885ebbd92",
+        "specification": "308246925b23d17368a91adc3b96ca59cd7b543882f6bc30847c00f7345a72bf"
+      }
+    },
+    {
+      "category": "failure_mode",
+      "files": {
+        "expected": "validation/failure_modes/FM-013/expected.json",
+        "scenario": "validation/failure_modes/FM-013/scenario.json"
+      },
+      "fixture_id": "FM-013",
+      "sha256": {
+        "expected": "5f54a69986ea4ae7a4ffc024041e975d96c612fd984d12f6192b40bac6e82a74",
+        "scenario": "4326b7502b84d17331cae255b43be22a84b15170ab6e8b81486c73d96a511c39"
+      }
+    },
+    {
+      "category": "failure_mode",
+      "files": {
+        "expected": "validation/failure_modes/FM-014/expected.json",
+        "scenario": "validation/failure_modes/FM-014/scenario.json"
+      },
+      "fixture_id": "FM-014",
+      "sha256": {
+        "expected": "2a7298557fc0c56097c3b98455c4827633bd01fbc8ec56fe6ec10c194b047e42",
+        "scenario": "aad8a745bb011e0d8d810a7ca337e490af65bb00488bad9e219991d0342c6513"
+      }
+    },
+    {
+      "category": "failure_mode",
+      "files": {
+        "expected": "validation/failure_modes/FM-015/expected.json",
+        "scenario": "validation/failure_modes/FM-015/scenario.json"
+      },
+      "fixture_id": "FM-015",
+      "sha256": {
+        "expected": "b685d5b3ea313021f6a95955a68dbe89aa2a3101262edb5796d72e30b30b61e2",
+        "scenario": "bb0586be1f6e6d0a3a96412c42bdb7a3acc573aeec921d6056ce7d65f94f5e0d"
+      }
+    },
+    {
+      "category": "inference",
+      "files": {
+        "data": "validation/inference/INF-001/data.csv",
+        "expected": "validation/inference/INF-001/expected.json",
+        "notes": "validation/inference/INF-001/README.md",
+        "specification": "validation/inference/INF-001/specification.json"
+      },
+      "fixture_id": "INF-001",
+      "sha256": {
+        "data": "973916229c25aa65594c225c5c0260e3bccd9096cc6c15748ad80752840937a3",
+        "expected": "aefc9577a2df1e6f25edf37b316d915b3d8f643b7d9e2059747dc594bfe15b0d",
+        "notes": "7754287a354936aab971f74778829325395a76e7b5af7aad46c6993ea13cb5ad",
+        "specification": "7a980188e13256a01a193f3cb7b6724c14582457fd422809e299d63c1e40430f"
+      }
+    },
+    {
+      "category": "inference",
+      "files": {
+        "data": "validation/inference/INF-002/data.csv",
+        "expected": "validation/inference/INF-002/expected.json",
+        "specification": "validation/inference/INF-002/specification.json"
+      },
+      "fixture_id": "INF-002",
+      "sha256": {
+        "data": "179efd79bfb8d013ce64e9b5165d2a634fcfcea88dd2dd77fd4c60cd40d54ba7",
+        "expected": "82029b96ef700420a20daeb22c9ae90038ab4768774e0212186cd9bb4802d5b4",
+        "specification": "7aab0d1f77c26d5c0f702ff8b2e511643e4d75405a0e91c87e7702924233445a"
+      }
+    },
+    {
+      "category": "known_answer",
+      "files": {
+        "data": "validation/known_answer/KA-001/data.csv",
+        "expected": "validation/known_answer/KA-001/expected.json",
+        "notes": "validation/known_answer/KA-001/README.md",
+        "specification": "validation/known_answer/KA-001/specification.json"
+      },
+      "fixture_id": "KA-001",
+      "sha256": {
+        "data": "af14ea11daff7546478412c2551e9a1463cdc78d2b2a977675c01515fda41c88",
+        "expected": "b0fd4de9740a302250db455d7a60b4c979da8e9f6c9599323d39d87d60001985",
+        "notes": "dc6bacecfa2c60a05233b7e215e504c62919f11742d98c2b09fbaf9d31244a8d",
+        "specification": "7a980188e13256a01a193f3cb7b6724c14582457fd422809e299d63c1e40430f"
+      }
+    },
+    {
+      "category": "known_answer",
+      "files": {
+        "data": "validation/known_answer/KA-002/data.csv",
+        "expected": "validation/known_answer/KA-002/expected.json",
+        "specification": "validation/known_answer/KA-002/specification.json"
+      },
+      "fixture_id": "KA-002",
+      "sha256": {
+        "data": "cd0cb9c624824726468ba07bcf08ddd1b77506d22d6fef69de7a119f0d8ed969",
+        "expected": "b912b8892215af0b913a3db79022d7c60b20f2205d232d668eab2a7293ec5e45",
+        "specification": "7a980188e13256a01a193f3cb7b6724c14582457fd422809e299d63c1e40430f"
+      }
+    },
+    {
+      "category": "known_answer",
+      "files": {
+        "data": "validation/known_answer/KA-003/data.csv",
+        "expected": "validation/known_answer/KA-003/expected.json",
+        "specification": "validation/known_answer/KA-003/specification.json"
+      },
+      "fixture_id": "KA-003",
+      "sha256": {
+        "data": "973916229c25aa65594c225c5c0260e3bccd9096cc6c15748ad80752840937a3",
+        "expected": "bee53f436a9042bd4e803bd8e7b3041ced9f29ffa8d0ebec56c19c229b0094de",
+        "specification": "7a980188e13256a01a193f3cb7b6724c14582457fd422809e299d63c1e40430f"
+      }
+    },
+    {
+      "category": "known_answer",
+      "files": {
+        "data": "validation/known_answer/KA-004/data.csv",
+        "expected": "validation/known_answer/KA-004/expected.json",
+        "specification": "validation/known_answer/KA-004/specification.json"
+      },
+      "fixture_id": "KA-004",
+      "sha256": {
+        "data": "973916229c25aa65594c225c5c0260e3bccd9096cc6c15748ad80752840937a3",
+        "expected": "79e0b4ff19cc486f1589110f2f5120a94b4afd5a5762625251a7165477f49963",
+        "specification": "7a980188e13256a01a193f3cb7b6724c14582457fd422809e299d63c1e40430f"
+      }
+    },
+    {
+      "category": "known_answer",
+      "files": {
+        "data": "validation/known_answer/KA-005/data.csv",
+        "expected": "validation/known_answer/KA-005/expected.json",
+        "specification": "validation/known_answer/KA-005/specification.json"
+      },
+      "fixture_id": "KA-005",
+      "sha256": {
+        "data": "89d6a3f09be30c5b79f95c95f291da80caa74c3677666c7b57a5319a7bd5fe43",
+        "expected": "b40a22e535f77c6330dd99710ecc5144f7ae384e90f373b10c17a5c138e4141a",
+        "specification": "26340b2296e4c631d9d960d522d86ae4806d592532c25da47647e79482d958d2"
+      }
+    },
+    {
+      "category": "placebo",
+      "files": {
+        "data": "validation/placebo/PLC-001/data.csv",
+        "expected": "validation/placebo/PLC-001/expected.json",
+        "notes": "validation/placebo/PLC-001/README.md",
+        "specification": "validation/placebo/PLC-001/specification.json"
+      },
+      "fixture_id": "PLC-001",
+      "sha256": {
+        "data": "f54959129a4fe0a8df63f217d85ef969a1f16e9b8e7e976a7eb8f5f9d5dfe6ad",
+        "expected": "55ef4b9ef9437096f138b9c144b67af652b0610ef6f990a754b8c23ef40b7e26",
+        "notes": "28e1daaa5eeb78e7d66c1647342bcf7f5f9bf5a6f3d3eb4ccc84316a20f2dfe9",
+        "specification": "5643f708489e2c01c55ae486bec4eb64483f9fa97cb21466989b83c7064eb6a2"
+      }
+    },
+    {
+      "category": "robustness",
+      "files": {
+        "data": "validation/robustness/ROB-001/data.csv",
+        "expected": "validation/robustness/ROB-001/expected.json",
+        "specification": "validation/robustness/ROB-001/specification.json"
+      },
+      "fixture_id": "ROB-001",
+      "sha256": {
+        "data": "973916229c25aa65594c225c5c0260e3bccd9096cc6c15748ad80752840937a3",
+        "expected": "112c92f883d7fdfbd0a4b1e9841e161866e4f0dfb7525ec67820a86c972a2e48",
+        "specification": "9965b09fd31b4a497e422394abe4f4877a0cd4538a646b6a48d14d8e46cb52ba"
+      }
+    }
+  ],
+  "project": "Empirical Finance Lab",
+  "reference_environment": {
+    "numpy": "2.3.5",
+    "python": "3.13.5",
+    "scipy": "1.17.0"
+  },
+  "schema_version": "0.1.0",
+  "stage": "III"
+}

@@ -1,0 +1,16 @@
+{
+  "expected": {
+    "car_m1_p1": 0.030000000000000006,
+    "event_ar_by_tau": {
+      "-1": 0.010000000000000002,
+      "0": 0.030000000000000002,
+      "1": -0.01
+    }
+  },
+  "invariant": "AR(-1)=0.01, AR(0)=0.03, AR(+1)=-0.01, CAR[-1,+1]=0.03.",
+  "purpose": "Known multi-day shock",
+  "tolerances": {
+    "continuous_abs": 1e-12,
+    "continuous_rel": 1e-10
+  }
+}

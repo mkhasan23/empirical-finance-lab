@@ -1,0 +1,27 @@
+{
+  "calendar_event_date": "2025-03-24",
+  "effective_event_date": "2025-03-24",
+  "estimation_window": {
+    "end": -2,
+    "start": -5
+  },
+  "event_timing": "during_or_before_market",
+  "event_window": {
+    "end": 0,
+    "start": 0
+  },
+  "excluded_dates": [],
+  "inference": {
+    "direction": "two_sided",
+    "permutation_B": 1000,
+    "seed": 20260816
+  },
+  "locked": true,
+  "model": "market_adjusted",
+  "placebo": {
+    "enabled": true
+  },
+  "return_units": "decimal",
+  "robustness_windows": [],
+  "schema_version": "0.1.0"
+}

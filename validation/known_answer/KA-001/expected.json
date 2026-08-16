@@ -1,0 +1,18 @@
+{
+  "expected": {
+    "alpha": 0.001,
+    "beta": 1.2,
+    "car": 0.0,
+    "event_ar": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "invariant": "All event AR and CAR are zero within tolerance.",
+  "purpose": "Exact zero-abnormal-return synthetic case",
+  "tolerances": {
+    "continuous_abs": 1e-12,
+    "continuous_rel": 1e-10
+  }
+}

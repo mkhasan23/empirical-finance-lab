@@ -1,0 +1,11 @@
+{
+  "B": 1000,
+  "K": 0,
+  "direction": "two_sided",
+  "input_type": "abnormal_return_unit_fixture",
+  "m": 2,
+  "n": 6,
+  "rng": "PCG64",
+  "schema_version": "0.1.0",
+  "seed": 20260816
+}

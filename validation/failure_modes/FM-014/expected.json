@@ -1,0 +1,9 @@
+{
+  "defect": "Worker timeout",
+  "expected": {
+    "error_code": "RUN_TIMEOUT",
+    "partial_result_visible": false,
+    "state": "FAILED"
+  },
+  "fixture_id": "FM-014"
+}

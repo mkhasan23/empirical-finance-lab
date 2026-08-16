@@ -1,0 +1,119 @@
+{
+  "$defs": {
+    "window": {
+      "additionalProperties": false,
+      "properties": {
+        "end": {
+          "type": "integer"
+        },
+        "start": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "start",
+        "end"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://empirical-finance-lab.org/schemas/analysis_specification.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "calendar_event_date": {
+      "format": "date",
+      "type": "string"
+    },
+    "effective_event_date": {
+      "format": "date",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "estimation_window": {
+      "$ref": "#/$defs/window"
+    },
+    "event_timing": {
+      "type": "string"
+    },
+    "event_window": {
+      "$ref": "#/$defs/window"
+    },
+    "excluded_dates": {
+      "items": {
+        "format": "date",
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "inference": {
+      "additionalProperties": true,
+      "properties": {
+        "direction": {
+          "enum": [
+            "two_sided",
+            "greater",
+            "less"
+          ]
+        },
+        "permutation_B": {
+          "maximum": 100000,
+          "minimum": 1000,
+          "type": "integer"
+        },
+        "seed": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "direction",
+        "permutation_B",
+        "seed"
+      ],
+      "type": "object"
+    },
+    "locked": {
+      "type": "boolean"
+    },
+    "model": {
+      "enum": [
+        "market_model",
+        "market_adjusted"
+      ]
+    },
+    "placebo": {
+      "type": "object"
+    },
+    "return_units": {
+      "enum": [
+        "decimal",
+        "percent"
+      ]
+    },
+    "robustness_windows": {
+      "items": {
+        "$ref": "#/$defs/window"
+      },
+      "type": "array"
+    },
+    "schema_version": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "return_units",
+    "model",
+    "calendar_event_date",
+    "effective_event_date",
+    "estimation_window",
+    "event_window",
+    "inference",
+    "locked"
+  ],
+  "title": "EFL AnalysisSpecification",
+  "type": "object"
+}

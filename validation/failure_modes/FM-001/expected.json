@@ -1,0 +1,9 @@
+{
+  "defect": "Duplicate date",
+  "expected": {
+    "calculation_blocked": true,
+    "rule_id": "DATA_DUPLICATE_DATE",
+    "status": "CRITICAL"
+  },
+  "fixture_id": "FM-001"
+}
