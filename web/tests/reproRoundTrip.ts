@@ -247,7 +247,7 @@ async function configureFromArchivedSpecification(page: Page, specification: Rec
   expect(await page.locator("#return-units").inputValue()).toBe(String(specification.return_units));
   await page.getByLabel("Calendar announcement date").fill(String(specification.calendar_event_date));
   await page.getByLabel("Announcement timing").selectOption(String(specification.event_timing));
-  await page.getByLabel("Effective event trading date").fill(String(specification.effective_event_date));
+  await page.getByLabel("Effective event trading date", { exact: true }).fill(String(specification.effective_event_date));
   await page.getByLabel(/I confirm the effective event trading date/).check();
   await page.getByLabel("Estimation start (τ)").fill(String(estimation.start));
   await page.getByLabel("Estimation end (τ)").fill(String(estimation.end));
