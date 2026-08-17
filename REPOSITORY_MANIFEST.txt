@@ -17,6 +17,8 @@ LICENSE
 README.md
 REPOSITORY_MANIFEST.txt
 SECURITY.md
+docs/STAGE_VII_ACCEPTANCE_CHECKLIST.md
+docs/STAGE_VII_EVIDENCE_REPORT.md
 docs/governance/DEPENDENCY_UPDATE_POLICY.md
 docs/governance/release_policy.md
 docs/governance/stage6_frozen_scientific_tree.json
@@ -31,6 +33,7 @@ docs/specifications/STAGE_I_SCIENTIFIC_SPEC.md
 docs/specifications/STAGE_VII_D2_REPRODUCIBILITY_ROUND_TRIP.md
 docs/specifications/STAGE_VII_E2_ACCESSIBILITY_RESPONSIVE.md
 docs/specifications/STAGE_VII_F1_RELEASE_DOCUMENTATION.md
+docs/specifications/STAGE_VII_F2_EVIDENCE_ACCEPTANCE.md
 docs/specifications/STAGE_VII_RELEASE_HARDENING.md
 docs/specifications/STAGE_VI_APPLICATION_UI.md
 docs/specifications/STAGE_V_BROWSER_RUNTIME.md
@@ -84,8 +87,10 @@ tools/check_stage7_d2_repro_gate.py
 tools/check_stage7_e1_onboarding_gate.py
 tools/check_stage7_e2_accessibility_gate.py
 tools/check_stage7_f1_release_docs_gate.py
+tools/check_stage7_f2_evidence_gate.py
 tools/check_stage7_static_gate.py
 tools/stage7_dist_manifest.py
+tools/write_stage7_f2_ci_evidence.py
 validation/README.md
 validation/failure_modes/FM-001/data.csv
 validation/failure_modes/FM-001/expected.json

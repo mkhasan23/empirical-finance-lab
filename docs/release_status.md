@@ -5,7 +5,7 @@
 Empirical Finance Lab is currently a **Stage VII release-hardening candidate**.
 
 - Stages III–VI form the accepted scientific/runtime/application baseline.
-- Stage VII candidate work has validated GitHub Pages deployment, document security/privacy controls, supply-chain governance, build provenance, reproducibility round-trip, synthetic onboarding, and automated accessibility/responsive behavior on the feature branch.
+- Stage VII candidate work has validated GitHub Pages deployment, document security/privacy controls, supply-chain governance, build provenance, reproducibility round-trip, synthetic onboarding, automated accessibility/responsive behavior, and release-documentation consistency on the feature branch.
 - Stage VII as a whole is **not yet accepted**.
 - The project is **not Public Beta**.
 - There is **no formal `v0.1.0` release**.
@@ -18,17 +18,26 @@ The publicly reachable GitHub Pages site is a candidate deployment used for rele
 
 Public reachability does not change the release state.
 
+## Formal evidence
+
+The Stage VII branch evidence is consolidated in:
+
+- [`STAGE_VII_EVIDENCE_REPORT.md`](STAGE_VII_EVIDENCE_REPORT.md); and
+- [`STAGE_VII_ACCEPTANCE_CHECKLIST.md`](STAGE_VII_ACCEPTANCE_CHECKLIST.md).
+
+The committed report records the last fully validated predecessor. The F2 CI workflow then emits a machine-readable `stage7-acceptance-evidence` artifact for the exact commit under test, avoiding a self-referential hard-coded future SHA.
+
 ## What remains before Stage VII acceptance
 
 Stage VII still requires:
 
-1. this release-documentation/metadata contract to pass its exact-commit gate;
-2. the formal Stage VII evidence report and acceptance checklist;
-3. a complete feature-branch III–VII gate;
-4. governed integration to `main`; and
-5. the required III–VII rerun on `main`.
+1. the F2 evidence/acceptance contract to pass on its exact feature-branch commit, including III–VII and the exact-commit acceptance artifact;
+2. governed integration to `main`;
+3. the required III–VII rerun on the resulting exact `main` commit;
+4. removal of the temporary feature-branch Pages deployment allowance; and
+5. activation of repository-wide full-action-SHA enforcement after the pinned workflows are present and validated on `main`.
 
-Repository-level security settings that are intentionally deferred until the pinned workflows are on `main` are handled after that integration step.
+Repository-level security settings intentionally deferred until integration remain outside the branch source tree and are handled after the main-branch gate.
 
 ## What comes after Stage VII
 

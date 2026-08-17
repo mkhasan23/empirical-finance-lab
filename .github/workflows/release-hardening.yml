@@ -47,6 +47,7 @@ jobs:
           python tools/check_stage7_e1_onboarding_gate.py
           python tools/check_stage7_e2_accessibility_gate.py
           python tools/check_stage7_f1_release_docs_gate.py
+          python tools/check_stage7_f2_evidence_gate.py
       - name: Install locked frontend dependencies
         working-directory: web
         run: npm ci --no-audit --no-fund
@@ -174,3 +175,45 @@ jobs:
           path: web/test-results
           if-no-files-found: ignore
           retention-days: 3
+
+  evidence:
+    needs: [build, deploy, verify-live]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    env:
+      EFL_STAGE7_BUILD_RESULT: ${{ needs.build.result }}
+      EFL_STAGE7_DEPLOY_RESULT: ${{ needs.deploy.result }}
+      EFL_STAGE7_VERIFY_LIVE_RESULT: ${{ needs.verify-live.result }}
+      EFL_STAGE7_PAGE_URL: ${{ needs.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - name: Set up Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.13'
+      - name: Set up Node
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24'
+      - name: Download production artifact evidence
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: stage7-dist-evidence
+          path: stage7-evidence
+      - name: Install locked frontend evidence dependencies
+        working-directory: web
+        run: npm ci --no-audit --no-fund
+      - name: Write exact-commit Stage VII acceptance evidence
+        run: >-
+          python tools/write_stage7_f2_ci_evidence.py
+          stage7-evidence/stage7-dist-manifest.json
+          "$RUNNER_TEMP/stage7-acceptance-evidence.json"
+      - name: Upload Stage VII acceptance evidence
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: stage7-acceptance-evidence
+          path: ${{ runner.temp }}/stage7-acceptance-evidence.json
+          if-no-files-found: error
+          retention-days: 30
