@@ -35,7 +35,7 @@
         </div>
       </aside>
 
-      <main id="workspace" class="workspace">
+      <main id="workspace" class="workspace" tabindex="-1">
         <div id="app-status" class="app-status" role="status" aria-live="polite" data-tone="neutral"></div>
 
         <section id="panel-intake" data-workflow-panel="intake" class="workflow-panel" tabindex="-1" aria-labelledby="intake-heading">
@@ -231,7 +231,7 @@
 
           <div id="analysis-progress-wrap" class="progress-card" hidden>
             <div class="progress-copy"><strong id="analysis-progress-label">Preparing scientific runtime…</strong><span>Long calculations run in a Web Worker so the interface remains responsive.</span></div>
-            <progress id="analysis-progress" max="100" value="0">0%</progress>
+            <progress id="analysis-progress" max="100" value="0" aria-labelledby="analysis-progress-label">0%</progress>
             <button id="cancel-analysis" class="button danger small" type="button" disabled>Cancel analysis</button>
           </div>
 
@@ -245,16 +245,16 @@
               <article class="metric-card"><span>Event window</span><strong id="metric-window">—</strong></article>
             </section>
 
-            <div class="result-tabs" role="tablist" aria-label="Analysis output sections">
-              <button type="button" role="tab" aria-selected="true" data-result-tab="summary">Main result</button>
-              <button type="button" role="tab" aria-selected="false" data-result-tab="audits" tabindex="-1">Integrity audit</button>
-              <button type="button" role="tab" aria-selected="false" data-result-tab="robustness" tabindex="-1">Robustness</button>
-              <button type="button" role="tab" aria-selected="false" data-result-tab="placebo" tabindex="-1">Placebo</button>
-              <button type="button" role="tab" aria-selected="false" data-result-tab="referee" tabindex="-1">Referee Mode</button>
-              <button type="button" role="tab" aria-selected="false" data-result-tab="reproduce" tabindex="-1">Reproduce & cite</button>
+            <div class="result-tabs" role="tablist" aria-label="Analysis output sections" aria-orientation="horizontal">
+              <button id="result-tab-summary" type="button" role="tab" aria-selected="true" aria-controls="result-panel-summary" data-result-tab="summary">Main result</button>
+              <button id="result-tab-audits" type="button" role="tab" aria-selected="false" aria-controls="result-panel-audits" data-result-tab="audits" tabindex="-1">Integrity audit</button>
+              <button id="result-tab-robustness" type="button" role="tab" aria-selected="false" aria-controls="result-panel-robustness" data-result-tab="robustness" tabindex="-1">Robustness</button>
+              <button id="result-tab-placebo" type="button" role="tab" aria-selected="false" aria-controls="result-panel-placebo" data-result-tab="placebo" tabindex="-1">Placebo</button>
+              <button id="result-tab-referee" type="button" role="tab" aria-selected="false" aria-controls="result-panel-referee" data-result-tab="referee" tabindex="-1">Referee Mode</button>
+              <button id="result-tab-reproduce" type="button" role="tab" aria-selected="false" aria-controls="result-panel-reproduce" data-result-tab="reproduce" tabindex="-1">Reproduce & cite</button>
             </div>
 
-            <section data-result-panel="summary" role="tabpanel" class="result-panel">
+            <section id="result-panel-summary" data-result-panel="summary" role="tabpanel" aria-labelledby="result-tab-summary" class="result-panel">
               <div class="card-grid two-column results-two-column">
                 <article class="card"><h3>Event-time path</h3><div id="event-chart" class="chart-wrap"></div></article>
                 <article class="card"><h3>Model diagnostics</h3><div id="model-details"></div><p class="field-help">Low R² is reported, not automatically treated as model failure.</p></article>
@@ -262,23 +262,23 @@
               <article class="card"><h3>Exact event-time values</h3><div id="event-table"></div></article>
             </section>
 
-            <section data-result-panel="audits" role="tabpanel" class="result-panel" hidden>
+            <section id="result-panel-audits" data-result-panel="audits" role="tabpanel" aria-labelledby="result-tab-audits" class="result-panel" hidden>
               <article class="card"><h3>Research Integrity Audit</h3><p>CRITICAL findings cannot be averaged away by unrelated PASS findings. NOT ASSESSABLE means the application lacks sufficient information to evaluate that issue.</p><div id="audit-results"></div></article>
             </section>
 
-            <section data-result-panel="robustness" role="tabpanel" class="result-panel" hidden>
+            <section id="result-panel-robustness" data-result-panel="robustness" role="tabpanel" aria-labelledby="result-tab-robustness" class="result-panel" hidden>
               <article class="card"><h3>Prespecified robustness matrix</h3><p>All rows are retained; EFL does not search alternatives and report only the most significant result.</p><div id="robustness-results"></div></article>
             </section>
 
-            <section data-result-panel="placebo" role="tabpanel" class="result-panel" hidden>
+            <section id="result-panel-placebo" data-result-panel="placebo" role="tabpanel" aria-labelledby="result-tab-placebo" class="result-panel" hidden>
               <article class="card"><h3>Historical pseudo-event diagnostic</h3><p>The tail proportion asks how unusual the actual CAR is relative to admissible historical pseudo-events. It is not labeled causal proof.</p><div id="placebo-results" class="chart-wrap"></div></article>
             </section>
 
-            <section data-result-panel="referee" role="tabpanel" class="result-panel" hidden>
+            <section id="result-panel-referee" data-result-panel="referee" role="tabpanel" aria-labelledby="result-tab-referee" class="result-panel" hidden>
               <article class="card referee-card"><div id="referee-results"></div></article>
             </section>
 
-            <section data-result-panel="reproduce" role="tabpanel" class="result-panel" hidden>
+            <section id="result-panel-reproduce" data-result-panel="reproduce" role="tabpanel" aria-labelledby="result-tab-reproduce" class="result-panel" hidden>
               <div class="card-grid two-column results-two-column">
                 <article class="card">
                   <h3>Run identity</h3>

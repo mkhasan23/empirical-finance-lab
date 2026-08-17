@@ -550,10 +550,17 @@ function bindEvents(): void {
   document.querySelectorAll<HTMLButtonElement>("[data-result-tab]").forEach((tab) => {
     tab.addEventListener("click", () => showResultTab(tab.dataset.resultTab as ResultTab));
     tab.addEventListener("keydown", (event) => {
-      if (!["ArrowLeft", "ArrowRight"].includes(event.key)) return;
+      if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+      event.preventDefault();
       const tabs = [...document.querySelectorAll<HTMLButtonElement>("[data-result-tab]")];
       const index = tabs.indexOf(tab);
-      const next = event.key === "ArrowRight" ? (index + 1) % tabs.length : (index - 1 + tabs.length) % tabs.length;
+      const next = event.key === "Home"
+        ? 0
+        : event.key === "End"
+          ? tabs.length - 1
+          : event.key === "ArrowRight"
+            ? (index + 1) % tabs.length
+            : (index - 1 + tabs.length) % tabs.length;
       tabs[next]!.focus();
       tabs[next]!.click();
     });

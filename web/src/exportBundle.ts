@@ -1,3 +1,16 @@
+import { createStoredZip, crc32 } from "./storedZip";
+import {
+  buildPayloadIntegrity,
+  canonicalJsonText,
+  REPRO_BUNDLE_SCHEMA,
+  sha256HexSync,
+  verifyReproducibilityArchive,
+} from "./reproRoundTrip";
+
+export { createStoredZip, crc32 } from "./storedZip";
+
+// storedZip.ts preserves the accepted deterministic ZIP timestamp: 1980-01-01.
+
 export type BundleContext = {
   result: Record<string, unknown>;
   originalUploadSha256: string;
@@ -8,89 +21,12 @@ export type BundleContext = {
   runtime: Record<string, unknown> | null;
 };
 
-type ZipEntry = { name: string; bytes: Uint8Array };
-
-const encoder = new TextEncoder();
-
-function u16(value: number): Uint8Array {
-  const out = new Uint8Array(2);
-  new DataView(out.buffer).setUint16(0, value, true);
-  return out;
-}
-
-function u32(value: number): Uint8Array {
-  const out = new Uint8Array(4);
-  new DataView(out.buffer).setUint32(0, value >>> 0, true);
-  return out;
-}
-
-function concat(parts: Uint8Array[]): Uint8Array {
-  const total = parts.reduce((sum, part) => sum + part.length, 0);
-  const out = new Uint8Array(total);
-  let offset = 0;
-  for (const part of parts) {
-    out.set(part, offset);
-    offset += part.length;
-  }
-  return out;
-}
-
-let crcTable: Uint32Array | null = null;
-function getCrcTable(): Uint32Array {
-  if (crcTable) return crcTable;
-  crcTable = new Uint32Array(256);
-  for (let n = 0; n < 256; n += 1) {
-    let c = n;
-    for (let k = 0; k < 8; k += 1) c = (c & 1) !== 0 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1;
-    crcTable[n] = c >>> 0;
-  }
-  return crcTable;
-}
-
-export function crc32(bytes: Uint8Array): number {
-  const table = getCrcTable();
-  let crc = 0xFFFFFFFF;
-  for (const byte of bytes) crc = table[(crc ^ byte) & 0xFF]! ^ (crc >>> 8);
-  return (crc ^ 0xFFFFFFFF) >>> 0;
-}
-
-export function createStoredZip(files: Record<string, string>): Uint8Array {
-  const entries: ZipEntry[] = Object.entries(files)
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([name, text]) => ({ name, bytes: encoder.encode(text) }));
-  const localParts: Uint8Array[] = [];
-  const centralParts: Uint8Array[] = [];
-  let localOffset = 0;
-  const utf8Flag = 0x0800;
-  const dosTime = 0;
-  const dosDate = 0x0021; // 1980-01-01, deterministic ZIP timestamp.
-
-  for (const entry of entries) {
-    const nameBytes = encoder.encode(entry.name);
-    const crc = crc32(entry.bytes);
-    const localHeader = concat([
-      u32(0x04034B50), u16(20), u16(utf8Flag), u16(0), u16(dosTime), u16(dosDate),
-      u32(crc), u32(entry.bytes.length), u32(entry.bytes.length), u16(nameBytes.length), u16(0), nameBytes,
-    ]);
-    localParts.push(localHeader, entry.bytes);
-
-    const centralHeader = concat([
-      u32(0x02014B50), u16(20), u16(20), u16(utf8Flag), u16(0), u16(dosTime), u16(dosDate),
-      u32(crc), u32(entry.bytes.length), u32(entry.bytes.length), u16(nameBytes.length), u16(0), u16(0),
-      u16(0), u16(0), u32(0), u32(localOffset), nameBytes,
-    ]);
-    centralParts.push(centralHeader);
-    localOffset += localHeader.length + entry.bytes.length;
-  }
-
-  const central = concat(centralParts);
-  const local = concat(localParts);
-  const end = concat([
-    u32(0x06054B50), u16(0), u16(0), u16(entries.length), u16(entries.length),
-    u32(central.length), u32(local.length), u16(0),
-  ]);
-  return concat([local, central, end]);
-}
+type ExportBuildProvenance = {
+  build_commit: string;
+  build_mode: string;
+  build_source: string;
+  core_bundle_sha256: string;
+};
 
 function json(value: unknown): string {
   return `${JSON.stringify(value, null, 2)}\n`;
@@ -115,6 +51,27 @@ function arrayValue(value: unknown): Record<string, unknown>[] {
   return Array.isArray(value) ? value.filter((item): item is Record<string, unknown> => Boolean(item) && typeof item === "object" && !Array.isArray(item)) : [];
 }
 
+function resolveBuildProvenance(coreRepro: Record<string, unknown>, runtimeValue: Record<string, unknown> | null): ExportBuildProvenance {
+  const coreEnvironment = objectValue(coreRepro.environment);
+  const browserRuntime = objectValue(runtimeValue);
+  const coreCommit = String(coreEnvironment.build_commit ?? "UNSET");
+  const browserCommit = String(browserRuntime.build_commit ?? "UNSET");
+  if (coreCommit !== browserCommit) throw new Error(`BUILD_PROVENANCE_COMMIT_MISMATCH:${coreCommit}:${browserCommit}`);
+
+  const buildMode = String(browserRuntime.build_mode ?? "UNAVAILABLE");
+  const buildSource = String(browserRuntime.build_source ?? "UNAVAILABLE");
+  if (buildMode === "github-pages" && !/^[0-9a-f]{40}$/.test(browserCommit)) {
+    throw new Error("BUILD_PROVENANCE_PAGES_COMMIT_INVALID");
+  }
+
+  return {
+    build_commit: browserCommit,
+    build_mode: buildMode,
+    build_source: buildSource,
+    core_bundle_sha256: String(browserRuntime.core_bundle_sha256 ?? "UNAVAILABLE"),
+  };
+}
+
 export function buildReproducibilityFiles(context: BundleContext): Record<string, string> {
   const result = context.result;
   const coreRepro = objectValue(result.reproducibility);
@@ -128,25 +85,13 @@ export function buildReproducibilityFiles(context: BundleContext): Record<string
   const audits = arrayValue(result.audits);
   const executionId = String(coreRepro.execution_id ?? "UNAVAILABLE");
   const analysisId = String(coreRepro.analysis_id ?? "UNAVAILABLE");
-  const engineRawHash = String(coreHashes.raw_file_sha256 ?? context.engineInputSha256);
+  const coreRawHash = String(coreHashes.raw_file_sha256 ?? "");
+  if (coreRawHash !== context.engineInputSha256) {
+    throw new Error(`ENGINE_INPUT_HASH_MISMATCH:${coreRawHash}:${context.engineInputSha256}`);
+  }
   const canonicalHash = String(coreHashes.canonical_data_sha256 ?? "UNAVAILABLE");
   const specHash = String(coreHashes.specification_sha256 ?? "UNAVAILABLE");
-
-  const manifest = {
-    bundle_schema: "EFL_REPRODUCIBILITY_BUNDLE_V1",
-    software_version: coreRepro.software_version ?? "0.0.0",
-    analysis_id: analysisId,
-    execution_id: executionId,
-    hashes: {
-      raw_file_sha256: context.originalUploadSha256,
-      engine_input_sha256: engineRawHash,
-      canonical_data_sha256: canonicalHash,
-      specification_sha256: specHash,
-    },
-    column_mapping: context.columnMapping,
-    normalization: context.normalization,
-    scientific_core_manifest: coreRepro,
-  };
+  const buildProvenance = resolveBuildProvenance(coreRepro, context.runtime);
 
   const inference = {
     classical: Object.keys(classical).length > 0 ? classical : null,
@@ -166,6 +111,8 @@ export function buildReproducibilityFiles(context: BundleContext): Record<string
     "Empirical Finance Lab: Audit-First Tools for Credible Empirical Finance Research.",
     "Author: Muhammad Kamrul Hasan.",
     `Software version: ${String(coreRepro.software_version ?? "0.0.0")}.`,
+    `Build commit: ${buildProvenance.build_commit}.`,
+    `Build mode/source: ${buildProvenance.build_mode}/${buildProvenance.build_source}.`,
     "Repository: https://github.com/mkhasan23/empirical-finance-lab",
     "Pre-alpha software: no version-specific DOI has been assigned yet.",
     "If a future validated release materially contributes to your research, cite the exact released version and DOI provided with that release.",
@@ -176,39 +123,75 @@ export function buildReproducibilityFiles(context: BundleContext): Record<string
     "===========================================",
     "",
     "This archive was generated locally in the browser. It does not include the proprietary/raw research file.",
+    "A full reproduction therefore requires this ZIP plus the exact original local CSV used for the run.",
     "manifest.json records the SHA-256 of the original local file and the transformed engine input separately.",
     "analysis_spec.json is the locked research specification sent to the validated Python core.",
     "normalization.json documents column mapping, any explicitly approved sort, and normalized-to-original source-row provenance.",
+    "scientific_result.json records the complete deterministic scientific result returned by the authoritative Python core.",
+    "The D2 round-trip contract verifies the ZIP structure and payload hashes, the original-file hash, reconstructed engine input, locked specification, AnalysisID, ExecutionID, build provenance, and scientific-result identity before requiring a byte-identical deterministic re-export.",
     "event_time.csv reports the event-window values returned by the scientific core; no econometric quantity is recomputed by the exporter.",
     "Referee Mode is a deterministic synthesis of version-controlled audit rules and is not causal certification.",
     "",
     `AnalysisID: ${analysisId}`,
     `ExecutionID: ${executionId}`,
+    `Build commit: ${buildProvenance.build_commit}`,
+    `Build mode/source: ${buildProvenance.build_mode}/${buildProvenance.build_source}`,
     "",
   ].join("\n");
 
-  return {
+  const payloadFiles: Record<string, string> = {
     "README.txt": readme,
     "analysis_spec.json": json(result.specification ?? null),
     "audit_report.json": json(audits),
     "citation.txt": citation,
     "data_audit.json": json({ audits, source_row_provenance: context.normalizedToOriginalSourceRow }),
-    "environment.json": json({ core_environment: coreRepro.environment ?? null, browser_runtime: context.runtime }),
+    "environment.json": json({ core_environment: coreRepro.environment ?? null, browser_runtime: context.runtime, build_provenance: buildProvenance }),
     "event_time.csv": csvFromRows(["date", "tau", "security_return", "benchmark_return", "expected_return", "abnormal_return", "cumulative_abnormal_return"], eventRows),
     "inference.json": json(inference),
-    "manifest.json": json(manifest),
     "model_results.json": json(primary),
     "normalization.json": json({ column_mapping: context.columnMapping, normalization: context.normalization, normalized_to_original_source_row: context.normalizedToOriginalSourceRow }),
     "placebo_events.csv": csvFromRows(["date", "placebo_car"], placeboEvents),
     "placebo_summary.json": json(placeboSummary),
     "referee_report.md": String(result.referee_report ?? "# Empirical Finance Lab — Referee Mode\n\nNot available.\n"),
     "robustness.csv": csvFromRows(["model", "window", "car", "permutation_p_value", "permutation_ge_count", "B", "sign", "significant_5pct"], robustness.map((row) => ({ ...row, window: Array.isArray(row.window) ? row.window.join(":") : row.window }))),
+    "scientific_result.json": json(result),
   };
+  const payloadIntegrity = buildPayloadIntegrity(payloadFiles);
+  const manifest = {
+    bundle_schema: REPRO_BUNDLE_SCHEMA,
+    software_version: coreRepro.software_version ?? "0.0.0",
+    analysis_id: analysisId,
+    execution_id: executionId,
+    build_provenance: buildProvenance,
+    hashes: {
+      raw_file_sha256: context.originalUploadSha256,
+      engine_input_sha256: coreRawHash,
+      canonical_data_sha256: canonicalHash,
+      specification_sha256: specHash,
+    },
+    column_mapping: context.columnMapping,
+    normalization: context.normalization,
+    scientific_core_manifest: coreRepro,
+    scientific_result_sha256: sha256HexSync(canonicalJsonText(result)),
+    reproduction_contract: {
+      original_local_file_required: true,
+      raw_research_data_included: false,
+      deterministic_reexport_required: true,
+    },
+    payload_integrity: {
+      algorithm: "SHA-256",
+      files: payloadIntegrity.files,
+      tree_sha256: payloadIntegrity.tree_sha256,
+    },
+  };
+  return { ...payloadFiles, "manifest.json": json(manifest) };
 }
 
 export function buildReproducibilityZip(context: BundleContext): { filename: string; bytes: Uint8Array } {
   const files = buildReproducibilityFiles(context);
   const repro = objectValue(context.result.reproducibility);
   const executionId = String(repro.execution_id ?? "unavailable").replace(/[^a-zA-Z0-9]/g, "").slice(0, 12) || "unavailable";
-  return { filename: `efl-run-${executionId}.zip`, bytes: createStoredZip(files) };
+  const bytes = createStoredZip(files);
+  verifyReproducibilityArchive(bytes); // fail closed before the browser can offer a download
+  return { filename: `efl-run-${executionId}.zip`, bytes };
 }

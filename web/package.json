@@ -10,10 +10,15 @@
     "typecheck": "npm run typecheck:browser && npm run typecheck:node",
     "test:unit": "vitest run --config vitest.config.ts",
     "build": "vite build",
+    "prebuild:pages": "python ../tools/check_stage7_c1_security_gate.py && python ../tools/check_stage7_d2_repro_gate.py",
+    "build:pages": "vite build --mode github-pages",
     "preview": "vite preview --host 127.0.0.1 --port 4173",
+    "preview:pages": "vite preview --mode github-pages --host 127.0.0.1 --port 4173",
     "test:e2e": "playwright test",
     "test:e2e:stage5": "playwright test tests/stage5.spec.ts",
-    "test:e2e:stage6": "playwright test tests/stage6.spec.ts"
+    "test:e2e:stage6": "playwright test tests/stage6.spec.ts",
+    "test:e2e:stage7": "playwright test --config=playwright.stage7.config.ts",
+    "test:e2e:stage7:live": "playwright test --config=playwright.stage7.live.config.ts"
   },
   "devDependencies": {
     "@playwright/test": "1.62.0",

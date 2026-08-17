@@ -132,10 +132,10 @@ for browser in ("chromium", "firefox", "webkit"):
 if "matrix:" not in workflow or "--project=${{ matrix.browser }}" not in workflow:
     errors.append("Stage V CI does not isolate browser parity by matrix project")
 
-if "actions/upload-artifact@v4" not in workflow or "name: stage5-browser-assets" not in workflow:
-    errors.append("Stage V preflight does not publish the authoritative browser asset artifact")
-if "actions/download-artifact@v5" not in workflow or "path: web/public" not in workflow:
-    errors.append("Stage V browser jobs do not consume the authoritative preflight asset artifact")
+if "actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7" not in workflow or "name: stage5-browser-assets" not in workflow:
+    errors.append("Stage V preflight does not publish the authoritative browser asset artifact with the approved immutable action pin")
+if "actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8" not in workflow or "path: web/public" not in workflow:
+    errors.append("Stage V browser jobs do not consume the authoritative preflight asset artifact with the approved immutable action pin")
 
 browser_section = workflow.split("  browser-runtime:", 1)[1] if "  browser-runtime:" in workflow else ""
 if "python tools/build_stage5_browser_assets.py" in browser_section:

@@ -21,6 +21,9 @@ export type RuntimeManifest = {
   scipy_version: string;
   efl_version: string;
   core_bundle_sha256: string;
+  build_commit: string;
+  build_mode: string;
+  build_source: string;
 };
 
 export type WorkerResponse =
