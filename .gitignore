@@ -14,3 +14,6 @@ coverage.xml
 .pytest_cache/
 playwright-report/
 test-results/
+web/public/efl-core.json
+web/public/stage5-parity-cases.json
+web/public/stage5-runtime-pin.json

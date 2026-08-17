@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Empirical Finance Lab — Stage V Runtime Harness</title>
+  </head>
+  <body>
+    <main>
+      <h1>Empirical Finance Lab — Stage V Browser Runtime Harness</h1>
+      <p>This is a pre-alpha scientific parity harness, not the public user interface.</p>
+      <p id="status" data-state="EMPTY">Browser engine not initialized.</p>
+      <button id="initialize" type="button">Initialize browser engine</button>
+      <button id="run-ka003" type="button" disabled>Run KA-003 parity fixture</button>
+      <button id="cancel" type="button" disabled>Cancel active analysis</button>
+      <pre id="output" aria-live="polite"></pre>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,89 @@
+name: Stage V browser runtime parity
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Install frozen Stage IV Python environment
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy==2.3.5 scipy==1.17.0 pytest==9.0.2 coverage==7.13.3
+          python -m pip install -e . --no-deps
+      - name: Verify Stage III and Stage IV remain green
+        run: |
+          python tools/check_corpus_integrity.py
+          pytest -q
+          python tools/check_stage4_gate.py
+      - name: Build and statically audit Stage V browser assets
+        run: python tools/check_stage5_static_gate.py
+      - name: Upload authoritative Stage V browser assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage5-browser-assets
+          path: |
+            web/public/efl-core.json
+            web/public/stage5-parity-cases.json
+            web/public/stage5-runtime-pin.json
+          if-no-files-found: error
+          retention-days: 1
+      - name: Install pinned frontend test dependencies
+        working-directory: web
+        run: npm install --no-audit --no-fund
+      - name: TypeScript and Vitest gates
+        working-directory: web
+        run: |
+          npm run typecheck
+          npm run test:unit
+      - name: Build Vite Stage V harness
+        working-directory: web
+        run: npm run build
+
+  browser-runtime:
+    needs: preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    name: browser-runtime-${{ matrix.browser }}
+    steps:
+      - uses: actions/checkout@v6
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Download authoritative Stage V browser assets
+        uses: actions/download-artifact@v5
+        with:
+          name: stage5-browser-assets
+          path: web/public
+      - name: Install pinned frontend test dependencies
+        working-directory: web
+        run: npm install --no-audit --no-fund
+      - name: Build Vite Stage V harness
+        working-directory: web
+        run: npm run build
+      - name: Install selected Playwright browser
+        working-directory: web
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+      - name: Pyodide parity and privacy — ${{ matrix.browser }}
+        working-directory: web
+        run: npx playwright test --project=${{ matrix.browser }}
