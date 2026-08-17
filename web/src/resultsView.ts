@@ -64,6 +64,9 @@ export function renderEventTable(container: HTMLElement, result: Record<string, 
   }
   const wrapper = document.createElement("div");
   wrapper.className = "table-scroll";
+  wrapper.tabIndex = 0;
+  wrapper.setAttribute("role", "region");
+  wrapper.setAttribute("aria-label", "Scrollable event-time abnormal return results table");
   wrapper.append(table);
   container.append(wrapper);
 }
@@ -179,6 +182,9 @@ export function renderRobustness(container: HTMLElement, result: Record<string, 
   }
   const wrapper = document.createElement("div");
   wrapper.className = "table-scroll";
+  wrapper.tabIndex = 0;
+  wrapper.setAttribute("role", "region");
+  wrapper.setAttribute("aria-label", "Scrollable prespecified robustness matrix");
   wrapper.append(table);
   container.append(wrapper);
 }

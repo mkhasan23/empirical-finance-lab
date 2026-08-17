@@ -1,7 +1,9 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
+import path from "node:path";
 import { exerciseD2RoundTrip } from "./reproRoundTrip.js";
 
 const BASE_PATH = "/empirical-finance-lab/";
+const TUTORIAL_CSV = path.resolve("../examples/efl_tutorial_synthetic.csv");
 const EXPECTED_DOCUMENT_CSP = "default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; worker-src 'self'; frame-src 'none'; media-src 'none'; manifest-src 'self'; form-action 'self'";
 const EXPECTED_BUILD_COMMIT = process.env.EFL_BUILD_COMMIT;
 if (!EXPECTED_BUILD_COMMIT || !/^[0-9a-f]{40}$/.test(EXPECTED_BUILD_COMMIT)) {
@@ -79,3 +81,104 @@ test("production Pages candidate completes the privacy-preserving reproducibilit
   await page.goto("./");
   await exerciseD2RoundTrip(page, EXPECTED_BUILD_COMMIT);
 });
+
+async function completeTutorialAnalysis(page: Page): Promise<void> {
+  await page.getByLabel("Choose CSV file").setInputFiles(TUTORIAL_CSV);
+  await expect(page.getByRole("button", { name: "Continue to research specification" })).toBeEnabled();
+  await page.getByRole("button", { name: "Continue to research specification" }).click();
+  await page.getByLabel("Calendar announcement date").fill("2025-07-31");
+  await page.getByLabel("Announcement timing").selectOption("during_or_before_market");
+  await page.getByRole("button", { name: "Use suggestion" }).click();
+  await page.getByLabel(/I confirm the effective event trading date/).check();
+  await page.getByLabel("Estimation start (τ)").fill("-140");
+  await page.getByLabel("Estimation end (τ)").fill("-20");
+  await page.getByLabel("Event start (τ)").fill("-1");
+  await page.getByLabel("Event end (τ)").fill("1");
+  await page.getByLabel("Permutation count (B)").fill("1000");
+  await page.getByLabel("PCG64 seed").fill("20260817");
+  await page.getByLabel("Run historical pseudo-event placebo diagnostic").uncheck();
+  await page.getByLabel(/Also run market-adjusted model/).uncheck();
+  for (const id of ["robust-start-1", "robust-end-1", "robust-start-2", "robust-end-2"]) {
+    await page.locator(`#${id}`).fill("");
+  }
+  await page.getByRole("button", { name: "Review & lock specification" }).click();
+  await page.getByRole("button", { name: "Run locked analysis" }).click();
+  await page.waitForFunction(() => window.__EFL_STAGE6__.getResult() !== null, undefined, { timeout: 300_000 });
+  await expect(page.locator("#metric-state")).toHaveText("COMPLETE", { timeout: 300_000 });
+  await expect(page.locator("#metric-car")).toHaveText("3.000%");
+}
+
+test("production candidate preserves keyboard semantics and completed-result responsiveness", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 800 });
+  await page.goto("./");
+
+  const duplicateIds = await page.evaluate(() => {
+    const ids = [...document.querySelectorAll<HTMLElement>("[id]")].map((node) => node.id);
+    return ids.filter((id, index) => ids.indexOf(id) !== index);
+  });
+  expect(duplicateIds).toEqual([]);
+  await expect(page.locator("#workspace")).toHaveAttribute("tabindex", "-1");
+  await expect(page.locator("#analysis-progress")).toHaveAttribute("aria-labelledby", "analysis-progress-label");
+
+  const skipLink = page.getByRole("link", { name: "Skip to analysis workspace" });
+  await skipLink.focus();
+  await expect(skipLink).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(page.locator("#workspace")).toBeFocused();
+
+  const fileInput = page.getByLabel("Choose CSV file");
+  await fileInput.focus();
+  const pickerFocus = await page.locator(".file-picker").evaluate((node) => {
+    const style = getComputedStyle(node);
+    return { style: style.outlineStyle, width: style.outlineWidth };
+  });
+  expect(pickerFocus.style).not.toBe("none");
+  expect(Number.parseFloat(pickerFocus.width)).toBeGreaterThan(0);
+
+  await completeTutorialAnalysis(page);
+
+  const relationships = await page.getByRole("tab").evaluateAll((tabs) => tabs.map((tab) => {
+    const controls = tab.getAttribute("aria-controls");
+    const panel = controls ? document.getElementById(controls) : null;
+    return {
+      tabId: tab.id,
+      controls,
+      panelLabelledBy: panel?.getAttribute("aria-labelledby") ?? null,
+    };
+  }));
+  expect(relationships).toHaveLength(6);
+  for (const relation of relationships) {
+    expect(relation.tabId).not.toBe("");
+    expect(relation.controls).not.toBeNull();
+    expect(relation.panelLabelledBy).toBe(relation.tabId);
+  }
+
+  const mainTab = page.getByRole("tab", { name: "Main result" });
+  await mainTab.focus();
+  await page.keyboard.press("End");
+  const reproduceTab = page.getByRole("tab", { name: "Reproduce & cite" });
+  await expect(reproduceTab).toBeFocused();
+  await expect(reproduceTab).toHaveAttribute("aria-selected", "true");
+  await page.keyboard.press("Home");
+  await expect(mainTab).toBeFocused();
+  await page.keyboard.press("ArrowRight");
+  const auditTab = page.getByRole("tab", { name: "Integrity audit" });
+  await expect(auditTab).toBeFocused();
+  await expect(auditTab).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("tabpanel", { name: "Integrity audit" })).toBeVisible();
+
+  await mainTab.click();
+  const tableRegion = page.getByRole("region", { name: "Scrollable event-time abnormal return results table" });
+  await expect(tableRegion).toBeVisible();
+  await tableRegion.focus();
+  await expect(tableRegion).toBeFocused();
+  const tableOverflow = await tableRegion.evaluate((node) => node.scrollWidth > node.clientWidth);
+  expect(tableOverflow).toBeTruthy();
+
+  for (const width of [320, 390, 768, 1280]) {
+    await page.setViewportSize({ width, height: 900 });
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    expect(overflow, `document overflow at ${width}px`).toBeLessThanOrEqual(1);
+  }
+});
+
