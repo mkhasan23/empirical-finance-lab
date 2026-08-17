@@ -13,7 +13,14 @@ declare const self: DedicatedWorkerGlobalScope;
 type PyodideApi = {
   FS: { mkdirTree(path: string): void; writeFile(path: string, data: Uint8Array | string, opts?: Record<string, unknown>): void };
   globals: { set(name: string, value: unknown): void; delete(name: string): boolean };
-  loadPackage(packages: string[]): Promise<void>;
+  loadPackage(
+    packages: string[],
+    options?: {
+      messageCallback?: (message: string) => void;
+      errorCallback?: (message: string) => void;
+      checkIntegrity?: boolean;
+    },
+  ): Promise<unknown>;
   runPython(code: string): unknown;
 };
 
@@ -69,10 +76,15 @@ async function initialize(bundleUrl: string, requestId: string) {
     const mod = await import(/* @vite-ignore */ PYODIDE_MODULE_URL) as { loadPyodide(options: { indexURL: string }): Promise<PyodideApi> };
     send({ protocol: WORKER_PROTOCOL_VERSION, type: "PROGRESS", requestId, phase: "initializing_python_runtime", percent: 15 });
     pyodide = await mod.loadPyodide({ indexURL: PYODIDE_INDEX_URL });
+    const packageHeartbeat = (phase: string, percent: number) => ({
+      messageCallback: (_message: string) => {
+        send({ protocol: WORKER_PROTOCOL_VERSION, type: "PROGRESS", requestId, phase, percent });
+      },
+    });
     send({ protocol: WORKER_PROTOCOL_VERSION, type: "PROGRESS", requestId, phase: "loading_numpy", percent: 35 });
-    await pyodide.loadPackage(["numpy"]);
+    await pyodide.loadPackage(["numpy"], packageHeartbeat("loading_numpy", 35));
     send({ protocol: WORKER_PROTOCOL_VERSION, type: "PROGRESS", requestId, phase: "loading_scipy", percent: 52 });
-    await pyodide.loadPackage(["scipy"]);
+    await pyodide.loadPackage(["scipy"], packageHeartbeat("loading_scipy", 52));
     send({ protocol: WORKER_PROTOCOL_VERSION, type: "PROGRESS", requestId, phase: "scientific_runtime_loaded", percent: 65 });
   }
   coreBundleSha256 = await installCore(bundleUrl, requestId);
