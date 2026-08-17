@@ -10,6 +10,7 @@
     "typecheck": "npm run typecheck:browser && npm run typecheck:node",
     "test:unit": "vitest run --config vitest.config.ts",
     "build": "vite build",
+    "prebuild:pages": "python ../tools/check_stage7_c1_security_gate.py",
     "build:pages": "vite build --mode github-pages",
     "preview": "vite preview --host 127.0.0.1 --port 4173",
     "preview:pages": "vite preview --mode github-pages --host 127.0.0.1 --port 4173",

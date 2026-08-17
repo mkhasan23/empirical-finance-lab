@@ -32,6 +32,22 @@ A Stage VII candidate must:
 - verify the production tree is unchanged after the smoke test;
 - upload the tested dist and its manifest as separate CI artifacts.
 
+## Browser security boundary contract
+
+The Stage VII Pages candidate must emit an enforcing document **Content Security Policy** and **Referrer Policy** through Vite's HTML transformation before resource-loading tags.
+
+The document CSP must retain the following policy surface:
+
+`default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; worker-src 'self'; frame-src 'none'; media-src 'none'; manifest-src 'self'; form-action 'self'`
+
+The policy must not contain `unsafe-inline` or `unsafe-eval`, and it must not grant the document direct access to `cdn.jsdelivr.net`. The Referrer Policy must be `no-referrer`.
+
+The `worker-src 'self'` rule protects creation of the same-origin EFL scientific worker. The worker's internal network policy is a separate execution-context boundary: EFL does not claim that the document CSP constrains normal dedicated-worker fetches. Worker initialization remains governed by version-controlled worker code, the same-origin `efl-core.json` authority check, the pinned `cdn.jsdelivr.net` Pyodide endpoint, source/bundle hash verification, and browser network auditing.
+
+Both the local production-subpath test and the real deployed-site test must assert the exact document CSP and Referrer Policy, listen for `securitypolicyviolation`, and fail on any document CSP violation while preserving the existing pinned-runtime, KA-003, and zero-analysis-network requirements.
+
+The Stage VII-C1 static security gate must run automatically before `build:pages` so a Pages artifact cannot be produced from a candidate whose documented policy, Vite injection, or production/live assertions have drifted.
+
 ## Deployment contract
 
 The deploy job must consume the exact build-job artifact. It must not rebuild the application. Before packaging for GitHub Pages, it re-verifies the downloaded dist against the build-job manifest.
@@ -58,6 +74,7 @@ The live gate must:
 - tolerate a short Pages/CDN propagation interval but fail if the live artifact does not converge to the tested manifest;
 - open the actual deployed site in Chromium over HTTPS;
 - confirm the `/empirical-finance-lab/` base path and document base URI;
+- verify the exact Stage VII document CSP and `no-referrer` policy and require no document `securitypolicyviolation` events;
 - initialize the pinned Pyodide/Python/NumPy/SciPy runtime;
 - permit initialization network traffic only to the Pages project path and the pinned jsDelivr runtime host;
 - confirm that the authoritative `efl-core.json` is fetched from the live repository subpath;

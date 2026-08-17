@@ -5,6 +5,7 @@ import { expect, test, type APIRequestContext } from "@playwright/test";
 const BASE_PATH = "/empirical-finance-lab/";
 const EXPECTED_ORIGIN = "https://mkhasan23.github.io";
 const MANIFEST_SCHEMA = "efl-stage7-dist-manifest-1";
+const EXPECTED_DOCUMENT_CSP = "default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; worker-src 'self'; frame-src 'none'; media-src 'none'; manifest-src 'self'; form-action 'self'";
 
 interface DistManifestFile {
   path: string;
@@ -119,7 +120,15 @@ test("live GitHub Pages serves the exact tested Stage VII artifact", async ({ re
     .toBe("PASS");
 });
 
-test("live GitHub Pages preserves pinned runtime parity and analysis privacy", async ({ page }) => {
+test("live GitHub Pages preserves pinned runtime parity, document security, and analysis privacy", async ({ page }) => {
+  await page.addInitScript(() => {
+    const target = window as Window & { __EFL_STAGE7_CSP_VIOLATIONS__?: string[] };
+    target.__EFL_STAGE7_CSP_VIOLATIONS__ = [];
+    document.addEventListener("securitypolicyviolation", (event) => {
+      target.__EFL_STAGE7_CSP_VIOLATIONS__?.push(`${event.effectiveDirective}:${event.blockedURI}`);
+    });
+  });
+
   const initializationRequests: Array<{ method: string; url: string }> = [];
   page.on("request", (request) => initializationRequests.push({ method: request.method(), url: request.url() }));
 
@@ -130,6 +139,13 @@ test("live GitHub Pages preserves pinned runtime parity and analysis privacy", a
   expect(pageUrl.origin).toBe(EXPECTED_ORIGIN);
   expect(pageUrl.pathname).toBe(BASE_PATH);
   expect(await page.evaluate(() => new URL(document.baseURI).pathname)).toBe(BASE_PATH);
+
+  const documentSecurity = await page.evaluate(() => ({
+    csp: document.querySelector<HTMLMetaElement>('meta[http-equiv="Content-Security-Policy"]')?.content ?? null,
+    referrer: document.querySelector<HTMLMetaElement>('meta[name="referrer"]')?.content ?? null,
+  }));
+  expect(documentSecurity.csp).toBe(EXPECTED_DOCUMENT_CSP);
+  expect(documentSecurity.referrer).toBe("no-referrer");
 
   const runtime = await page.evaluate(() => window.__EFL_STAGE5__.initialize());
   expect(runtime.pyodide_version).toBe("314.0.4");
@@ -157,4 +173,9 @@ test("live GitHub Pages preserves pinned runtime parity and analysis privacy", a
   const parity = await page.evaluate(() => window.__EFL_STAGE5__.runFixture("KA-003"));
   expect(parity.mismatches).toEqual([]);
   expect(analysisRequests, "live production scientific analysis emitted a network request").toEqual([]);
+
+  const cspViolations = await page.evaluate(() => (
+    (window as Window & { __EFL_STAGE7_CSP_VIOLATIONS__?: string[] }).__EFL_STAGE7_CSP_VIOLATIONS__ ?? []
+  ));
+  expect(cspViolations, "live production document emitted a CSP violation").toEqual([]);
 });
