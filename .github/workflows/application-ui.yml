@@ -45,7 +45,7 @@ jobs:
           retention-days: 1
       - name: Install pinned frontend test dependencies
         working-directory: web
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
       - name: TypeScript and unit-test gates
         working-directory: web
         run: |
@@ -77,7 +77,7 @@ jobs:
           path: web/public
       - name: Install pinned frontend test dependencies
         working-directory: web
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
       - name: Build Stage VI application
         working-directory: web
         run: npm run build
