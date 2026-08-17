@@ -488,7 +488,13 @@ function downloadBundle(): void {
     normalizedToOriginalSourceRow: session.normalized.normalizedToOriginalSourceRow,
     runtime: session.runtime as unknown as Record<string, unknown> | null,
   });
-  const blob = new Blob([bytes], { type: "application/zip" });
+  // TypeScript 5.9 preserves whether a typed array may be backed by
+  // SharedArrayBuffer. BlobPart requires an ArrayBuffer-backed view, so make
+  // an owned ArrayBuffer copy at the download boundary instead of using a
+  // type assertion that could hide an incompatible backing buffer.
+  const downloadBuffer = new ArrayBuffer(bytes.byteLength);
+  new Uint8Array(downloadBuffer).set(bytes);
+  const blob = new Blob([downloadBuffer], { type: "application/zip" });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
   anchor.href = url;
