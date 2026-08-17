@@ -1,0 +1,125 @@
+name: Stage VII release hardening
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      deploy:
+        description: Deploy the tested production artifact to GitHub Pages
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Install frozen scientific environment
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy==2.3.5 scipy==1.17.0 pytest==9.0.2 coverage==7.13.3
+          python -m pip install -e . --no-deps
+      - name: Verify accepted foundation and Stage VII static invariants
+        run: python tools/check_stage7_static_gate.py
+      - name: Install locked frontend dependencies
+        working-directory: web
+        run: npm ci --no-audit --no-fund
+      - name: TypeScript and unit-test gates
+        working-directory: web
+        run: |
+          npm run typecheck
+          npm run test:unit
+      - name: Build GitHub Pages production candidate
+        working-directory: web
+        run: npm run build:pages
+      - name: Record deterministic production artifact manifest
+        run: python tools/stage7_dist_manifest.py write web/dist "$RUNNER_TEMP/stage7-dist-manifest.json"
+      - name: Install Chromium for production-like smoke test
+        working-directory: web
+        run: npx playwright install --with-deps chromium
+      - name: Production subpath parity and privacy smoke
+        working-directory: web
+        run: npm run test:e2e:stage7
+      - name: Verify production artifact unchanged after smoke test
+        run: python tools/stage7_dist_manifest.py verify web/dist "$RUNNER_TEMP/stage7-dist-manifest.json"
+      - name: Upload tested production dist
+        uses: actions/upload-artifact@v7
+        with:
+          name: stage7-production-dist
+          path: web/dist
+          if-no-files-found: error
+          retention-days: 7
+      - name: Upload production artifact evidence
+        uses: actions/upload-artifact@v7
+        with:
+          name: stage7-dist-evidence
+          path: ${{ runner.temp }}/stage7-dist-manifest.json
+          if-no-files-found: error
+          retention-days: 7
+      - name: Upload Stage VII failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: stage7-playwright-diagnostics
+          path: web/test-results
+          if-no-files-found: ignore
+          retention-days: 3
+
+  deploy:
+    needs: build
+    if: >-
+      (github.event_name == 'workflow_dispatch' && inputs.deploy == true) ||
+      (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      group: github-pages
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v6
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Download tested production dist
+        uses: actions/download-artifact@v8
+        with:
+          name: stage7-production-dist
+          path: web/dist
+      - name: Download production artifact evidence
+        uses: actions/download-artifact@v8
+        with:
+          name: stage7-dist-evidence
+          path: stage7-evidence
+      - name: Verify downloaded production artifact
+        run: python tools/stage7_dist_manifest.py verify web/dist stage7-evidence/stage7-dist-manifest.json
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v6
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: web/dist
+      - name: Deploy exact tested artifact to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
