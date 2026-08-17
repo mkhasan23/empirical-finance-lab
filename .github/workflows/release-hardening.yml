@@ -83,7 +83,8 @@ jobs:
     needs: build
     if: >-
       (github.event_name == 'workflow_dispatch' && inputs.deploy == true) ||
-      (github.event_name == 'push' && github.ref == 'refs/heads/main')
+      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'push' && github.ref == 'refs/heads/stage-vii-release-hardening' && contains(github.event.head_commit.message, '[deploy-candidate]'))
     runs-on: ubuntu-latest
     timeout-minutes: 15
     concurrency:
