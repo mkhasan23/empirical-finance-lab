@@ -132,9 +132,9 @@ for browser in ("chromium", "firefox", "webkit"):
 if "matrix:" not in workflow or "--project=${{ matrix.browser }}" not in workflow:
     errors.append("Stage V CI does not isolate browser parity by matrix project")
 
-if "actions/upload-artifact@v4" not in workflow or "name: stage5-browser-assets" not in workflow:
+if "actions/upload-artifact@v7" not in workflow or "name: stage5-browser-assets" not in workflow:
     errors.append("Stage V preflight does not publish the authoritative browser asset artifact")
-if "actions/download-artifact@v5" not in workflow or "path: web/public" not in workflow:
+if "actions/download-artifact@v8" not in workflow or "path: web/public" not in workflow:
     errors.append("Stage V browser jobs do not consume the authoritative preflight asset artifact")
 
 browser_section = workflow.split("  browser-runtime:", 1)[1] if "  browser-runtime:" in workflow else ""

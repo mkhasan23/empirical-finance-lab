@@ -34,7 +34,7 @@ jobs:
       - name: Build and statically audit Stage V browser assets
         run: python tools/check_stage5_static_gate.py
       - name: Upload authoritative Stage V browser assets
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: stage5-browser-assets
           path: |
@@ -71,7 +71,7 @@ jobs:
         with:
           node-version: '24'
       - name: Download authoritative Stage V browser assets
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           name: stage5-browser-assets
           path: web/public
