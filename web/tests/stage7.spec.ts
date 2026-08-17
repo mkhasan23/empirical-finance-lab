@@ -113,7 +113,7 @@ test("production candidate preserves keyboard semantics and completed-result res
   await page.goto("./");
 
   const duplicateIds = await page.evaluate(() => {
-    const ids = [...document.querySelectorAll<HTMLElement>("[id]")].map((node) => node.id);
+    const ids = Array.from(document.querySelectorAll<HTMLElement>("[id]")).map((node) => node.id);
     return ids.filter((id, index) => ids.indexOf(id) !== index);
   });
   expect(duplicateIds).toEqual([]);
