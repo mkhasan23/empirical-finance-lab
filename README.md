@@ -2,19 +2,19 @@
 
 **Audit-first research software for credible, transparent, and reproducible empirical finance.**
 
-> **Stage V CI candidate / pre-alpha:** Stage III and Stage IV remain the validated scientific baseline. A browser-runtime candidate now wraps the exact Python core through a pinned Pyodide module Web Worker. Stage V is **not accepted** until one commit passes Stage III, Stage IV, Stage V preflight, Chromium, Firefox, and WebKit.
+> **Stage VI application-UI CI candidate / pre-alpha:** Stage III validation, Stage IV numerical core, and Stage V browser runtime are the validated scientific/runtime baseline. Stage VI adds the researcher-facing application workflow without changing the frozen Stage III corpus or Stage IV Python core. Stage VI is **not accepted** until one branch commit passes the Stage III, IV, V, and complete Stage VI Chromium/Firefox/WebKit gates.
 
 ## Scientific workflow
 
-**Compute -> Audit -> Stress-test -> Interpret -> Reproduce**
+**Compute → Audit → Stress-test → Interpret → Reproduce**
 
 The first module is the **Audit-First Event Study Analyzer** for one security and one event using daily returns. Its purpose is not merely to calculate AR/CAR, but to expose data validity, model assumptions, specification sensitivity, placebo evidence, inference assumptions, and reproducibility metadata.
 
-## Current scientific core and Stage V CI candidate
+## Validated scientific/runtime baseline
 
-Implemented in `src/empirical_finance_lab/`:
+Implemented in `src/empirical_finance_lab/` and validated before the Stage VI interface:
 
-- explicit CSV/unit/data validation with no silent sorting or imputation;
+- explicit CSV/unit/data validation with no silent imputation;
 - trading-index event/estimation window construction;
 - market model and market-adjusted model;
 - AR and CAR;
@@ -23,28 +23,45 @@ Implemented in `src/empirical_finance_lab/`:
 - historical pre-event placebo diagnostic;
 - prespecified robustness matrix;
 - deterministic audit rules and Referee Mode;
-- RawFileHash, CanonicalDataHash, SpecHash, AnalysisID, and ExecutionID;
-- timeout/stale-execution lifecycle guards;
-- pinned Pyodide module-Worker browser candidate with cross-runtime parity/privacy gates.
+- RawFileHash/CanonicalDataHash/SpecHash/AnalysisID/ExecutionID logic;
+- pinned Pyodide module-Worker runtime with cross-browser parity/privacy validation;
+- cancellation, stale-result rejection, worker-error propagation, and runtime watchdogs.
+
+## Stage VI application candidate
+
+The `web/` application now implements:
+
+1. **Open local file** — no EFL research-data upload endpoint;
+2. **Validate intake** — explicit column mapping, units, duplicate/date/order checks;
+3. **Specify** — event identity, primary model/windows, inference, placebo, robustness;
+4. **Lock** — methodological choices freeze for the run;
+5. **Analyze** — the exact Stage IV Python core executes inside the validated Stage V worker;
+6. **Audit** — PASS / WARNING / CRITICAL / NOT ASSESSABLE findings remain explicit;
+7. **Stress-test** — prespecified robustness and historical placebo outputs;
+8. **Interpret** — deterministic Referee Mode distinguishes association from causal attribution;
+9. **Reproduce/Cite** — local reproducibility ZIP with hashes, specification, results, audits, environment, and pre-release citation status.
+
+Stage VI does **not** re-estimate econometric quantities in TypeScript. Charts/tables display values returned by the scientific core.
 
 ## Validation authority
 
-The authoritative ground truth remains in `validation/` and predates the production core. The current implementation must conform to those fixtures; golden/reference outputs must **not** be regenerated merely because production code disagrees with them.
+The authoritative ground truth remains in `validation/` and predates the production core. Golden/reference outputs must **not** be regenerated merely because production code disagrees with them.
 
-Run:
+Run from repository root:
 
 ```bash
 python tools/check_corpus_integrity.py
 pytest -q
 python tools/check_stage4_gate.py
 python tools/check_stage5_static_gate.py
+python tools/check_stage6_static_gate.py
 ```
 
-The Stage IV CI workflow pins the Stage III reference numerical environment for the gate: Python 3.13, NumPy 2.3.5, and SciPy 1.17.0.
+Stage VI additionally has TypeScript/Vitest/Vite and Playwright end-to-end gates in Chromium, Firefox, and WebKit.
 
 ## Scientific scope of v0.1
 
-Supported core design:
+Supported:
 
 - one security;
 - one event;
@@ -56,15 +73,15 @@ Supported core design:
 - historical placebo diagnostic;
 - deterministic audit/reproducibility outputs.
 
-Not yet supported: multi-firm CAAR inference, cross-sectional event-study tests, long-horizon BHAR, factor models, automated news/confounder detection, or causal certification.
+Not supported: multi-firm CAAR inference, cross-sectional event-study tests, long-horizon BHAR, factor models, automated news/confounder detection, or causal certification.
 
 ## Important governance rule
 
-Scientific changes are classified separately from software/reporting changes. A change to a golden/reference answer requires an independent derivation and explicit numerical-impact classification.
+Scientific changes are classified separately from software/reporting changes. Stage VI adds `docs/governance/stage6_frozen_scientific_tree.json`; its static gate fails if the Stage III validation corpus or Stage IV Python core changes on the UI branch.
 
 ## Citation
 
-`CITATION.cff` is included from project inception. The current `0.0.0` pre-alpha state is **not a validated scholarly release**. Formal citation should use a future version-specific DOI after browser/runtime/release validation.
+`CITATION.cff` is included from project inception. The current `0.0.0` pre-alpha state is **not a validated scholarly release** and has no version-specific DOI. Formal citation should use a future validated release and its exact DOI.
 
 ## License
 
