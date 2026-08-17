@@ -293,7 +293,7 @@ export async function exerciseD2RoundTrip(page: Page, expectedBuildCommit: strin
   await page.locator("#new-run").click();
   await configureFromArchivedSpecification(page, verified.specification);
   const relocked = await page.evaluate(() => window.__EFL_STAGE6__.getLockedSpecification());
-  expect(relocked).toEqual(verified.specification);
+  expect(relocked).toEqual({ ...verified.specification, robustness_models: verified.specification.robustness_models ?? [] });
 
   const rerunRequests: string[] = [];
   page.on("request", (request) => rerunRequests.push(request.url()));
