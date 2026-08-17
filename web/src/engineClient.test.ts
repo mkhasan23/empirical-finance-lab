@@ -10,7 +10,7 @@ class FakeWorker {
       protocol: WORKER_PROTOCOL_VERSION,
       type: "READY",
       requestId: message.requestId,
-      runtime: { protocol: WORKER_PROTOCOL_VERSION, pyodide_version: "x", python_version: "x", numpy_version: "x", scipy_version: "x", efl_version: "x", core_bundle_sha256: "x" },
+      runtime: { protocol: WORKER_PROTOCOL_VERSION, pyodide_version: "x", python_version: "x", numpy_version: "x", scipy_version: "x", efl_version: "x", core_bundle_sha256: "x", build_commit: "UNSET", build_mode: "test", build_source: "vitest" },
     }));
   }
   addEventListener(type: string, listener: EventListener) {
@@ -64,7 +64,7 @@ describe("browser engine runtime controls", () => {
           protocol: WORKER_PROTOCOL_VERSION,
           type: "READY",
           requestId: message.requestId,
-          runtime: { protocol: WORKER_PROTOCOL_VERSION, pyodide_version: "x", python_version: "x", numpy_version: "x", scipy_version: "x", efl_version: "x", core_bundle_sha256: "x" },
+          runtime: { protocol: WORKER_PROTOCOL_VERSION, pyodide_version: "x", python_version: "x", numpy_version: "x", scipy_version: "x", efl_version: "x", core_bundle_sha256: "x", build_commit: "UNSET", build_mode: "test", build_source: "vitest" },
         }), 55);
       }
     }
