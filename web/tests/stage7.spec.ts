@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { exerciseD2RoundTrip } from "./reproRoundTrip.js";
 
 const BASE_PATH = "/empirical-finance-lab/";
 const EXPECTED_DOCUMENT_CSP = "default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; worker-src 'self'; frame-src 'none'; media-src 'none'; manifest-src 'self'; form-action 'self'";
@@ -72,4 +73,9 @@ test("production Pages base path preserves pinned runtime parity, build provenan
     (window as Window & { __EFL_STAGE7_CSP_VIOLATIONS__?: string[] }).__EFL_STAGE7_CSP_VIOLATIONS__ ?? []
   ));
   expect(cspViolations, "production-like document emitted a CSP violation").toEqual([]);
+});
+
+test("production Pages candidate completes the privacy-preserving reproducibility ZIP round trip", async ({ page }) => {
+  await page.goto("./");
+  await exerciseD2RoundTrip(page, EXPECTED_BUILD_COMMIT);
 });

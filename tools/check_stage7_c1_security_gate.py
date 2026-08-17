@@ -25,8 +25,9 @@ if not package_path.is_file():
     errors.append("web/package.json is missing")
 else:
     package = json.loads(package_path.read_text(encoding="utf-8"))
-    if package.get("scripts", {}).get("prebuild:pages") != "python ../tools/check_stage7_c1_security_gate.py":
-        errors.append("Pages build does not automatically invoke the Stage VII-C1 security gate")
+    expected_prebuild = "python ../tools/check_stage7_c1_security_gate.py && python ../tools/check_stage7_d2_repro_gate.py"
+    if package.get("scripts", {}).get("prebuild:pages") != expected_prebuild:
+        errors.append("Pages build does not automatically invoke the Stage VII-C1 security gate before the D2 reproducibility gate")
     if package.get("dependencies"):
         errors.append("Stage VII-C1 must not introduce frontend runtime npm dependencies")
 

@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { expect, test, type APIRequestContext } from "@playwright/test";
+import { exerciseD2RoundTrip } from "../tests/reproRoundTrip.js";
 
 const BASE_PATH = "/empirical-finance-lab/";
 const EXPECTED_ORIGIN = "https://mkhasan23.github.io";
@@ -191,4 +192,10 @@ test("live GitHub Pages preserves pinned runtime parity, build provenance, docum
     (window as Window & { __EFL_STAGE7_CSP_VIOLATIONS__?: string[] }).__EFL_STAGE7_CSP_VIOLATIONS__ ?? []
   ));
   expect(cspViolations, "live production document emitted a CSP violation").toEqual([]);
+});
+
+test("live GitHub Pages closes the privacy-preserving reproducibility ZIP round trip", async ({ page }) => {
+  const navigation = await page.goto(`./?efl-stage7-d2=${manifest.tree_sha256}`, { waitUntil: "domcontentloaded" });
+  expect(navigation?.status()).toBe(200);
+  await exerciseD2RoundTrip(page, EXPECTED_BUILD_COMMIT);
 });
