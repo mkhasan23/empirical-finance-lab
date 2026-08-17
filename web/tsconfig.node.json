@@ -21,7 +21,9 @@
     "vitest.config.ts",
     "playwright.config.ts",
     "playwright.stage7.config.ts",
+    "playwright.stage7.live.config.ts",
     "tests/**/*.ts",
+    "tests-live/**/*.ts",
     "src/global.d.ts"
   ]
 }

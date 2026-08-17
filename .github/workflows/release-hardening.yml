@@ -87,6 +87,8 @@ jobs:
       (github.event_name == 'push' && github.ref == 'refs/heads/stage-vii-release-hardening' && contains(github.event.head_commit.message, '[deploy-candidate]'))
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
     concurrency:
       group: github-pages
       cancel-in-progress: false
@@ -124,3 +126,39 @@ jobs:
       - name: Deploy exact tested artifact to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+
+  verify-live:
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Download production artifact evidence
+        uses: actions/download-artifact@v8
+        with:
+          name: stage7-dist-evidence
+          path: stage7-evidence
+      - name: Install locked frontend dependencies
+        working-directory: web
+        run: npm ci --no-audit --no-fund
+      - name: Install Chromium for live deployed-site verification
+        working-directory: web
+        run: npx playwright install --with-deps chromium
+      - name: Verify exact live artifact, runtime parity, and analysis privacy
+        working-directory: web
+        env:
+          EFL_STAGE7_LIVE_URL: ${{ needs.deploy.outputs.page_url }}
+          EFL_STAGE7_MANIFEST: ${{ github.workspace }}/stage7-evidence/stage7-dist-manifest.json
+        run: npm run test:e2e:stage7:live
+      - name: Upload live deployed-site failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: stage7-live-playwright-diagnostics
+          path: web/test-results
+          if-no-files-found: ignore
+          retention-days: 3
