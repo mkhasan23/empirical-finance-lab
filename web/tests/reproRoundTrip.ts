@@ -271,6 +271,7 @@ async function configureFromArchivedSpecification(page: Page, specification: Rec
 
 async function runAndDownload(page: Page): Promise<{ result: Record<string, unknown>; zip: Uint8Array }> {
   await page.getByRole("button", { name: "Run locked analysis" }).click();
+  await page.waitForFunction(() => window.__EFL_STAGE6__.getResult() !== null, undefined, { timeout: 300_000 });
   await expect(page.locator("#metric-state")).toHaveText("COMPLETE", { timeout: 300_000 });
   const result = await page.evaluate(() => window.__EFL_STAGE6__.getResult()) as Record<string, unknown>;
   await page.getByRole("tab", { name: "Reproduce & cite" }).click();
