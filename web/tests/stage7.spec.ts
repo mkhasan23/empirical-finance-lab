@@ -137,6 +137,12 @@ test("production candidate preserves keyboard semantics and completed-result res
 
   await completeTutorialAnalysis(page);
 
+  await expect(page.locator("#analysis-progress-wrap")).toBeHidden();
+  await expect(page.locator("#result-panel-summary")).toBeVisible();
+  for (const id of ["result-panel-audits", "result-panel-robustness", "result-panel-placebo", "result-panel-referee", "result-panel-reproduce"]) {
+    await expect(page.locator(`#${id}`)).toBeHidden();
+  }
+
   const relationships = await page.getByRole("tab").evaluateAll((tabs) => tabs.map((tab) => {
     const controls = tab.getAttribute("aria-controls");
     const panel = controls ? document.getElementById(controls) : null;
@@ -159,15 +165,22 @@ test("production candidate preserves keyboard semantics and completed-result res
   const reproduceTab = page.getByRole("tab", { name: "Reproduce & cite" });
   await expect(reproduceTab).toBeFocused();
   await expect(reproduceTab).toHaveAttribute("aria-selected", "true");
+  await expect(page.locator("#result-panel-reproduce")).toBeVisible();
+  await expect(page.locator("#result-panel-summary")).toBeHidden();
   await page.keyboard.press("Home");
   await expect(mainTab).toBeFocused();
+  await expect(page.locator("#result-panel-summary")).toBeVisible();
+  await expect(page.locator("#result-panel-reproduce")).toBeHidden();
   await page.keyboard.press("ArrowRight");
   const auditTab = page.getByRole("tab", { name: "Integrity audit" });
   await expect(auditTab).toBeFocused();
   await expect(auditTab).toHaveAttribute("aria-selected", "true");
-  await expect(page.getByRole("tabpanel", { name: "Integrity audit" })).toBeVisible();
+  await expect(page.locator("#result-panel-audits")).toBeVisible();
+  await expect(page.locator("#result-panel-summary")).toBeHidden();
 
   await mainTab.click();
+  await expect(page.locator("#result-panel-summary")).toBeVisible();
+  await expect(page.locator("#result-panel-audits")).toBeHidden();
   const tableRegion = page.getByRole("region", { name: "Scrollable event-time abnormal return results table" });
   await expect(tableRegion).toBeVisible();
   await tableRegion.focus();

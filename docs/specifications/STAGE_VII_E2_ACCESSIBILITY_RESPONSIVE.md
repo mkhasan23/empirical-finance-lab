@@ -17,6 +17,7 @@ The production document must preserve:
 - a programmatically focusable `#workspace` skip-link target;
 - an explicitly labelled analysis progress element;
 - six result tabs with unique IDs, `aria-controls`, and matching tab panels labelled by their controlling tabs;
+- native `hidden` state remains authoritative even when components define explicit `display` rules, so inactive tab panels and completed progress UI are not left in the rendered layout;
 - automatic tab activation with Left/Right Arrow plus Home/End navigation;
 - visible focus treatment for the visually customized local-file input;
 - keyboard-focusable regions for horizontally scrollable result tables;
@@ -24,7 +25,7 @@ The production document must preserve:
 
 ## Responsive proof
 
-The production-like Chromium gate completes the deterministic E1 tutorial analysis and checks the rendered result at **320, 390, 768, and 1280 CSS pixels**. At each width, document-level horizontal overflow greater than one pixel is a gate failure. Wide result tables may overflow only inside their dedicated keyboard-focusable scroll regions.
+The production-like Chromium gate completes the deterministic E1 tutorial analysis, verifies that only the selected result panel remains rendered and that completed progress UI is hidden, and checks the rendered result at **320, 390, 768, and 1280 CSS pixels**. At each width, document-level horizontal overflow greater than one pixel is a gate failure. Wide result tables may overflow only inside their dedicated keyboard-focusable scroll regions.
 
 The E2 browser proof also verifies that the tutorial still completes at CAR[-1,+1] = +3.000%; this is a regression anchor only and does not create a second scientific authority.
 

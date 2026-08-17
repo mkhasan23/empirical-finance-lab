@@ -69,6 +69,7 @@ if STYLES.is_file():
     text = STYLES.read_text(encoding="utf-8")
     for required in (
         ".file-picker:focus-within",
+        "[hidden] { display: none !important; }",
         ":focus-visible",
         "@media (max-width: 850px)",
         "@media (max-width: 560px)",
@@ -106,6 +107,9 @@ if STAGE7_TEST.is_file():
         'page.keyboard.press("End")',
         'page.keyboard.press("Home")',
         'page.keyboard.press("ArrowRight")',
+        'page.locator("#analysis-progress-wrap")).toBeHidden()',
+        'page.locator("#result-panel-summary")).toBeVisible()',
+        'page.locator("#result-panel-audits")).toBeHidden()',
         'Scrollable event-time abnormal return results table',
         'for (const width of [320, 390, 768, 1280])',
         'document.documentElement.scrollWidth - document.documentElement.clientWidth',
@@ -136,6 +140,7 @@ if errors:
 print("STAGE VII-E2 ACCESSIBILITY GATE: PASS")
 print(" - skip-link target and progress semantics: PASS")
 print(" - result tab/panel relationships: PASS")
+print(" - native hidden-state semantics: PASS")
 print(" - keyboard tab navigation contract: PASS")
 print(" - focus-visible file intake contract: PASS")
 print(" - keyboard-scrollable result tables: PASS")
