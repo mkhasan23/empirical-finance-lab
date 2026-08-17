@@ -62,6 +62,26 @@ Dependabot proposals do not bypass governance. An accepted dependency or action 
 
 After C2 is merged to the default branch, repository administrators should enable the GitHub Actions setting requiring full-length SHA pins. Dependency graph, Dependabot alerts, and Dependabot security updates should be enabled in repository security settings; those settings create monitoring/triage obligations but do not override EFL's validation requirements.
 
+## Build provenance authority contract
+
+Stage VII-D1 gives the browser production artifact a deterministic, verifiable identity tied to the **exact checked-out Git commit**. The release-hardening workflow exports `EFL_BUILD_COMMIT=${{ github.sha }}` and verifies that it equals `git rev-parse HEAD` before the candidate build begins. A GitHub Pages build must refuse to proceed unless that value is a lowercase 40-character Git commit SHA.
+
+Vite embeds three provenance fields into the application bundle: build commit, build mode, and build source. Build mode is the Vite mode and the production candidate must report `github-pages`; build source is `github-actions` for the validated Pages artifact. The production identity deliberately contains **no timestamps** and **no workflow-run identifiers**, so rebuilding the same commit under the same controlled toolchain does not acquire irrelevant time-dependent provenance.
+
+The dedicated scientific worker must set the embedded build commit into Python as `EFL_BUILD_COMMIT` before the authoritative `empirical_finance_lab` analysis path executes. The worker must verify that Python reads back exactly the same commit and expose commit/mode/source in the browser runtime manifest. The frozen Python reproducibility code remains unchanged: its existing runtime manifest consumes `EFL_BUILD_COMMIT`, and its existing ExecutionID definition already incorporates `build_commit`.
+
+D1 does not redefine **AnalysisID** or **ExecutionID**. AnalysisID remains a function of canonical data plus locked specification. ExecutionID continues to use the existing Stage IV definition and now receives the build-commit input that definition was designed to include for production browser runs. Scientific parity comparisons continue to exclude environment and ExecutionID fields while retaining all scientific quantities and AnalysisID.
+
+The reproducibility exporter must require the browser runtime commit and scientific-core environment commit to agree. Its manifest, environment file, README, and citation text must record the same build provenance. A Pages-mode export with an unset or malformed commit must fail safely rather than emit ambiguous provenance.
+
+Both the local production-subpath gate and the real deployed-site gate must assert that:
+- runtime build commit equals `EFL_BUILD_COMMIT` for the workflow run;
+- build mode is `github-pages`;
+- build source is `github-actions`;
+- the scientific-core reproducibility environment reports that same build commit;
+- AnalysisID and ExecutionID remain well-formed; and
+- existing KA-003 parity, CSP, and zero-analysis-network requirements remain green.
+
 ## Deployment contract
 
 The deploy job must consume the exact build-job artifact. It must not rebuild the application. Before packaging for GitHub Pages, it re-verifies the downloaded dist against the build-job manifest.

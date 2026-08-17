@@ -1,4 +1,5 @@
 /// <reference lib="webworker" />
+import { BUILD_PROVENANCE } from "./buildProvenance";
 import {
   PYODIDE_INDEX_URL,
   PYODIDE_MODULE_URL,
@@ -70,6 +71,16 @@ async function installCore(bundleUrl: string, requestId: string): Promise<string
   return bundleHash;
 }
 
+function installBuildCommit(): void {
+  if (!pyodide) throw new Error("PYODIDE_NOT_READY");
+  pyodide.globals.set("efl_build_commit", BUILD_PROVENANCE.build_commit);
+  try {
+    pyodide.runPython("import os\nos.environ['EFL_BUILD_COMMIT'] = efl_build_commit");
+  } finally {
+    pyodide.globals.delete("efl_build_commit");
+  }
+}
+
 async function initialize(bundleUrl: string, requestId: string) {
   if (!pyodide) {
     send({ protocol: WORKER_PROTOCOL_VERSION, type: "PROGRESS", requestId, phase: "importing_pyodide_module", percent: 5 });
@@ -88,17 +99,26 @@ async function initialize(bundleUrl: string, requestId: string) {
     send({ protocol: WORKER_PROTOCOL_VERSION, type: "PROGRESS", requestId, phase: "scientific_runtime_loaded", percent: 65 });
   }
   coreBundleSha256 = await installCore(bundleUrl, requestId);
+  installBuildCommit();
   send({ protocol: WORKER_PROTOCOL_VERSION, type: "PROGRESS", requestId, phase: "importing_efl_core", percent: 96 });
   const runtimeJson = pyodide.runPython(`
-import json, sys, numpy, scipy, empirical_finance_lab
+import json, os, sys, numpy, scipy, empirical_finance_lab
 json.dumps({
   "python_version": sys.version.split()[0],
   "numpy_version": numpy.__version__,
   "scipy_version": scipy.__version__,
   "efl_version": empirical_finance_lab.__version__,
+  "build_commit": os.environ.get("EFL_BUILD_COMMIT", "UNSET"),
 }, separators=(",", ":"))
 `) as string;
-  const runtime = JSON.parse(runtimeJson) as { python_version: string; numpy_version: string; scipy_version: string; efl_version: string };
+  const runtime = JSON.parse(runtimeJson) as {
+    python_version: string;
+    numpy_version: string;
+    scipy_version: string;
+    efl_version: string;
+    build_commit: string;
+  };
+  if (runtime.build_commit !== BUILD_PROVENANCE.build_commit) throw new Error("BUILD_COMMIT_RUNTIME_MISMATCH");
   return {
     protocol: WORKER_PROTOCOL_VERSION,
     pyodide_version: PYODIDE_VERSION,
@@ -107,6 +127,9 @@ json.dumps({
     scipy_version: runtime.scipy_version,
     efl_version: runtime.efl_version,
     core_bundle_sha256: coreBundleSha256,
+    build_commit: runtime.build_commit,
+    build_mode: BUILD_PROVENANCE.build_mode,
+    build_source: BUILD_PROVENANCE.build_source,
   };
 }
 

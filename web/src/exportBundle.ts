@@ -10,6 +10,13 @@ export type BundleContext = {
 
 type ZipEntry = { name: string; bytes: Uint8Array };
 
+type ExportBuildProvenance = {
+  build_commit: string;
+  build_mode: string;
+  build_source: string;
+  core_bundle_sha256: string;
+};
+
 const encoder = new TextEncoder();
 
 function u16(value: number): Uint8Array {
@@ -115,6 +122,27 @@ function arrayValue(value: unknown): Record<string, unknown>[] {
   return Array.isArray(value) ? value.filter((item): item is Record<string, unknown> => Boolean(item) && typeof item === "object" && !Array.isArray(item)) : [];
 }
 
+function resolveBuildProvenance(coreRepro: Record<string, unknown>, runtimeValue: Record<string, unknown> | null): ExportBuildProvenance {
+  const coreEnvironment = objectValue(coreRepro.environment);
+  const browserRuntime = objectValue(runtimeValue);
+  const coreCommit = String(coreEnvironment.build_commit ?? "UNSET");
+  const browserCommit = String(browserRuntime.build_commit ?? "UNSET");
+  if (coreCommit !== browserCommit) throw new Error(`BUILD_PROVENANCE_COMMIT_MISMATCH:${coreCommit}:${browserCommit}`);
+
+  const buildMode = String(browserRuntime.build_mode ?? "UNAVAILABLE");
+  const buildSource = String(browserRuntime.build_source ?? "UNAVAILABLE");
+  if (buildMode === "github-pages" && !/^[0-9a-f]{40}$/.test(browserCommit)) {
+    throw new Error("BUILD_PROVENANCE_PAGES_COMMIT_INVALID");
+  }
+
+  return {
+    build_commit: browserCommit,
+    build_mode: buildMode,
+    build_source: buildSource,
+    core_bundle_sha256: String(browserRuntime.core_bundle_sha256 ?? "UNAVAILABLE"),
+  };
+}
+
 export function buildReproducibilityFiles(context: BundleContext): Record<string, string> {
   const result = context.result;
   const coreRepro = objectValue(result.reproducibility);
@@ -131,12 +159,14 @@ export function buildReproducibilityFiles(context: BundleContext): Record<string
   const engineRawHash = String(coreHashes.raw_file_sha256 ?? context.engineInputSha256);
   const canonicalHash = String(coreHashes.canonical_data_sha256 ?? "UNAVAILABLE");
   const specHash = String(coreHashes.specification_sha256 ?? "UNAVAILABLE");
+  const buildProvenance = resolveBuildProvenance(coreRepro, context.runtime);
 
   const manifest = {
     bundle_schema: "EFL_REPRODUCIBILITY_BUNDLE_V1",
     software_version: coreRepro.software_version ?? "0.0.0",
     analysis_id: analysisId,
     execution_id: executionId,
+    build_provenance: buildProvenance,
     hashes: {
       raw_file_sha256: context.originalUploadSha256,
       engine_input_sha256: engineRawHash,
@@ -166,6 +196,8 @@ export function buildReproducibilityFiles(context: BundleContext): Record<string
     "Empirical Finance Lab: Audit-First Tools for Credible Empirical Finance Research.",
     "Author: Muhammad Kamrul Hasan.",
     `Software version: ${String(coreRepro.software_version ?? "0.0.0")}.`,
+    `Build commit: ${buildProvenance.build_commit}.`,
+    `Build mode/source: ${buildProvenance.build_mode}/${buildProvenance.build_source}.`,
     "Repository: https://github.com/mkhasan23/empirical-finance-lab",
     "Pre-alpha software: no version-specific DOI has been assigned yet.",
     "If a future validated release materially contributes to your research, cite the exact released version and DOI provided with that release.",
@@ -184,6 +216,8 @@ export function buildReproducibilityFiles(context: BundleContext): Record<string
     "",
     `AnalysisID: ${analysisId}`,
     `ExecutionID: ${executionId}`,
+    `Build commit: ${buildProvenance.build_commit}`,
+    `Build mode/source: ${buildProvenance.build_mode}/${buildProvenance.build_source}`,
     "",
   ].join("\n");
 
@@ -193,7 +227,7 @@ export function buildReproducibilityFiles(context: BundleContext): Record<string
     "audit_report.json": json(audits),
     "citation.txt": citation,
     "data_audit.json": json({ audits, source_row_provenance: context.normalizedToOriginalSourceRow }),
-    "environment.json": json({ core_environment: coreRepro.environment ?? null, browser_runtime: context.runtime }),
+    "environment.json": json({ core_environment: coreRepro.environment ?? null, browser_runtime: context.runtime, build_provenance: buildProvenance }),
     "event_time.csv": csvFromRows(["date", "tau", "security_return", "benchmark_return", "expected_return", "abnormal_return", "cumulative_abnormal_return"], eventRows),
     "inference.json": json(inference),
     "manifest.json": json(manifest),
