@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.0.0 - Stage VI research application UI CI candidate (2026-08-16)
+
+- Added the researcher-facing audit-first event-study workflow: local file intake, explicit column mapping/units, event-date confirmation, prespecification, specification locking, analysis, audit, robustness, placebo, Referee Mode, and reproducibility export.
+- Added deterministic local CSV normalization with explicit sort approval and normalized-to-original source-row provenance; original local-file SHA-256 and normalized engine-input SHA-256 are exported separately.
+- Added a deterministic dependency-free ZIP reproducibility bundle without automatically including proprietary raw input data.
+- Added responsive, keyboard-addressable, status-message-aware UI semantics and exact-value table alternatives for charts.
+- Added Stage VI unit tests and Chromium/Firefox/WebKit end-to-end researcher-journey CI.
+- Added a frozen SHA-256 scientific-tree manifest protecting the Stage III validation corpus and Stage IV Python core from Stage VI interface drift.
+- Stage V is now the validated browser-runtime baseline; Stage VI remains a **CI candidate** until one branch commit passes Stages III-V plus the complete Stage VI gate.
+
 ## 0.0.0 - Stage V browser-runtime CI candidate (2026-08-16)
 
 - Added a pinned Pyodide module Web Worker around the authoritative Stage IV Python core; no second econometric implementation was created.

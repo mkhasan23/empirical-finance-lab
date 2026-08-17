@@ -11,7 +11,9 @@
     "test:unit": "vitest run --config vitest.config.ts",
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1 --port 4173",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:e2e:stage5": "playwright test tests/stage5.spec.ts",
+    "test:e2e:stage6": "playwright test tests/stage6.spec.ts"
   },
   "devDependencies": {
     "@playwright/test": "1.62.0",

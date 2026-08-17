@@ -41,17 +41,24 @@ function permutationB(specification: Record<string, unknown>): number {
   return typeof value === "number" ? value : 20_000;
 }
 
+export type EngineProgress = { phase: string; percent: number; operation: "INIT" | "RUN" };
+
 export class EFLBrowserEngineClient {
   private worker: WorkerLike | null = null;
   private initialized = false;
   private activeJobId: string | null = null;
   private pending = new Map<string, PendingRequest>();
+  private progressListener: ((progress: EngineProgress) => void) | null = null;
 
   constructor(
     private readonly workerFactory: WorkerFactory = () => new Worker(new URL("./eflWorker.ts", import.meta.url), { type: "module" }),
     private readonly watchdogMs = PUBLIC_WATCHDOG_MS,
     private readonly initTimeoutMs = ENGINE_INIT_TIMEOUT_MS,
   ) {}
+
+  setProgressListener(listener: ((progress: EngineProgress) => void) | null): void {
+    this.progressListener = listener;
+  }
 
   private rejectPending(kind: WorkerRequest["type"], error: EFLBrowserError): void {
     for (const [requestId, pending] of this.pending) {
@@ -102,6 +109,7 @@ export class EFLBrowserEngineClient {
         if (response.protocol !== WORKER_PROTOCOL_VERSION || response.requestId !== message.requestId) return;
         if (response.type === "PROGRESS") {
           lastProgressPhase = response.phase;
+          this.progressListener?.({ phase: response.phase, percent: response.percent, operation: message.type });
           if (message.type === "INIT") {
             const pending = this.pending.get(message.requestId);
             if (pending) {

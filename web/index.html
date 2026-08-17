@@ -4,18 +4,312 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex,nofollow" />
-    <title>Empirical Finance Lab — Stage V Runtime Harness</title>
+    <meta name="description" content="Empirical Finance Lab audit-first event-study research application." />
+    <title>Empirical Finance Lab — Audit-First Event Study Analyzer</title>
   </head>
   <body>
-    <main>
-      <h1>Empirical Finance Lab — Stage V Browser Runtime Harness</h1>
-      <p>This is a pre-alpha scientific parity harness, not the public user interface.</p>
-      <p id="status" data-state="EMPTY">Browser engine not initialized.</p>
-      <button id="initialize" type="button">Initialize browser engine</button>
-      <button id="run-ka003" type="button" disabled>Run KA-003 parity fixture</button>
-      <button id="cancel" type="button" disabled>Cancel active analysis</button>
-      <pre id="output" aria-live="polite"></pre>
-    </main>
+    <a class="skip-link" href="#workspace">Skip to analysis workspace</a>
+    <header class="site-header">
+      <div class="brand-block">
+        <p class="eyebrow">Empirical Finance Lab</p>
+        <h1>Audit-First Event Study Analyzer</h1>
+        <p class="subtitle">Compute → Audit → Stress-test → Interpret → Reproduce</p>
+      </div>
+      <div class="header-meta">
+        <span class="prealpha-badge">Pre-alpha · v0.1 workflow</span>
+        <p><strong>Local research data:</strong> held in browser memory; no EFL upload service, analytics, or telemetry.</p>
+      </div>
+    </header>
+
+    <div class="app-frame">
+      <aside class="workflow-sidebar" aria-label="Analysis workflow">
+        <ol class="workflow-steps">
+          <li><span data-step-target="intake" aria-current="step"><b>1</b><span>Open & validate</span></span></li>
+          <li><span data-step-target="specification" aria-current="false"><b>2</b><span>Specify</span></span></li>
+          <li><span data-step-target="lock" aria-current="false"><b>3</b><span>Lock</span></span></li>
+          <li><span data-step-target="results" aria-current="false"><b>4</b><span>Analyze & audit</span></span></li>
+        </ol>
+        <div class="sidebar-note">
+          <strong>Scientific boundary</strong>
+          <p>All AR/CAR, inference, placebo, robustness, audit, and reproducibility quantities come from the validated Python core. The interface does not re-estimate econometric results.</p>
+        </div>
+      </aside>
+
+      <main id="workspace" class="workspace">
+        <div id="app-status" class="app-status" role="status" aria-live="polite" data-tone="neutral"></div>
+
+        <section id="panel-intake" data-workflow-panel="intake" class="workflow-panel" tabindex="-1" aria-labelledby="intake-heading">
+          <div class="section-heading">
+            <p class="step-label">Step 1</p>
+            <h2 id="intake-heading">Open a local return file</h2>
+            <p>Choose a UTF-8 CSV, map the three required fields explicitly, and declare return units. “Open” means local browser access; the file is not transmitted to an EFL server.</p>
+          </div>
+
+          <div class="card-grid two-column">
+            <section class="card" aria-labelledby="file-card-heading">
+              <h3 id="file-card-heading">Local file</h3>
+              <label class="file-picker" for="file-input">
+                <span>Choose CSV file</span>
+                <input id="file-input" type="file" accept=".csv,text/csv" />
+              </label>
+              <dl class="definition-grid compact-defs file-meta">
+                <dt>Name</dt><dd id="file-name">—</dd>
+                <dt>Size</dt><dd id="file-size">—</dd>
+                <dt>Rows</dt><dd id="intake-row-count">—</dd>
+                <dt>Original SHA-256</dt><dd id="raw-hash" class="hash-value">—</dd>
+              </dl>
+            </section>
+
+            <section class="card" aria-labelledby="mapping-heading">
+              <h3 id="mapping-heading">Column mapping & units</h3>
+              <div class="field-grid">
+                <label>Date column
+                  <select id="map-date" disabled><option value="">Open a file first…</option></select>
+                </label>
+                <label>Security-return column
+                  <select id="map-security" disabled><option value="">Open a file first…</option></select>
+                </label>
+                <label>Benchmark-return column
+                  <select id="map-benchmark" disabled><option value="">Open a file first…</option></select>
+                </label>
+                <label>Return units
+                  <select id="return-units">
+                    <option value="decimal" selected>Decimal (0.05 = 5%)</option>
+                    <option value="percent">Percent (5 = 5%)</option>
+                  </select>
+                </label>
+              </div>
+              <div id="sort-approval-wrap" class="acknowledgement" hidden>
+                <label><input id="sort-approved" type="checkbox" /> I explicitly approve sorting the mapped observations ascending by date before scientific validation.</label>
+                <p>The original byte hash and normalized-to-original row provenance are retained in the reproducibility bundle. EFL never sorts silently.</p>
+              </div>
+            </section>
+          </div>
+
+          <section class="card" aria-labelledby="intake-checks-heading">
+            <div class="card-heading-row">
+              <div><h3 id="intake-checks-heading">Local intake checks</h3><p>These checks prepare the file for the scientific core; they do not replace the authoritative Python validation.</p></div>
+            </div>
+            <div id="intake-issues" aria-live="polite"></div>
+          </section>
+
+          <div class="panel-actions end">
+            <button id="continue-to-specification" class="button primary" type="button" disabled>Continue to research specification</button>
+          </div>
+        </section>
+
+        <section id="panel-specification" data-workflow-panel="specification" class="workflow-panel" tabindex="-1" aria-labelledby="spec-heading" hidden>
+          <div class="section-heading">
+            <p class="step-label">Step 2</p>
+            <h2 id="spec-heading">Prespecify the event study</h2>
+            <p>Define the primary analysis and robustness alternatives before seeing results. A material change after execution creates a new run.</p>
+          </div>
+
+          <div class="card-grid two-column">
+            <fieldset class="card">
+              <legend>Event identity</legend>
+              <div class="field-grid">
+                <label>Calendar announcement date
+                  <input id="calendar-event-date" type="date" required />
+                </label>
+                <label>Announcement timing
+                  <select id="event-timing">
+                    <option value="uncertain">Unknown / uncertain</option>
+                    <option value="during_or_before_market">Before or during trading</option>
+                    <option value="after_market">After market close</option>
+                  </select>
+                </label>
+                <label>Effective event trading date
+                  <input id="effective-event-date" type="date" required />
+                </label>
+              </div>
+              <div class="suggestion-row">
+                <p id="event-date-suggestion">Enter the calendar date to obtain a trading-date suggestion.</p>
+                <button id="use-suggested-date" class="button secondary small" type="button" disabled>Use suggestion</button>
+              </div>
+              <div class="acknowledgement">
+                <label><input id="effective-date-confirmed" type="checkbox" /> I confirm the effective event trading date. EFL has not shifted it silently.</label>
+              </div>
+            </fieldset>
+
+            <fieldset class="card">
+              <legend>Primary design</legend>
+              <div class="field-grid">
+                <label>Expected-return model
+                  <select id="model">
+                    <option value="market_model" selected>Market model</option>
+                    <option value="market_adjusted">Market-adjusted</option>
+                  </select>
+                </label>
+                <label>Estimation start (τ)
+                  <input id="estimation-start" type="number" value="-250" step="1" />
+                </label>
+                <label>Estimation end (τ)
+                  <input id="estimation-end" type="number" value="-30" step="1" />
+                </label>
+                <label>Event start (τ)
+                  <input id="event-start" type="number" value="-1" step="1" />
+                </label>
+                <label>Event end (τ)
+                  <input id="event-end" type="number" value="1" step="1" />
+                </label>
+              </div>
+              <p class="field-help">v0.1 supports event windows containing at most 11 trading days. Estimation and event windows cannot overlap.</p>
+            </fieldset>
+
+            <fieldset class="card">
+              <legend>Inference</legend>
+              <div class="field-grid">
+                <label>Hypothesis direction
+                  <select id="direction">
+                    <option value="two_sided" selected>Two-sided</option>
+                    <option value="greater">One-sided: greater</option>
+                    <option value="less">One-sided: less</option>
+                  </select>
+                </label>
+                <label>Permutation count (B)
+                  <input id="permutation-b" type="number" value="20000" min="1000" max="100000" step="1000" />
+                </label>
+                <label>PCG64 seed
+                  <input id="rng-seed" type="number" value="20260816" min="0" step="1" />
+                </label>
+              </div>
+              <div id="one-sided-ack-wrap" class="acknowledgement" hidden>
+                <label><input id="one-sided-prespecified" type="checkbox" /> I confirm this directional hypothesis was prespecified before observing the analysis result.</label>
+              </div>
+            </fieldset>
+
+            <fieldset class="card">
+              <legend>Placebo & exclusions</legend>
+              <div class="check-row"><label><input id="placebo-enabled" type="checkbox" checked /> Run historical pseudo-event placebo diagnostic</label></div>
+              <label>Known excluded/confounding dates <span class="optional">optional</span>
+                <textarea id="excluded-dates" rows="4" placeholder="YYYY-MM-DD, YYYY-MM-DD"></textarea>
+              </label>
+              <p class="field-help">v0.1 does not have an external news database. If no competing-event information is supplied, confounding events remain NOT ASSESSABLE.</p>
+            </fieldset>
+          </div>
+
+          <fieldset class="card">
+            <legend>Prespecified robustness</legend>
+            <div class="check-row"><label><input id="alternative-model" type="checkbox" checked /> <span id="model-alternative-label">Also run market-adjusted model</span></label></div>
+            <p class="field-help">Up to three secondary short-horizon windows may be prespecified. Blank rows are ignored.</p>
+            <div class="robustness-window-grid">
+              <div data-robustness-window><span>Window 1</span><label>Start <input id="robust-start-1" data-window-start type="number" value="0" step="1" /></label><label>End <input id="robust-end-1" data-window-end type="number" value="0" step="1" /></label></div>
+              <div data-robustness-window><span>Window 2</span><label>Start <input id="robust-start-2" data-window-start type="number" value="-2" step="1" /></label><label>End <input id="robust-end-2" data-window-end type="number" value="2" step="1" /></label></div>
+              <div data-robustness-window><span>Window 3</span><label>Start <input id="robust-start-3" data-window-start type="number" step="1" /></label><label>End <input id="robust-end-3" data-window-end type="number" step="1" /></label></div>
+            </div>
+          </fieldset>
+
+          <div id="spec-issues" class="form-status" role="status" aria-live="polite"></div>
+          <div class="panel-actions split">
+            <button id="back-to-intake" class="button secondary" type="button">Back to intake</button>
+            <button id="review-lock" class="button primary" type="button" disabled>Review & lock specification</button>
+          </div>
+        </section>
+
+        <section id="panel-lock" data-workflow-panel="lock" class="workflow-panel" tabindex="-1" aria-labelledby="lock-heading" hidden>
+          <div class="section-heading">
+            <p class="step-label">Step 3</p>
+            <h2 id="lock-heading">Locked analysis specification</h2>
+            <p>Review the frozen design below. The Python core will generate the authoritative SpecHash, AnalysisID, and ExecutionID.</p>
+          </div>
+          <section class="card lock-card">
+            <div id="lock-summary"></div>
+          </section>
+          <div class="panel-actions split">
+            <button id="back-to-specification" class="button secondary" type="button">Edit before execution</button>
+            <button id="run-analysis" class="button primary" type="button" disabled>Run locked analysis</button>
+          </div>
+        </section>
+
+        <section id="panel-results" data-workflow-panel="results" class="workflow-panel" tabindex="-1" aria-labelledby="results-heading" hidden>
+          <div class="section-heading">
+            <p class="step-label">Step 4</p>
+            <h2 id="results-heading">Analyze, audit, stress-test, reproduce</h2>
+            <p>The interface displays quantities returned by the validated Python core and does not substitute statistical significance for research credibility.</p>
+          </div>
+
+          <div id="analysis-progress-wrap" class="progress-card" hidden>
+            <div class="progress-copy"><strong id="analysis-progress-label">Preparing scientific runtime…</strong><span>Long calculations run in a Web Worker so the interface remains responsive.</span></div>
+            <progress id="analysis-progress" max="100" value="0">0%</progress>
+            <button id="cancel-analysis" class="button danger small" type="button" disabled>Cancel analysis</button>
+          </div>
+
+          <div id="result-shell" hidden>
+            <section class="metrics-grid" aria-label="Primary result summary">
+              <article class="metric-card"><span>State</span><strong id="metric-state">—</strong></article>
+              <article class="metric-card emphasis"><span>CAR</span><strong id="metric-car">—</strong></article>
+              <article class="metric-card"><span>Permutation p</span><strong id="metric-permutation">—</strong></article>
+              <article class="metric-card"><span>Classical p</span><strong id="metric-classical">—</strong></article>
+              <article class="metric-card"><span>Model</span><strong id="metric-model">—</strong></article>
+              <article class="metric-card"><span>Event window</span><strong id="metric-window">—</strong></article>
+            </section>
+
+            <div class="result-tabs" role="tablist" aria-label="Analysis output sections">
+              <button type="button" role="tab" aria-selected="true" data-result-tab="summary">Main result</button>
+              <button type="button" role="tab" aria-selected="false" data-result-tab="audits" tabindex="-1">Integrity audit</button>
+              <button type="button" role="tab" aria-selected="false" data-result-tab="robustness" tabindex="-1">Robustness</button>
+              <button type="button" role="tab" aria-selected="false" data-result-tab="placebo" tabindex="-1">Placebo</button>
+              <button type="button" role="tab" aria-selected="false" data-result-tab="referee" tabindex="-1">Referee Mode</button>
+              <button type="button" role="tab" aria-selected="false" data-result-tab="reproduce" tabindex="-1">Reproduce & cite</button>
+            </div>
+
+            <section data-result-panel="summary" role="tabpanel" class="result-panel">
+              <div class="card-grid two-column results-two-column">
+                <article class="card"><h3>Event-time path</h3><div id="event-chart" class="chart-wrap"></div></article>
+                <article class="card"><h3>Model diagnostics</h3><div id="model-details"></div><p class="field-help">Low R² is reported, not automatically treated as model failure.</p></article>
+              </div>
+              <article class="card"><h3>Exact event-time values</h3><div id="event-table"></div></article>
+            </section>
+
+            <section data-result-panel="audits" role="tabpanel" class="result-panel" hidden>
+              <article class="card"><h3>Research Integrity Audit</h3><p>CRITICAL findings cannot be averaged away by unrelated PASS findings. NOT ASSESSABLE means the application lacks sufficient information to evaluate that issue.</p><div id="audit-results"></div></article>
+            </section>
+
+            <section data-result-panel="robustness" role="tabpanel" class="result-panel" hidden>
+              <article class="card"><h3>Prespecified robustness matrix</h3><p>All rows are retained; EFL does not search alternatives and report only the most significant result.</p><div id="robustness-results"></div></article>
+            </section>
+
+            <section data-result-panel="placebo" role="tabpanel" class="result-panel" hidden>
+              <article class="card"><h3>Historical pseudo-event diagnostic</h3><p>The tail proportion asks how unusual the actual CAR is relative to admissible historical pseudo-events. It is not labeled causal proof.</p><div id="placebo-results" class="chart-wrap"></div></article>
+            </section>
+
+            <section data-result-panel="referee" role="tabpanel" class="result-panel" hidden>
+              <article class="card referee-card"><div id="referee-results"></div></article>
+            </section>
+
+            <section data-result-panel="reproduce" role="tabpanel" class="result-panel" hidden>
+              <div class="card-grid two-column results-two-column">
+                <article class="card">
+                  <h3>Run identity</h3>
+                  <dl class="definition-grid compact-defs">
+                    <dt>AnalysisID</dt><dd id="analysis-id" class="hash-value">—</dd>
+                    <dt>ExecutionID</dt><dd id="execution-id" class="hash-value">—</dd>
+                  </dl>
+                  <p>The bundle records the original local-file SHA-256 separately from the normalized engine-input hash and does not automatically include proprietary source data.</p>
+                  <button id="download-bundle" class="button primary" type="button" disabled>Download reproducibility bundle (.zip)</button>
+                </article>
+                <article class="card">
+                  <h3>Citation status</h3>
+                  <p><strong>Software version:</strong> <span id="citation-version">0.0.0</span></p>
+                  <p>Empirical Finance Lab is still pre-alpha. No version-specific DOI has been assigned. A formal scholarly citation should use a future validated release and its exact DOI.</p>
+                  <p>If a future validated release materially contributes to research, the release bundle will provide its version-specific citation.</p>
+                </article>
+              </div>
+            </section>
+
+            <div class="panel-actions end result-actions">
+              <button id="new-run" class="button secondary" type="button">Start a new run from these inputs</button>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <footer class="site-footer">
+      <p><strong>Empirical Finance Lab</strong> · open-source, audit-first empirical finance research software.</p>
+      <p>Pre-alpha software. Significant CAR ≠ causal effect established.</p>
+    </footer>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

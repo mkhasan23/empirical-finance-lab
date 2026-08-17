@@ -9,5 +9,12 @@ declare global {
       getRuntime(): Record<string, unknown> | null;
       getLastResult(): Record<string, unknown> | null;
     };
+    __EFL_STAGE6__: {
+      getResult(): Record<string, unknown> | null;
+      getLockedSpecification(): Record<string, unknown> | null;
+      getRuntime(): Record<string, unknown> | null;
+      getOriginalSha256(): string;
+      getEngineInputSha256(): string;
+    };
   }
 }
