@@ -46,6 +46,7 @@ jobs:
           python tools/check_stage7_d1_provenance_gate.py
           python tools/check_stage7_e1_onboarding_gate.py
           python tools/check_stage7_e2_accessibility_gate.py
+          python tools/check_stage7_f1_release_docs_gate.py
       - name: Install locked frontend dependencies
         working-directory: web
         run: npm ci --no-audit --no-fund

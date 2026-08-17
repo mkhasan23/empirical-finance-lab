@@ -1,16 +1,29 @@
 # Changelog
 
-## 0.0.0 - Stage VI research application UI CI candidate (2026-08-16)
+## 0.0.0 - Stage VII release-hardening candidate (2026-08-17)
+
+- Added a committed frontend lockfile and converted controlled CI installation to `npm ci`.
+- Added exact tested-artifact GitHub Pages deployment plus post-deployment byte-for-byte and live runtime verification.
+- Added an enforcing document CSP/referrer boundary, explicit browser privacy/network checks, and a documented worker/network security boundary.
+- Added full-SHA GitHub Actions governance, scoped Dependabot configuration, and dependency-update policy without placing the scientific Python authority on automatic version updates.
+- Added deterministic build provenance tied to the exact Git commit and propagated the build commit/mode/source through the browser runtime, Python environment, and reproducibility export.
+- Added a strict privacy-preserving reproducibility ZIP round-trip contract: verify the exact original local CSV externally, reconstruct normalized engine input, rerun the authoritative browser core, compare identities/scientific results, and require deterministic byte-identical re-export.
+- Added a deterministic 180-row synthetic onboarding dataset and quickstart tied to the frozen KA-003 AR/CAR known answer.
+- Added automated accessibility/keyboard/responsive contracts, including native `hidden` semantics and completed-result containment at 320/390/768/1280 px.
+- Aligned release-status documentation, release policy, browser README, changelog, and repository manifest under the Stage VII-F1 documentation contract.
+- Stage VII remains a **pre-release release-hardening candidate** until its final evidence/checklist and governed `main` integration pass. This is **not Public Beta**, not a formal `v0.1.0` release, and has no version-specific DOI.
+
+## 0.0.0 - Stage VI research application UI (2026-08-16)
 
 - Added the researcher-facing audit-first event-study workflow: local file intake, explicit column mapping/units, event-date confirmation, prespecification, specification locking, analysis, audit, robustness, placebo, Referee Mode, and reproducibility export.
 - Added deterministic local CSV normalization with explicit sort approval and normalized-to-original source-row provenance; original local-file SHA-256 and normalized engine-input SHA-256 are exported separately.
 - Added a deterministic dependency-free ZIP reproducibility bundle without automatically including proprietary raw input data.
 - Added responsive, keyboard-addressable, status-message-aware UI semantics and exact-value table alternatives for charts.
 - Added Stage VI unit tests and Chromium/Firefox/WebKit end-to-end researcher-journey CI.
-- Added a frozen SHA-256 scientific-tree manifest protecting the Stage III validation corpus and Stage IV Python core from Stage VI interface drift.
-- Stage V is now the validated browser-runtime baseline; Stage VI remains a **CI candidate** until one branch commit passes Stages III-V plus the complete Stage VI gate.
+- Added a frozen SHA-256 scientific-tree manifest protecting the Stage III validation corpus and Stage IV Python core from interface drift.
+- Stage VI is part of the accepted Stage III–VI baseline used by Stage VII release hardening.
 
-## 0.0.0 - Stage V browser-runtime CI candidate (2026-08-16)
+## 0.0.0 - Stage V browser runtime (2026-08-16)
 
 - Added a pinned Pyodide module Web Worker around the authoritative Stage IV Python core; no second econometric implementation was created.
 - Added strict browser-vs-Node TypeScript boundaries and explicit Vitest-vs-Playwright test discovery boundaries.
@@ -19,7 +32,6 @@
 - Stage V scientific browser assets are generated once in preflight under the frozen Stage IV Python environment and transferred unchanged to all browser jobs using GitHub Actions artifacts. Browser jobs perform pure Vite builds and do not regenerate CPython reference outcomes.
 - Generated Stage V browser JSON payloads are derived artifacts and are not committed as source authority.
 - Stage III validation fixtures and the Stage IV Python numerical core remain unchanged.
-- Status remains **CI candidate** until the same commit passes Stage III, Stage IV, Stage V preflight, Chromium, Firefox, and WebKit.
 
 ## 0.0.0 - Stage IV numerical core (2026-08-16)
 
