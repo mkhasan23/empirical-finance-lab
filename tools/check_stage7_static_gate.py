@@ -19,6 +19,15 @@ proc = subprocess.run(
 if proc.returncode != 0:
     errors.append("Stage VI static gate failed")
 
+supply_chain_proc = subprocess.run(
+    ["python", "tools/check_stage7_c2_supply_chain_gate.py"],
+    cwd=ROOT,
+    text=True,
+    capture_output=True,
+)
+if supply_chain_proc.returncode != 0:
+    errors.append("Stage VII-C2 supply-chain gate failed")
+
 package_path = ROOT / "web/package.json"
 lock_path = ROOT / "web/package-lock.json"
 if not package_path.is_file():
@@ -154,19 +163,19 @@ else:
         "push:",
         "pull_request:",
         "workflow_dispatch:",
-        "actions/checkout@v6",
-        "actions/setup-python@v6",
-        "actions/setup-node@v6",
+        "actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6",
+        "actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6",
+        "actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6",
         "node-version: '24'",
         "npm ci --no-audit --no-fund",
         "npm run build:pages",
         "npm run test:e2e:stage7",
         "npm run test:e2e:stage7:live",
-        "actions/upload-artifact@v7",
-        "actions/download-artifact@v8",
-        "actions/configure-pages@v6",
-        "actions/upload-pages-artifact@v5",
-        "actions/deploy-pages@v5",
+        "actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7",
+        "actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8",
+        "actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6",
+        "actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5",
+        "actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5",
         "pages: write",
         "id-token: write",
         "name: github-pages",
@@ -222,6 +231,10 @@ if errors:
         print(proc.stdout.rstrip())
     if proc.returncode != 0 and proc.stderr:
         print(proc.stderr.rstrip())
+    if supply_chain_proc.returncode != 0 and supply_chain_proc.stdout:
+        print(supply_chain_proc.stdout.rstrip())
+    if supply_chain_proc.returncode != 0 and supply_chain_proc.stderr:
+        print(supply_chain_proc.stderr.rstrip())
     raise SystemExit(1)
 
 print("STAGE VII STATIC GATE: PASS")

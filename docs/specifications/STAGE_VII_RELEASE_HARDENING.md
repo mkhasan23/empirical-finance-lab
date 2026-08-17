@@ -48,6 +48,20 @@ Both the local production-subpath test and the real deployed-site test must asse
 
 The Stage VII-C1 static security gate must run automatically before `build:pages` so a Pages artifact cannot be produced from a candidate whose documented policy, Vite injection, or production/live assertions have drifted.
 
+## Supply-chain governance contract
+
+Every external action invoked from `.github/workflows` must use a **full-length commit SHA**. Stage VII-C2 freezes the action commits that were already exercised successfully by the accepted C1 run and rejects mutable tags, malformed `uses:` references, unapproved external actions, and unexpected SHA/version-annotation drift.
+
+Dependabot version updates are intentionally scoped to:
+- npm development/test tooling under `/web`, checked weekly; and
+- GitHub Actions under `/`, checked weekly.
+
+Scientific Python is not placed on automatic version updates. Changes to the numerical environment, Pyodide runtime, Python, NumPy, SciPy, or related scientific authority require deliberate maintenance and scientific parity evidence.
+
+Dependabot proposals do not bypass governance. An accepted dependency or action update must preserve its applicable static contracts and pass Stages III through VII before integration. The detailed review and vulnerability-triage policy is maintained in `docs/governance/DEPENDENCY_UPDATE_POLICY.md`.
+
+After C2 is merged to the default branch, repository administrators should enable the GitHub Actions setting requiring full-length SHA pins. Dependency graph, Dependabot alerts, and Dependabot security updates should be enabled in repository security settings; those settings create monitoring/triage obligations but do not override EFL's validation requirements.
+
 ## Deployment contract
 
 The deploy job must consume the exact build-job artifact. It must not rebuild the application. Before packaging for GitHub Pages, it re-verifies the downloaded dist against the build-job manifest.

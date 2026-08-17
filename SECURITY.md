@@ -16,6 +16,16 @@ The document policy permits only same-origin workers through `worker-src 'self'`
 
 The Referrer Policy is `no-referrer`.
 
+## Supply-chain security boundary
+
+All external GitHub Actions used by EFL workflows are pinned to a **full-length commit SHA** rather than mutable major-version tags. The approved SHAs are enforced by the Stage VII-C2 repository-wide supply-chain gate, and human-readable version annotations are retained beside each pin.
+
+Dependabot is intentionally limited to weekly version-update proposals for frontend npm development tooling and GitHub Actions. Scientific Python is excluded from automatic version updates because numerical reproducibility and cross-runtime parity require deliberate validation before those versions move.
+
+Repository administrators should enable the dependency graph, Dependabot alerts, and Dependabot security updates. After the SHA-pinned C2 workflows are merged to the default branch, the repository Actions setting that requires full-length SHA pins should also be enabled.
+
+Dependency and action-update acceptance criteria are documented in `docs/governance/DEPENDENCY_UPDATE_POLICY.md`.
+
 ## Release posture
 
 Stage VII remains a candidate-hardening stage, not Public Beta and not formal `v0.1.0`. `noindex,nofollow` remains in force until the later public-beta acceptance decision.

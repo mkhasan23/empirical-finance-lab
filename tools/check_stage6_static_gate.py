@@ -86,7 +86,7 @@ for required in (
     "Prespecified robustness matrix",
     "Historical pseudo-event diagnostic",
     "Reproduce & cite",
-    "role=\"status\"",
+    'role="status"',
 ):
     if required not in index:
         errors.append(f"Stage VI interface contract missing: {required}")
@@ -144,8 +144,8 @@ for required in (
     "chromium",
     "firefox",
     "webkit",
-    "actions/upload-artifact@v7",
-    "actions/download-artifact@v8",
+    "actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7",
+    "actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8",
     "python tools/check_stage6_static_gate.py",
     "npm run test:e2e:stage6 -- --project=${{ matrix.browser }}",
 ):
