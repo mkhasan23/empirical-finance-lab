@@ -61,6 +61,16 @@ jobs:
         run: npm run build:pages
       - name: Record deterministic production artifact manifest
         run: python tools/stage7_dist_manifest.py write web/dist "$RUNNER_TEMP/stage7-dist-manifest.json"
+      - name: Stabilize Ubuntu mirror for Playwright system dependencies
+        run: |
+          test -f /etc/apt/apt-mirrors.txt
+          printf '%s\n' 'https://archive.ubuntu.com/ubuntu/' | sudo tee /etc/apt/apt-mirrors.txt >/dev/null
+          printf '%s\n' \
+            'Acquire::Retries "5";' \
+            'Acquire::http::Timeout "20";' \
+            'Acquire::https::Timeout "20";' \
+            | sudo tee /etc/apt/apt.conf.d/99-efl-ci-network >/dev/null
+          test "$(cat /etc/apt/apt-mirrors.txt)" = "https://archive.ubuntu.com/ubuntu/"
       - name: Install Chromium for production-like smoke test
         working-directory: web
         run: npx playwright install --with-deps chromium
@@ -158,6 +168,16 @@ jobs:
       - name: Install locked frontend dependencies
         working-directory: web
         run: npm ci --no-audit --no-fund
+      - name: Stabilize Ubuntu mirror for Playwright system dependencies
+        run: |
+          test -f /etc/apt/apt-mirrors.txt
+          printf '%s\n' 'https://archive.ubuntu.com/ubuntu/' | sudo tee /etc/apt/apt-mirrors.txt >/dev/null
+          printf '%s\n' \
+            'Acquire::Retries "5";' \
+            'Acquire::http::Timeout "20";' \
+            'Acquire::https::Timeout "20";' \
+            | sudo tee /etc/apt/apt.conf.d/99-efl-ci-network >/dev/null
+          test "$(cat /etc/apt/apt-mirrors.txt)" = "https://archive.ubuntu.com/ubuntu/"
       - name: Install Chromium for live deployed-site verification
         working-directory: web
         run: npx playwright install --with-deps chromium
