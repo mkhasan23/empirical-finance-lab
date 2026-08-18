@@ -5,6 +5,7 @@ import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+ACCEPTED_STAGE7_BASELINE = "08d8b1b8f5953b1e5cf93ec6a298a731757e0c87"
 
 
 def read(path: str) -> str:
@@ -74,10 +75,13 @@ def main() -> None:
     for token in (
         "- [x] Stage III corpus integrity preserved.",
         "- [x] Scientific analysis-phase network traffic is zero.",
-        "- [ ] The exact F2 commit must pass Stages III–VII.",
-        "- [ ] The exact F2 Stage VII run must emit `stage7-acceptance-evidence`",
-        "- [ ] Governed integration of the fully green Stage VII feature branch to `main`.",
-        "Only after the required `main` gates pass may Stage VII be recorded as accepted.",
+        f"- [x] Exact F2 commit `7236cb37a971edceed99981dd7d17e631868ee2b` passed Stages III–VII.",
+        f"- [x] Exact F2 Stage VII run `32073099350` passed build, deployment, and live verification on attempt 2.",
+        f"artifact `9303611739` with digest `sha256:18df6b9b058de4d16d91d6c070996bb3356ba8f578440bb7f4b5365ea4978b5d`",
+        "- [x] Governed integration of the fully green Stage VII feature branch to `main`.",
+        f"- [x] Stages III–VII reran successfully on accepted baseline `08d8b1b8f5953b1e5cf93ec6a298a731757e0c87`",
+        "repository administrator-confirmed",
+        f"**Stage VII is accepted at baseline `08d8b1b8f5953b1e5cf93ec6a298a731757e0c87`.**",
     ):
         require(checklist, token, "acceptance checklist", errors)
 
@@ -96,13 +100,17 @@ def main() -> None:
     for token in (
         'SCHEMA = "efl-stage7-acceptance-evidence-1"',
         'DIST_SCHEMA = "efl-stage7-dist-manifest-1"',
+        f'ACCEPTED_STAGE7_BASELINE = "08d8b1b8f5953b1e5cf93ec6a298a731757e0c87"',
         'required_env("EFL_BUILD_COMMIT")',
         'required_env("GITHUB_RUN_ID")',
         'required_env("EFL_STAGE7_PAGE_URL")',
+        'is_main = ref == "refs/heads/main"',
         '"stage7_dependency_jobs"',
         '"playwright_browsers"',
         '"external_action_pins"',
-        '"main_integration_and_main_rerun_required": True',
+        '"stage7_accepted": is_main',
+        '"main_integration_and_main_rerun_required": not is_main',
+        '"repository_governance_settings_machine_verified": False',
     ):
         require(writer, token, "F2 evidence writer", errors)
 
@@ -130,17 +138,18 @@ def main() -> None:
 
     status = read("docs/release_status.md")
     for token in (
-        "Stage VII release-hardening candidate",
-        "Stage VII as a whole is **not yet accepted**",
+        "accepted Stage VII release-hardening baseline on `main`",
+        ACCEPTED_STAGE7_BASELINE,
         "STAGE_VII_EVIDENCE_REPORT.md",
         "STAGE_VII_ACCEPTANCE_CHECKLIST.md",
         "stage7-acceptance-evidence",
-        "required III–VII rerun on the resulting exact `main` commit",
+        "repository administrator-confirmed",
         "not Public Beta",
         "no formal `v0.1.0` release",
         "no version-specific DOI",
     ):
         require(status, token, "docs/release_status.md", errors)
+    reject(status, "Stage VII as a whole is **not yet accepted**", "docs/release_status.md", errors)
 
     citation = read("CITATION.cff")
     require(citation, "version: 0.0.0", "CITATION.cff", errors)
@@ -159,7 +168,7 @@ def main() -> None:
         errors.append("REPOSITORY_MANIFEST.txt: duplicate entries found")
     if len(manifest_lines) != 206:
         errors.append(
-            f"REPOSITORY_MANIFEST.txt: expected 206 tracked paths for F2, found {len(manifest_lines)}"
+            f"REPOSITORY_MANIFEST.txt: expected 206 tracked paths for Stage VII, found {len(manifest_lines)}"
         )
     required_manifest_entries = {
         "docs/STAGE_VII_ACCEPTANCE_CHECKLIST.md",
@@ -194,9 +203,9 @@ def main() -> None:
     print(" - validated predecessor ledger: PASS")
     print(" - WebKit rerun disclosure: PASS")
     print(" - exact-commit CI evidence contract: PASS")
-    print(" - release-state boundary: PASS")
+    print(" - accepted Stage VII release-state boundary: PASS")
     print(f" - repository manifest: {len(manifest_lines)} tracked paths")
-    print(" - main-integration acceptance boundary: PASS")
+    print(" - main-integration acceptance record: PASS")
 
 
 if __name__ == "__main__":
