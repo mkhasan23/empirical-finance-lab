@@ -1,10 +1,10 @@
-# Stage VII release-hardening browser application
+# Stage VII accepted release-hardening browser application
 
-This directory contains the browser application for the Empirical Finance Lab v0.1 workflow. The repository is currently a **pre-release Stage VII release-hardening candidate**: it is not Public Beta and is not a formal `v0.1.0` release.
+This directory contains the browser application for the Empirical Finance Lab v0.1 workflow. Stage VII release hardening is **accepted on `main`** at baseline `08d8b1b8f5953b1e5cf93ec6a298a731757e0c87`. The project remains pre-release: it is not Public Beta and is not a formal `v0.1.0` release.
 
 Scientific calculations remain in `src/empirical_finance_lab/` and execute through the validated Pyodide module Web Worker. Stage VII adds release/deployment, security, provenance, reproducibility, onboarding, and accessibility hardening without creating a second econometric implementation.
 
-For the first-run tutorial, see [`../docs/quickstart.md`](../docs/quickstart.md). For the exact release boundary, see [`../docs/release_status.md`](../docs/release_status.md).
+For the first-run tutorial, see [`../docs/quickstart.md`](../docs/quickstart.md). For the exact release boundary and acceptance record, see [`../docs/release_status.md`](../docs/release_status.md).
 
 ## Environment separation
 
@@ -12,7 +12,7 @@ For the first-run tutorial, see [`../docs/quickstart.md`](../docs/quickstart.md)
 - `tsconfig.node.json`: Playwright/Vite/tooling tests with explicit Node types.
 - `vitest.config.ts`: unit tests only under `src/**/*.test.ts`.
 - `playwright.config.ts`: accepted Stage V/VI real-browser tests.
-- `playwright.stage7.config.ts`: production-subpath Stage VII candidate tests.
+- `playwright.stage7.config.ts`: Stage VII production-subpath tests.
 - `playwright.stage7.live.config.ts`: real deployed GitHub Pages verification.
 
 ## Application and release-hardening modules
@@ -31,7 +31,7 @@ For the first-run tutorial, see [`../docs/quickstart.md`](../docs/quickstart.md)
 
 Research files are opened into browser memory. The application does not persist them to localStorage/sessionStorage and does not transmit them to an EFL service. The original local-file SHA-256 is computed before mapping/normalization. The reproducibility archive records original and engine-input hashes separately and does not automatically include the proprietary source CSV.
 
-Stage VII additionally verifies zero analysis-time network requests, exact deployed-artifact parity, document security policy, and the reproducibility ZIP round trip on the live HTTPS Pages deployment.
+Stage VII verifies zero analysis-time network requests, exact deployed-artifact parity, document security policy, and the reproducibility ZIP round trip on the live HTTPS Pages deployment.
 
 ## Generated scientific assets
 
@@ -48,6 +48,7 @@ python tools/check_stage7_d1_provenance_gate.py
 python tools/check_stage7_e1_onboarding_gate.py
 python tools/check_stage7_e2_accessibility_gate.py
 python tools/check_stage7_f1_release_docs_gate.py
+python tools/check_stage7_f2_evidence_gate.py
 ```
 
 From `web/` after installing the locked development dependencies:
@@ -62,4 +63,4 @@ npm run test:e2e:stage7
 
 The live deployed-site suite is executed by the Stage VII workflow after deployment and is not a substitute for the accepted Stage V/VI cross-browser gates.
 
-Stage VII is accepted only after its complete feature-branch evidence/checklist is green, the governed integration reaches `main`, and the required main-branch gates pass. Until then, this directory documents a release-hardening candidate rather than a scholarly software release.
+Stage VII is an **accepted pre-release baseline**, not Public Beta and not a scholarly software release. Stage VIII external validation is a separate later milestone.

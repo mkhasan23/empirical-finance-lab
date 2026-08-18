@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Write machine-readable Stage VII F2 acceptance evidence for the exact CI commit."""
+"""Write machine-readable Stage VII F2 evidence for the exact CI commit."""
 from __future__ import annotations
 
 import argparse
@@ -18,6 +18,7 @@ DIST_SCHEMA = "efl-stage7-dist-manifest-1"
 SHA40 = re.compile(r"^[0-9a-f]{40}$")
 SHA64 = re.compile(r"^[0-9a-f]{64}$")
 EXPECTED_PAGE_PREFIX = "https://mkhasan23.github.io/empirical-finance-lab/"
+ACCEPTED_STAGE7_BASELINE = "08d8b1b8f5953b1e5cf93ec6a298a731757e0c87"
 
 
 def sha256(path: Path) -> str:
@@ -165,6 +166,7 @@ def main() -> None:
         page_url = required_env("EFL_STAGE7_PAGE_URL")
         if not page_url.startswith(EXPECTED_PAGE_PREFIX):
             raise ValueError(f"unexpected GitHub Pages URL: {page_url}")
+        is_main = ref == "refs/heads/main"
 
         job_results = {
             "build": required_env("EFL_STAGE7_BUILD_RESULT"),
@@ -223,18 +225,28 @@ def main() -> None:
             "repository_hashes": dict(sorted(tracked_hashes.items())),
             "external_action_pins": actions,
             "acceptance_boundary": {
+                "accepted_stage7_baseline": ACCEPTED_STAGE7_BASELINE,
                 "branch_candidate_evidence_complete": True,
-                "stage7_accepted": False,
+                "stage7_accepted": is_main,
                 "public_beta": False,
                 "formal_v0_1_0": False,
                 "version_specific_doi": False,
-                "main_integration_and_main_rerun_required": True,
+                "main_integration_and_main_rerun_required": not is_main,
+                "repository_governance_settings_machine_verified": False,
             },
             "limitations": [
-                "This artifact proves the exact Stage VII deployed branch candidate, not Stage VII acceptance on main.",
+                (
+                    "This artifact proves the exact deployed main commit under the Stage VII CI contract; "
+                    "repository-level Pages cleanup and full-SHA enforcement are administrator-confirmed "
+                    "in the committed acceptance record and are not machine-read by this workflow."
+                    if is_main
+                    else
+                    "This artifact proves the exact deployed branch commit under the Stage VII CI contract; "
+                    "Stage VII remains accepted at the separately recorded main baseline."
+                ),
                 "Automated accessibility checks are not a WCAG certification or manual assistive-technology study.",
                 "Pinned runtime initialization may use the allowed jsDelivr Pyodide host; scientific analysis-phase network traffic must remain zero.",
-                "A prior WebKit cold-start timeout was resolved by a successful rerun without a code change and remains disclosed in the committed evidence report.",
+                "Prior WebKit cold-start/timeout events were resolved by successful same-code reruns and remain disclosed in the committed evidence record.",
             ],
         }
 
@@ -245,9 +257,12 @@ def main() -> None:
         )
         print("STAGE VII-F2 CI EVIDENCE: WRITE PASS")
         print(f" - commit: {commit}")
+        print(f" - ref: {ref}")
+        print(f" - stage7 accepted: {is_main}")
+        print(f" - accepted baseline: {ACCEPTED_STAGE7_BASELINE}")
         print(f" - run: {run_id} attempt {run_attempt}")
         print(f" - production tree: {manifest['tree_sha256']}")
-        print(f" - browsers: {', '.join(f'{k} {v['browser_version']}' for k, v in browsers.items())}")
+        print(f" - browsers: {', '.join(f'{k} {v["browser_version"]}' for k, v in browsers.items())}")
     except (OSError, ValueError, KeyError, json.JSONDecodeError, subprocess.CalledProcessError) as error:
         print(f"STAGE VII-F2 CI EVIDENCE: FAIL - {error}")
         raise SystemExit(1) from error

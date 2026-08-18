@@ -2,11 +2,11 @@
 
 **Audit-first research software for credible, transparent, and reproducible empirical finance.**
 
-> **Current status — Stage VII release-hardening candidate (pre-release).** Stages III–VI are the accepted scientific/runtime/application baseline. Stage VII has validated deployment, browser security, supply-chain governance, build provenance, reproducibility round-trip, synthetic onboarding, and automated accessibility/responsive contracts on the feature branch. Stage VII as a whole is **not yet accepted**, Empirical Finance Lab is **not Public Beta**, and there is no formal `v0.1.0` release or version-specific DOI.
+> **Current status — Stage VII release hardening accepted on `main` (pre-release).** The accepted Stage VII baseline is exact `main` commit `08d8b1b8f5953b1e5cf93ec6a298a731757e0c87`, after governed integration and fresh Stage III–VII validation on `main`. Empirical Finance Lab is **not Public Beta**, and there is no formal `v0.1.0` release or version-specific DOI.
 
-**Live candidate application:** https://mkhasan23.github.io/empirical-finance-lab/
+**Live validated pre-release application:** https://mkhasan23.github.io/empirical-finance-lab/
 
-Start with [`docs/quickstart.md`](docs/quickstart.md). For the exact pre-release boundary, see [`docs/release_status.md`](docs/release_status.md).
+Start with [`docs/quickstart.md`](docs/quickstart.md). For the exact pre-release boundary and acceptance record, see [`docs/release_status.md`](docs/release_status.md).
 
 ## Scientific workflow
 
@@ -16,7 +16,7 @@ The first module is the **Audit-First Event Study Analyzer** for one security an
 
 ## Accepted scientific/runtime baseline
 
-Implemented in `src/empirical_finance_lab/` and protected from Stage VII release-hardening drift:
+Implemented in `src/empirical_finance_lab/` and protected from release-engineering drift:
 
 - explicit CSV/unit/data validation with no silent imputation;
 - trading-index event/estimation window construction;
@@ -47,9 +47,9 @@ The `web/` application implements:
 
 The browser application does **not** re-estimate econometric quantities in TypeScript. Charts and tables display values returned by the scientific core.
 
-## Stage VII release hardening
+## Stage VII accepted release hardening
 
-Stage VII adds release engineering around the accepted scientific/application stack without adding econometric methods. Current candidate controls include:
+Stage VII adds release engineering around the accepted scientific/application stack without adding econometric methods. Accepted Stage VII controls include:
 
 - locked frontend dependency installation with `npm ci`;
 - GitHub Pages production build and exact tested-artifact deployment;
@@ -61,7 +61,7 @@ Stage VII adds release engineering around the accepted scientific/application st
 - deterministic synthetic onboarding data tied to a frozen known answer;
 - automated keyboard, hidden-state, and responsive checks at 320/390/768/1280 px.
 
-These are **candidate hardening controls**, not a declaration of Public Beta or formal release. Stage VII acceptance still requires its final evidence/checklist and integration gate on `main`.
+These controls form the **accepted Stage VII pre-release baseline**. Acceptance does **not** promote the project to Public Beta or a formal scholarly release. Stage VIII remains the separate Public Beta / external-validation phase.
 
 ## Validation authority
 
@@ -80,6 +80,7 @@ python tools/check_stage7_d1_provenance_gate.py
 python tools/check_stage7_e1_onboarding_gate.py
 python tools/check_stage7_e2_accessibility_gate.py
 python tools/check_stage7_f1_release_docs_gate.py
+python tools/check_stage7_f2_evidence_gate.py
 ```
 
 Browser/runtime/application gates additionally run TypeScript/Vitest/Vite and Playwright in their stage-specific workflows.
@@ -102,7 +103,7 @@ Not supported: multi-firm CAAR inference, cross-sectional event-study tests, lon
 
 ## Governance and security
 
-Scientific changes are classified separately from software/reporting changes. The frozen Stage VI scientific-tree manifest protects the Stage III validation corpus and Stage IV Python core during interface/release-hardening work.
+Scientific changes are classified separately from software/reporting changes. The frozen Stage VI scientific-tree manifest continues to protect the Stage III validation corpus and Stage IV Python core.
 
 - Release policy: [`docs/governance/release_policy.md`](docs/governance/release_policy.md)
 - Dependency policy: [`docs/governance/DEPENDENCY_UPDATE_POLICY.md`](docs/governance/DEPENDENCY_UPDATE_POLICY.md)
@@ -112,7 +113,7 @@ Scientific changes are classified separately from software/reporting changes. Th
 
 ## Citation
 
-`CITATION.cff` intentionally remains at `0.0.0` while the project is pre-release. There is no version-specific DOI. Formal scholarly citation should use a future validated release and its exact release metadata rather than treating the Stage VII candidate deployment as a release.
+`CITATION.cff` intentionally remains at `0.0.0` while the project is pre-release. There is no version-specific DOI. Formal scholarly citation should use a future validated release and its exact release metadata rather than treating the accepted Stage VII pre-release deployment as a formal release.
 
 ## License
 

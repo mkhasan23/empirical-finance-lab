@@ -4,6 +4,7 @@ import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+ACCEPTED_STAGE7_BASELINE = "08d8b1b8f5953b1e5cf93ec6a298a731757e0c87"
 
 
 def read(path: str) -> str:
@@ -44,7 +45,8 @@ def main() -> None:
     errors: list[str] = []
 
     root_readme = read("README.md")
-    require(root_readme, "Stage VII release-hardening candidate", "README.md", errors)
+    require(root_readme, "Stage VII release hardening accepted on `main`", "README.md", errors)
+    require(root_readme, ACCEPTED_STAGE7_BASELINE, "README.md", errors)
     require(root_readme, "not Public Beta", "README.md", errors)
     require(root_readme, "no formal `v0.1.0` release", "README.md", errors)
     require(root_readme, "docs/quickstart.md", "README.md", errors)
@@ -57,39 +59,46 @@ def main() -> None:
         "README.md",
         errors,
     )
+    reject(root_readme, "Stage VII as a whole is **not yet accepted**", "README.md", errors)
     reject(root_readme, "Stage VI application-UI CI candidate", "README.md", errors)
     reject(root_readme, "Stage VI is **not accepted**", "README.md", errors)
 
     web_readme = read("web/README.md")
-    require(web_readme, "# Stage VII release-hardening browser application", "web/README.md", errors)
+    require(web_readme, "# Stage VII accepted release-hardening browser application", "web/README.md", errors)
+    require(web_readme, ACCEPTED_STAGE7_BASELINE, "web/README.md", errors)
     require(web_readme, "not Public Beta", "web/README.md", errors)
     require(web_readme, "../docs/quickstart.md", "web/README.md", errors)
     require(web_readme, "../docs/release_status.md", "web/README.md", errors)
     require(web_readme, "npm run build:pages", "web/README.md", errors)
     require(web_readme, "npm run test:e2e:stage7", "web/README.md", errors)
+    reject(web_readme, "pre-release Stage VII release-hardening candidate", "web/README.md", errors)
     reject(web_readme, "# Stage VI research application UI CI candidate", "web/README.md", errors)
 
     changelog = read("CHANGELOG.md")
-    require(changelog, "Stage VII release-hardening candidate", "CHANGELOG.md", errors)
+    require(changelog, "Stage VII release hardening accepted", "CHANGELOG.md", errors)
+    require(changelog, ACCEPTED_STAGE7_BASELINE, "CHANGELOG.md", errors)
     require(changelog, "reproducibility ZIP round-trip", "CHANGELOG.md", errors)
     require(changelog, "not Public Beta", "CHANGELOG.md", errors)
     require(changelog, "no version-specific DOI", "CHANGELOG.md", errors)
 
     status = read("docs/release_status.md")
     for token in (
-        "Stage VII release-hardening candidate",
+        "accepted Stage VII release-hardening baseline on `main`",
+        ACCEPTED_STAGE7_BASELINE,
         "not Public Beta",
         "no formal `v0.1.0` release",
         "no version-specific DOI",
         "Stage VIII",
         "Stage IX",
+        "repository administrator-confirmed",
         "https://mkhasan23.github.io/empirical-finance-lab/",
     ):
         require(status, token, "docs/release_status.md", errors)
+    reject(status, "Stage VII as a whole is **not yet accepted**", "docs/release_status.md", errors)
 
     policy = read("docs/governance/release_policy.md")
     for token in (
-        "Stage VII — release-hardening candidate",
+        "Stage VII — accepted release hardening",
         "Stage VIII — Public Beta / external validation",
         "Stage IX — formal `v0.1.0` release",
         "version `0.0.0`",
@@ -171,12 +180,12 @@ def main() -> None:
         raise SystemExit(1)
 
     print("STAGE VII-F1 RELEASE DOCUMENTATION GATE: PASS")
-    print(" - Stage VII / Stage VIII / Stage IX status boundary: PASS")
+    print(" - Stage VII accepted / Stage VIII / Stage IX status boundary: PASS")
     print(" - pre-release citation/DOI boundary: PASS")
     print(" - current onboarding/security/release links: PASS")
     print(f" - repository manifest: {len(manifest_lines)} tracked paths")
     print(" - Stage VII workflow invocation: PASS")
-    print(" - candidate noindex boundary: PASS")
+    print(" - accepted pre-release noindex boundary: PASS")
 
 
 if __name__ == "__main__":

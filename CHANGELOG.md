@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.0.0 - Stage VII release-hardening candidate (2026-08-17)
+## 0.0.0 - Stage VII release hardening accepted (2026-08-17)
 
 - Added a committed frontend lockfile and converted controlled CI installation to `npm ci`.
 - Added exact tested-artifact GitHub Pages deployment plus post-deployment byte-for-byte and live runtime verification.
@@ -10,8 +10,9 @@
 - Added a strict privacy-preserving reproducibility ZIP round-trip contract: verify the exact original local CSV externally, reconstruct normalized engine input, rerun the authoritative browser core, compare identities/scientific results, and require deterministic byte-identical re-export.
 - Added a deterministic 180-row synthetic onboarding dataset and quickstart tied to the frozen KA-003 AR/CAR known answer.
 - Added automated accessibility/keyboard/responsive contracts, including native `hidden` semantics and completed-result containment at 320/390/768/1280 px.
-- Aligned release-status documentation, release policy, browser README, changelog, and repository manifest under the Stage VII-F1 documentation contract.
-- Stage VII remains a **pre-release release-hardening candidate** until its final evidence/checklist and governed `main` integration pass. This is **not Public Beta**, not a formal `v0.1.0` release, and has no version-specific DOI.
+- Added formal Stage VII branch evidence and exact-commit acceptance evidence, followed by governed squash integration to `main` and fresh Stage III–VII main-branch validation.
+- Accepted Stage VII at baseline `08d8b1b8f5953b1e5cf93ec6a298a731757e0c87`; the same-commit Stage V post-merge gate required a rerun and then passed. The temporary feature-branch Pages allowance was removed and repository-wide full-action-SHA enforcement was enabled by the repository administrator.
+- Stage VII acceptance remains **pre-release**: this is **not Public Beta**, not a formal `v0.1.0` release, and has no version-specific DOI.
 
 ## 0.0.0 - Stage VI research application UI (2026-08-16)
 
@@ -21,7 +22,7 @@
 - Added responsive, keyboard-addressable, status-message-aware UI semantics and exact-value table alternatives for charts.
 - Added Stage VI unit tests and Chromium/Firefox/WebKit end-to-end researcher-journey CI.
 - Added a frozen SHA-256 scientific-tree manifest protecting the Stage III validation corpus and Stage IV Python core from interface drift.
-- Stage VI is part of the accepted Stage III–VI baseline used by Stage VII release hardening.
+- Stage VI is part of the accepted scientific/application baseline preserved by Stage VII release hardening.
 
 ## 0.0.0 - Stage V browser runtime (2026-08-16)
 
