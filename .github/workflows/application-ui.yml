@@ -81,6 +81,16 @@ jobs:
       - name: Build Stage VI application
         working-directory: web
         run: npm run build
+      - name: Stabilize Ubuntu mirror for Playwright system dependencies
+        run: |
+          test -f /etc/apt/apt-mirrors.txt
+          printf '%s\n' 'https://archive.ubuntu.com/ubuntu/' | sudo tee /etc/apt/apt-mirrors.txt >/dev/null
+          printf '%s\n' \
+            'Acquire::Retries "5";' \
+            'Acquire::http::Timeout "20";' \
+            'Acquire::https::Timeout "20";' \
+            | sudo tee /etc/apt/apt.conf.d/99-efl-ci-network >/dev/null
+          test "$(cat /etc/apt/apt-mirrors.txt)" = "https://archive.ubuntu.com/ubuntu/"
       - name: Install selected Playwright browser
         working-directory: web
         run: npx playwright install --with-deps ${{ matrix.browser }}
@@ -95,3 +105,18 @@ jobs:
           path: web/test-results
           if-no-files-found: ignore
           retention-days: 3
+
+  stage6-required:
+    name: stage6-required
+    needs: [preflight, stage6-ui]
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Require complete Stage VI gate
+        env:
+          PREFLIGHT_RESULT: ${{ needs.preflight.result }}
+          STAGE6_UI_RESULT: ${{ needs.stage6-ui.result }}
+        run: |
+          test "$PREFLIGHT_RESULT" = "success"
+          test "$STAGE6_UI_RESULT" = "success"
