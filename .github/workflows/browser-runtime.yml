@@ -87,3 +87,18 @@ jobs:
       - name: Pyodide parity and privacy — ${{ matrix.browser }}
         working-directory: web
         run: npm run test:e2e:stage5 -- --project=${{ matrix.browser }} ${{ matrix.browser == 'webkit' && '--retries=1' || '' }}
+
+  stage5-required:
+    name: stage5-required
+    needs: [preflight, browser-runtime]
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Require complete Stage V gate
+        env:
+          PREFLIGHT_RESULT: ${{ needs.preflight.result }}
+          BROWSER_RUNTIME_RESULT: ${{ needs.browser-runtime.result }}
+        run: |
+          test "$PREFLIGHT_RESULT" = "success"
+          test "$BROWSER_RUNTIME_RESULT" = "success"

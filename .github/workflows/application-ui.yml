@@ -95,3 +95,18 @@ jobs:
           path: web/test-results
           if-no-files-found: ignore
           retention-days: 3
+
+  stage6-required:
+    name: stage6-required
+    needs: [preflight, stage6-ui]
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Require complete Stage VI gate
+        env:
+          PREFLIGHT_RESULT: ${{ needs.preflight.result }}
+          STAGE6_UI_RESULT: ${{ needs.stage6-ui.result }}
+        run: |
+          test "$PREFLIGHT_RESULT" = "success"
+          test "$STAGE6_UI_RESULT" = "success"

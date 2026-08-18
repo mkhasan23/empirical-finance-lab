@@ -217,3 +217,42 @@ jobs:
           path: ${{ runner.temp }}/stage7-acceptance-evidence.json
           if-no-files-found: error
           retention-days: 30
+
+  stage7-required:
+    name: stage7-required
+    needs: [build, deploy, verify-live, evidence]
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Require event-appropriate Stage VII gate
+        env:
+          BUILD_RESULT: ${{ needs.build.result }}
+          DEPLOY_RESULT: ${{ needs.deploy.result }}
+          VERIFY_LIVE_RESULT: ${{ needs.verify-live.result }}
+          EVIDENCE_RESULT: ${{ needs.evidence.result }}
+          EVENT_NAME: ${{ github.event_name }}
+          REF_NAME: ${{ github.ref }}
+          DISPATCH_DEPLOY: ${{ github.event_name == 'workflow_dispatch' && inputs.deploy == true }}
+          FEATURE_DEPLOY: ${{ github.event_name == 'push' && github.ref == 'refs/heads/stage-vii-release-hardening' && contains(github.event.head_commit.message, '[deploy-candidate]') }}
+        run: |
+          test "$BUILD_RESULT" = "success"
+
+          EXPECT_DEPLOY=false
+          if [ "$EVENT_NAME" = "push" ] && [ "$REF_NAME" = "refs/heads/main" ]; then
+            EXPECT_DEPLOY=true
+          elif [ "$DISPATCH_DEPLOY" = "true" ]; then
+            EXPECT_DEPLOY=true
+          elif [ "$FEATURE_DEPLOY" = "true" ]; then
+            EXPECT_DEPLOY=true
+          fi
+
+          if [ "$EXPECT_DEPLOY" = "true" ]; then
+            test "$DEPLOY_RESULT" = "success"
+            test "$VERIFY_LIVE_RESULT" = "success"
+            test "$EVIDENCE_RESULT" = "success"
+          else
+            test "$DEPLOY_RESULT" = "skipped"
+            test "$VERIFY_LIVE_RESULT" = "skipped"
+            test "$EVIDENCE_RESULT" = "skipped"
+          fi
