@@ -114,7 +114,7 @@ test("ambiguous year-last dates require an explicit interpretation and lock pars
   await page.getByLabel("Calendar announcement date").fill("2024-05-06");
   await page.getByLabel("Announcement timing").selectOption("during_or_before_market");
   await page.getByRole("button", { name: "Use suggestion" }).click();
-  await expect(page.getByLabel("Effective event trading date")).toHaveValue("2024-05-06");
+  await expect(page.locator("#effective-event-date")).toHaveValue("2024-05-06");
   await page.getByLabel(/I confirm the effective event trading date/).check();
   await page.getByRole("button", { name: "Review & lock specification" }).click();
   await expect(page.locator("#lock-summary")).toContainText("MM/DD/YYYY → YYYY-MM-DD");
@@ -245,4 +245,3 @@ test("production candidate preserves keyboard semantics and completed-result res
     expect(overflow, `document overflow at ${width}px`).toBeLessThanOrEqual(1);
   }
 });
-
