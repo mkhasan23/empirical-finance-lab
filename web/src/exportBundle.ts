@@ -108,6 +108,10 @@ export function buildReproducibilityFiles(context: BundleContext): Record<string
     ? placebo.candidate_dates.map((date, index) => ({ date, placebo_car: (placebo.placebo_cars as unknown[])[index] }))
     : [];
   const releaseVersion = String(coreRepro.software_version ?? "UNAVAILABLE");
+  const releaseTag = releaseVersion === "UNAVAILABLE" ? "UNAVAILABLE" : `v${releaseVersion}`;
+  const releaseUrl = releaseTag === "UNAVAILABLE"
+    ? "UNAVAILABLE"
+    : `https://github.com/mkhasan23/empirical-finance-lab/releases/tag/${releaseTag}`;
   const citation = [
     "Empirical Finance Lab: Audit-First Tools for Credible Empirical Finance Research.",
     "Author: Muhammad Kamrul Hasan.",
@@ -115,8 +119,8 @@ export function buildReproducibilityFiles(context: BundleContext): Record<string
     `Build commit: ${buildProvenance.build_commit}.`,
     `Build mode/source: ${buildProvenance.build_mode}/${buildProvenance.build_source}.`,
     "Repository: https://github.com/mkhasan23/empirical-finance-lab",
-    "Formal release tag: v0.1.0.",
-    "Release page: https://github.com/mkhasan23/empirical-finance-lab/releases/tag/v0.1.0",
+    `Formal release tag: ${releaseTag}.`,
+    `Release page: ${releaseUrl}`,
     "No version-specific DOI is claimed unless an archival DOI is actually minted and recorded with the release.",
     "",
   ].join("\n");
@@ -128,7 +132,7 @@ export function buildReproducibilityFiles(context: BundleContext): Record<string
     "A full reproduction therefore requires this ZIP plus the exact original local CSV used for the run.",
     "manifest.json records the SHA-256 of the original local file and the transformed engine input separately.",
     "analysis_spec.json is the locked research specification sent to the validated Python core.",
-    "normalization.json documents column mapping, any explicitly approved sort, and normalized-to-original source-row provenance.",
+    "normalization.json documents column mapping, date interpretation/canonicalization provenance when applicable, any explicitly approved sort, and normalized-to-original source-row provenance.",
     "scientific_result.json records the complete deterministic scientific result returned by the authoritative Python core.",
     "The D2 round-trip contract verifies the ZIP structure and payload hashes, the original-file hash, reconstructed engine input, locked specification, AnalysisID, ExecutionID, build provenance, and scientific-result identity before requiring a byte-identical deterministic re-export.",
     "event_time.csv reports the event-window values returned by the scientific core; no econometric quantity is recomputed by the exporter.",

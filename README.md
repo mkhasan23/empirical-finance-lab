@@ -2,11 +2,11 @@
 
 **Audit-first research software for credible, transparent, and reproducible empirical finance.**
 
-> **Current software line — v0.1.0 validated release.** The frozen scientific/external-validation baseline remains `a694d49df9716f9f87d359385598237363e4c3fc` (tree `621b0cafdcad3711d2aba3bef698d2e78d022144`). The exact formal release is the immutable `v0.1.0` tag after the Stage IX tag gate passes; before that tag exists, the same governed default-branch state is the release candidate. The Stage VII release-engineering baseline remains `08d8b1b8f5953b1e5cf93ec6a298a731757e0c87`.
+> **Current software line — v0.1.1 validated patch release line.** The frozen scientific/external-validation baseline remains `a694d49df9716f9f87d359385598237363e4c3fc` (tree `621b0cafdcad3711d2aba3bef698d2e78d022144`). The immutable historical `v0.1.0` release remains fixed at `faf3dc6c5702dad3f5abd1dd15f7697fab5a5831`. The formal v0.1.1 release authority will be the immutable `v0.1.1` tag after exact-main Stage III–X validation. The Stage VII release-engineering baseline remains `08d8b1b8f5953b1e5cf93ec6a298a731757e0c87`.
 
 **Live validated application:** https://mkhasan23.github.io/empirical-finance-lab/
 
-Start with [`docs/quickstart.md`](docs/quickstart.md). For the exact pre-release boundary and acceptance record, see [`docs/release_status.md`](docs/release_status.md).
+Start with [`docs/quickstart.md`](docs/quickstart.md). For the current release boundary and acceptance record, see [`docs/release_status.md`](docs/release_status.md).
 
 ## Scientific workflow
 
@@ -43,9 +43,23 @@ The `web/` application implements:
 6. **Audit** — PASS / WARNING / CRITICAL / NOT ASSESSABLE findings remain explicit;
 7. **Stress-test** — prespecified robustness and historical placebo outputs;
 8. **Interpret** — deterministic Referee Mode distinguishes association from causal attribution;
-9. **Reproduce/Cite** — deterministic local reproducibility ZIP with hashes, specification, results, audits, environment, build provenance, and pre-release citation status.
+9. **Reproduce/Cite** — deterministic local reproducibility ZIP with hashes, specification, results, audits, environment, build provenance, and release-specific citation metadata.
 
 The browser application does **not** re-estimate econometric quantities in TypeScript. Charts and tables display values returned by the scientific core.
+
+## v0.1.1 interoperability and usability patch
+
+v0.1.1 is a **non-econometric patch release**. It preserves the frozen Stage III/IV numerical authority and the accepted Stage VIII real-data evidence while improving researcher-facing interoperability, provenance, citation, and discoverability.
+
+- browser intake deterministically accepts `YYYY-MM-DD`, `YYYY/MM/DD`, and `YYYYMMDD`;
+- ambiguous `MM/DD/YYYY` versus `DD/MM/YYYY` is never guessed and requires an explicit researcher choice;
+- date canonicalization occurs before duplicate/order/effective-trading-date checks and is locked into reproducibility provenance;
+- CRSP-shaped headers `DlyCalDt`, `DlyRet`, and `vwretd` receive visible mapping suggestions;
+- original local-file and normalized engine-input hashes remain separate;
+- release citations are derived from the authoritative software version rather than a hardcoded tag;
+- author/citation/search metadata, canonical URL, Search Console verification, and a sitemap improve public discoverability.
+
+The general browser estimation-window default remains researcher-editable at `[-250,-30]`. The Stage VIII real-CRSP validation design `[-256,-46]` remains validation evidence, not a mandatory research default.
 
 ## Stage VII accepted release hardening
 
@@ -100,6 +114,8 @@ python tools/check_stage7_e2_accessibility_gate.py
 python tools/check_stage7_f1_release_docs_gate.py
 python tools/check_stage7_f2_evidence_gate.py
 python tools/check_stage8_real_data_gate.py
+python tools/check_stage9_release_gate.py
+python tools/check_stage10_patch_release_gate.py
 ```
 
 Browser/runtime/application gates additionally run TypeScript/Vitest/Vite and Playwright in their stage-specific workflows.
@@ -132,7 +148,7 @@ Scientific changes are classified separately from software/reporting changes. Th
 
 ## Citation
 
-`CITATION.cff` is configured for version `0.1.0`. The immutable `v0.1.0` tag is the formal release authority once its Stage IX tag gate passes. No version-specific DOI is claimed unless an archival DOI is actually minted and recorded in the release metadata. Researchers should cite the exact released version they use.
+`CITATION.cff` is configured for version `0.1.1`. The immutable `v0.1.0` tag remains historical release authority; the governed `v0.1.1` tag becomes the patch-release authority only after exact-main and tag-specific Stage X gates pass. No version-specific DOI is claimed unless an archival DOI is actually minted and recorded in the release metadata. Researchers should cite the exact released version they use.
 
 ## License
 

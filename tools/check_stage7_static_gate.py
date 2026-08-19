@@ -102,7 +102,7 @@ else:
         'window.__EFL_STAGE5__.runFixture("KA-003")',
         'pathname === `${BASE_PATH}efl-core.json`',
         'expect(analysisRequests, "production-like scientific analysis emitted a network request").toEqual([])',
-        'expect(runtime.efl_version).toBe("0.1.0")',
+        'expect(runtime.efl_version).toBe("0.1.1")',
     ):
         if required not in test_text:
             errors.append(f"Stage VII production browser invariant missing: {required}")
@@ -142,7 +142,7 @@ else:
         'pathname === `${BASE_PATH}efl-core.json`',
         'expect(analysisRequests, "live production scientific analysis emitted a network request").toEqual([])',
         'toBe("cdn.jsdelivr.net")',
-        'expect(runtime.efl_version).toBe("0.1.0")',
+        'expect(runtime.efl_version).toBe("0.1.1")',
     ):
         if required not in live_test_text:
             errors.append(f"Stage VII live deployed-site invariant missing: {required}")
@@ -223,11 +223,11 @@ else:
 
 index = (ROOT / "web/index.html").read_text(encoding="utf-8")
 if 'content="noindex,nofollow"' in index:
-    errors.append("formal v0.1.0 release must be indexable; stale noindex boundary remains")
-if "v0.1.0 · validated release" not in index:
-    errors.append("formal v0.1.0 release badge is missing")
-if 'id="citation-version">0.1.0' not in index:
-    errors.append("formal v0.1.0 citation version is missing")
+    errors.append("current validated v0.1.1 patch release must be indexable; stale noindex boundary remains")
+if "v0.1.1 · validated patch release" not in index:
+    errors.append("current v0.1.1 patch-release badge is missing")
+if 'id="citation-version">0.1.1' not in index:
+    errors.append("current v0.1.1 citation version is missing")
 
 if errors:
     print("STAGE VII STATIC GATE: FAIL")

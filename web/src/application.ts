@@ -6,6 +6,7 @@ import {
   sha256Hex,
   validateIntake,
   type ColumnMapping,
+  type DateInputMode,
   type NormalizedCsv,
   type ParsedLocalCsv,
 } from "./csvIntake";
@@ -131,6 +132,21 @@ function currentMapping(): ColumnMapping {
   };
 }
 
+function currentDateInputMode(): DateInputMode {
+  return select("date-format").value as DateInputMode;
+}
+
+function dateCanonicalizationProvenance(value: NormalizedCsv["dateCanonicalization"]): Record<string, unknown> {
+  return {
+    requested_format: value.requestedFormat,
+    detected_source_formats: [...value.sourceFormats],
+    canonical_format: value.canonicalFormat,
+    transformed_rows: value.transformedRows,
+    detection_method: value.detectionMethod,
+    explicit_ambiguous_format_selection: value.explicitAmbiguousFormatSelection,
+  };
+}
+
 function renderIntakeIssues(): void {
   const container = byId<HTMLElement>("intake-issues");
   container.replaceChildren();
@@ -140,7 +156,7 @@ function renderIntakeIssues(): void {
     return;
   }
   session.mapping = currentMapping();
-  const report = validateIntake(session.parsed, session.mapping);
+  const report = validateIntake(session.parsed, session.mapping, currentDateInputMode());
   const list = document.createElement("ul");
   list.className = "audit-list compact";
   for (const issue of report.issues) {
@@ -189,6 +205,7 @@ async function openLocalFile(file: File): Promise<void> {
   byId<HTMLElement>("file-size").textContent = `${(file.size / 1024).toFixed(1)} KB`;
   byId<HTMLElement>("raw-hash").textContent = session.originalSha256;
   input("sort-approved").checked = false;
+  select("date-format").value = "auto";
   renderIntakeIssues();
   setStatus("Local file opened in browser memory. No research data were transmitted.", "success");
 }
@@ -264,11 +281,7 @@ function renderSpecIssues(): boolean {
 }
 
 function observedDates(): string[] {
-  if (!session.parsed) return [];
-  const mapping = currentMapping();
-  const index = session.parsed.headers.indexOf(mapping.date);
-  if (index < 0) return [];
-  return session.parsed.rows.map((row) => (row[index] ?? "").trim()).filter(Boolean).sort();
+  return session.normalized ? [...session.normalized.canonicalDates] : [];
 }
 
 function updateEventSuggestion(): void {
@@ -314,10 +327,11 @@ function prepareSpecificationPanel(): void {
 async function finalizeIntakeAndContinue(): Promise<void> {
   if (!session.parsed || !session.originalBytes) return;
   session.mapping = currentMapping();
-  const report = validateIntake(session.parsed, session.mapping);
+  const dateInputMode = currentDateInputMode();
+  const report = validateIntake(session.parsed, session.mapping, dateInputMode);
   const sortApproved = input("sort-approved").checked;
   if (report.issues.some((issue) => issue.severity === "CRITICAL") || (report.unsorted && !sortApproved)) return;
-  session.normalized = normalizeMappedCsv(session.parsed, session.mapping, sortApproved);
+  session.normalized = normalizeMappedCsv(session.parsed, session.mapping, sortApproved, dateInputMode);
   session.engineInputSha256 = await sha256Hex(session.normalized.csvText);
   session.specDraft.returnUnits = select("return-units").value as SpecificationDraft["returnUnits"];
   prepareSpecificationPanel();
@@ -346,6 +360,18 @@ function renderLockSummary(spec: Record<string, unknown>): void {
   add("Inference", `${String(inf.direction).replaceAll("_", " ")}; B=${String(inf.permutation_B)}; seed=${String(inf.seed)}`);
   add("Placebo", (spec.placebo as Record<string, unknown>).enabled ? "Enabled" : "Disabled");
   add("Return units", String(spec.return_units));
+  const normalization = spec.normalization && typeof spec.normalization === "object"
+    ? spec.normalization as Record<string, unknown>
+    : {};
+  const dateCanonicalization = normalization.date_canonicalization && typeof normalization.date_canonicalization === "object"
+    ? normalization.date_canonicalization as Record<string, unknown>
+    : null;
+  if (dateCanonicalization) {
+    add(
+      "Date interpretation",
+      `${String(dateCanonicalization.requested_format)} → ${String(dateCanonicalization.canonical_format)} (${String(dateCanonicalization.detection_method).replaceAll("_", " ")})`,
+    );
+  }
   container.append(definition);
   const note = document.createElement("p");
   note.className = "lock-note";
@@ -356,7 +382,10 @@ function renderLockSummary(spec: Record<string, unknown>): void {
 function reviewAndLock(): void {
   if (!session.normalized || !renderSpecIssues()) return;
   const draft = syncDraftFromForm();
-  const spec = buildLockedSpecification(draft, session.mapping, { sortedAscending: session.normalized.sortedAscending });
+  const spec = buildLockedSpecification(draft, session.mapping, {
+    sortedAscending: session.normalized.sortedAscending,
+    dateCanonicalization: session.normalized.dateCanonicalization,
+  });
   session.lockedSpec = structuredClone(spec);
   renderLockSummary(session.lockedSpec);
   button("run-analysis").disabled = false;
@@ -483,6 +512,7 @@ function downloadBundle(): void {
     },
     normalization: {
       sorted_ascending_with_explicit_approval: session.normalized.sortedAscending,
+      date_canonicalization: dateCanonicalizationProvenance(session.normalized.dateCanonicalization),
       proprietary_raw_data_included: false,
     },
     normalizedToOriginalSourceRow: session.normalized.normalizedToOriginalSourceRow,
@@ -521,6 +551,7 @@ function bindEvents(): void {
     if (file) void openLocalFile(file);
   });
   ["map-date", "map-security", "map-benchmark"].forEach((id) => select(id).addEventListener("change", () => { clearDownstream("mapping"); renderIntakeIssues(); }));
+  select("date-format").addEventListener("change", () => { clearDownstream("mapping"); input("sort-approved").checked = false; renderIntakeIssues(); });
   input("sort-approved").addEventListener("change", renderIntakeIssues);
   select("return-units").addEventListener("change", () => { clearDownstream("mapping"); renderIntakeIssues(); });
   button("continue-to-specification").addEventListener("click", () => { void finalizeIntakeAndContinue(); });

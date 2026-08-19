@@ -8,6 +8,8 @@ const ORIGINAL_TEXT = "d,s,m\n2025-01-03,0.02,0.01\n2025-01-02,0.01,0.00\n";
 const NORMALIZED_TEXT = "date,security_return,benchmark_return\n2025-01-02,0.01,0.00\n2025-01-03,0.02,0.01\n";
 const ORIGINAL_HASH = sha256HexSync(ORIGINAL_TEXT);
 const ENGINE_HASH = sha256HexSync(NORMALIZED_TEXT);
+const AMBIGUOUS_ORIGINAL_TEXT = "d,s,m\n05/06/2024,0.01,0.00\n06/07/2024,0.02,0.01\n";
+const AMBIGUOUS_NORMALIZED_TEXT = "date,security_return,benchmark_return\n2024-05-06,0.01,0.00\n2024-06-07,0.02,0.01\n";
 
 function provenanceContext(runtimeCommit = BUILD_COMMIT): BundleContext {
   return {
@@ -25,7 +27,7 @@ function provenanceContext(runtimeCommit = BUILD_COMMIT): BundleContext {
       referee_report: "# Referee\n",
       primary: { car: 0.03, event_time: [], classical_inference: null, permutation_inference: null },
       reproducibility: {
-        software_version: "0.0.0",
+        software_version: "0.1.1",
         analysis_id: "1".repeat(64),
         execution_id: "2".repeat(64),
         hashes: {
@@ -50,6 +52,44 @@ function provenanceContext(runtimeCommit = BUILD_COMMIT): BundleContext {
       core_bundle_sha256: "b".repeat(64),
     },
   };
+}
+
+function explicitDateContext(): BundleContext {
+  const context = provenanceContext();
+  const originalHash = sha256HexSync(AMBIGUOUS_ORIGINAL_TEXT);
+  const engineHash = sha256HexSync(AMBIGUOUS_NORMALIZED_TEXT);
+  const dateCanonicalization = {
+    requested_format: "MM/DD/YYYY",
+    detected_source_formats: ["MM/DD/YYYY"],
+    canonical_format: "YYYY-MM-DD",
+    transformed_rows: 2,
+    detection_method: "explicit_user_selection",
+    explicit_ambiguous_format_selection: true,
+  };
+  context.originalUploadSha256 = originalHash;
+  context.engineInputSha256 = engineHash;
+  context.normalization = {
+    sorted_ascending_with_explicit_approval: false,
+    date_canonicalization: dateCanonicalization,
+    proprietary_raw_data_included: false,
+  };
+  context.normalizedToOriginalSourceRow = [2, 3];
+  const result = context.result;
+  (result.reproducibility as Record<string, unknown>).hashes = {
+    raw_file_sha256: engineHash,
+    canonical_data_sha256: "3".repeat(64),
+    specification_sha256: "4".repeat(64),
+  };
+  result.specification = {
+    schema_version: "0.1.0",
+    model: "market_model",
+    source_columns: { date: "d", security_return: "s", benchmark_return: "m" },
+    normalization: {
+      sorted_ascending_with_explicit_approval: false,
+      date_canonicalization: dateCanonicalization,
+    },
+  };
+  return context;
 }
 
 describe("Stage VII-D2 reproducibility round trip", () => {
@@ -91,6 +131,14 @@ describe("Stage VII-D2 reproducibility round trip", () => {
     expect(environment.build_provenance).toEqual(expected);
     expect(files["citation.txt"]).toContain(`Build commit: ${BUILD_COMMIT}.`);
     expect(files["README.txt"]).toContain(`Build commit: ${BUILD_COMMIT}`);
+  });
+
+  it("derives release citation links from the authoritative software version", () => {
+    const files = buildReproducibilityFiles(provenanceContext());
+    expect(files["citation.txt"]).toContain("Software version: 0.1.1.");
+    expect(files["citation.txt"]).toContain("Formal release tag: v0.1.1.");
+    expect(files["citation.txt"]).toContain("https://github.com/mkhasan23/empirical-finance-lab/releases/tag/v0.1.1");
+    expect(files["citation.txt"]).not.toContain("Formal release tag: v0.1.0.");
   });
 
   it("rejects disagreement between browser and scientific-core build commits", () => {
@@ -139,6 +187,36 @@ describe("Stage VII-D2 reproducibility round trip", () => {
     manifest.analysis_id = "9".repeat(64);
     files["manifest.json"] = `${JSON.stringify(manifest, null, 2)}\n`;
     expect(() => verifyReproducibilityArchive(createStoredZip(files))).toThrow("REPRO_IDENTIFIER_MISMATCH");
+  });
+
+  it("round-trips an explicit ambiguous date interpretation and its parser provenance", () => {
+    const context = explicitDateContext();
+    const bundle = buildReproducibilityZip(context);
+    const verified = verifyReproductionInputs(bundle.bytes, new TextEncoder().encode(AMBIGUOUS_ORIGINAL_TEXT));
+    expect(verified.normalizedCsvText).toBe(AMBIGUOUS_NORMALIZED_TEXT);
+    expect(verified.sourceRowProvenance).toEqual([2, 3]);
+    expect(verified.manifest.normalization.date_canonicalization).toEqual(context.normalization.date_canonicalization);
+    const files = buildReproducibilityFiles(context);
+    const normalization = JSON.parse(files["normalization.json"]!) as Record<string, unknown>;
+    expect((normalization.normalization as Record<string, unknown>).date_canonicalization).toEqual(context.normalization.date_canonicalization);
+  });
+
+  it("fails closed when date-parser provenance is internally invalid", () => {
+    const context = explicitDateContext();
+    context.normalization.date_canonicalization = {
+      ...(context.normalization.date_canonicalization as Record<string, unknown>),
+      requested_format: "guess-for-me",
+    };
+    expect(() => buildReproducibilityZip(context)).toThrow("REPRO_DATE_FORMAT_MODE_INVALID");
+  });
+
+  it("fails closed when declared date-source formats contradict the explicit parser", () => {
+    const context = explicitDateContext();
+    context.normalization.date_canonicalization = {
+      ...(context.normalization.date_canonicalization as Record<string, unknown>),
+      detected_source_formats: ["DD/MM/YYYY"],
+    };
+    expect(() => buildReproducibilityZip(context)).toThrow("REPRO_DATE_DETECTED_FORMAT_INCONSISTENT");
   });
 
   it("detects any scientific-result drift after rerun", () => {

@@ -1,12 +1,20 @@
-# Empirical Finance Lab v0.1.0 browser application
+# Empirical Finance Lab v0.1.1 browser application
 
-This directory contains the browser application for the Empirical Finance Lab v0.1 workflow. The scholarly software-version authority is the validated Python core, which reports version `0.1.0` in runtime and reproducibility metadata.
+This directory contains the browser application for the Empirical Finance Lab v0.1 workflow. The scholarly software-version authority is the validated Python core, which reports version `0.1.1` in runtime and reproducibility metadata.
 
-The accepted Stage VII release-hardening baseline remains `08d8b1b8f5953b1e5cf93ec6a298a731757e0c87`. The accepted Stage VIII scientific/external-validation baseline remains `a694d49df9716f9f87d359385598237363e4c3fc`. The exact formal release is the immutable `v0.1.0` tag after its Stage IX tag gate passes.
+The accepted Stage VII release-hardening baseline remains `08d8b1b8f5953b1e5cf93ec6a298a731757e0c87`. The accepted Stage VIII scientific/external-validation baseline remains `a694d49df9716f9f87d359385598237363e4c3fc`. The immutable historical `v0.1.0` tag remains fixed; the exact formal patch release becomes the immutable `v0.1.1` tag only after the Stage X exact-main/tag gates pass.
 
 Scientific calculations remain in `src/empirical_finance_lab/` and execute through the validated Pyodide module Web Worker. The browser application does not create a second econometric implementation.
 
 For the first-run tutorial, see [`../docs/quickstart.md`](../docs/quickstart.md). For the exact release boundary and acceptance record, see [`../docs/release_status.md`](../docs/release_status.md).
+
+## v0.1.1 interoperability patch
+
+The browser intake layer accepts deterministic year-first date formats `YYYY-MM-DD`, `YYYY/MM/DD`, and `YYYYMMDD`. Ambiguous `MM/DD/YYYY` versus `DD/MM/YYYY` values require an explicit researcher selection and are never guessed.
+
+Accepted dates are canonicalized to strict `YYYY-MM-DD` before duplicate/order/effective-date checks. Date-parser provenance, original-file SHA-256, normalized engine-input SHA-256, and normalized-to-original source-row provenance remain auditable in the locked specification and reproducibility bundle.
+
+CRSP-shaped headers `DlyCalDt`, `DlyRet`, and `vwretd` receive visible mapping suggestions. The general estimation-window default remains researcher-editable at `[-250,-30]`; the Stage VIII validated real-CRSP design `[-256,-46]` is not imposed as a universal default.
 
 ## Real-data validation
 
@@ -26,11 +34,11 @@ Licensed CRSP observations and private derived input CSVs are not distributed. T
 ## Application and release-hardening modules
 
 - `application.ts`: researcher workflow orchestration and result-state lifecycle;
-- `csvIntake.ts`: local CSV parsing, explicit mapping, intake checks, normalization/provenance;
+- `csvIntake.ts`: local CSV parsing, explicit mapping, intake checks, date canonicalization, and normalization/provenance;
 - `specification.ts`: prespecification validation, event-date suggestion, locked spec construction;
 - `resultsView.ts`: non-econometric rendering of core-returned values;
 - `buildProvenance.ts`: deterministic build commit/mode/source authority;
-- `exportBundle.ts`: deterministic local reproducibility ZIP;
+- `exportBundle.ts`: deterministic local reproducibility ZIP with release citation derived from authoritative software version;
 - `reproRoundTrip.ts` / `storedZip.ts`: strict bundle validation and privacy-preserving replay support;
 - `stage5Harness.ts`: preserves the accepted browser-runtime parity API;
 - `engineClient.ts` / `eflWorker.ts`: validated browser-to-Python worker boundary.
@@ -59,6 +67,7 @@ python tools/check_stage7_f1_release_docs_gate.py
 python tools/check_stage7_f2_evidence_gate.py
 python tools/check_stage8_real_data_gate.py
 python tools/check_stage9_release_gate.py
+python tools/check_stage10_patch_release_gate.py
 ```
 
 From `web/` after installing the locked development dependencies:

@@ -20,8 +20,10 @@ SHA40 = re.compile(r"^[0-9a-f]{40}$")
 SHA64 = re.compile(r"^[0-9a-f]{64}$")
 EXPECTED_PAGE_PREFIX = "https://mkhasan23.github.io/empirical-finance-lab/"
 ACCEPTED_STAGE7_BASELINE = "08d8b1b8f5953b1e5cf93ec6a298a731757e0c87"
-FORMAL_RELEASE_VERSION = "0.1.0"
-FORMAL_RELEASE_TAG = "v0.1.0"
+HISTORICAL_RELEASE_VERSION = "0.1.0"
+HISTORICAL_RELEASE_TAG = "v0.1.0"
+CURRENT_RELEASE_VERSION = "0.1.1"
+CURRENT_RELEASE_TAG = "v0.1.1"
 
 
 def sha256(path: Path) -> str:
@@ -179,11 +181,12 @@ def main() -> None:
         is_main = ref == "refs/heads/main"
 
         release_version = source_release_version()
-        release_candidate_v0_1_0 = release_version == FORMAL_RELEASE_VERSION
+        release_candidate_v0_1_0 = release_version == HISTORICAL_RELEASE_VERSION
+        release_candidate_current = release_version == CURRENT_RELEASE_VERSION
         is_release_tag = (
-            release_candidate_v0_1_0
+            release_candidate_current
             and ref_type == "tag"
-            and ref_name == FORMAL_RELEASE_TAG
+            and ref_name == CURRENT_RELEASE_TAG
         )
 
         job_results = {
@@ -204,6 +207,7 @@ def main() -> None:
         for relative in (
             ".github/workflows/release-hardening.yml",
             ".github/workflows/formal-release.yml",
+            ".github/workflows/patch-release.yml",
             "CITATION.cff",
             "REPOSITORY_MANIFEST.txt",
             "pyproject.toml",
@@ -249,8 +253,13 @@ def main() -> None:
                 "stage7_accepted": is_main,
                 "public_beta": False,
                 "release_candidate_v0_1_0": release_candidate_v0_1_0,
-                "formal_v0_1_0": is_release_tag,
-                "stage9_release_tag_required": release_candidate_v0_1_0 and not is_release_tag,
+                "formal_v0_1_0": False,
+                "stage9_release_tag_required": False,
+                "release_candidate_current": release_candidate_current,
+                "formal_current_release": is_release_tag,
+                "current_release_tag_required": release_candidate_current and not is_release_tag,
+                "current_release_tag": CURRENT_RELEASE_TAG,
+                "historical_release_tag": HISTORICAL_RELEASE_TAG,
                 "version_specific_doi": False,
                 "main_integration_and_main_rerun_required": not is_main,
                 "repository_governance_settings_machine_verified": False,
@@ -267,8 +276,8 @@ def main() -> None:
                 ),
                 (
                     f"Source metadata identifies release line {release_version}; the immutable "
-                    f"{FORMAL_RELEASE_TAG} tag is the formal release authority only after the "
-                    "Stage IX tag gate passes."
+                    f"{CURRENT_RELEASE_TAG} tag is the current formal patch-release authority only after the "
+                    "Stage X tag gate passes. Historical v0.1.0 remains immutable."
                 ),
                 "Automated accessibility checks are not a WCAG certification or manual assistive-technology study.",
                 "Pinned runtime initialization may use the allowed jsDelivr Pyodide host; scientific analysis-phase network traffic must remain zero.",

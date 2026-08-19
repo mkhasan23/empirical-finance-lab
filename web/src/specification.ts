@@ -1,4 +1,4 @@
-import type { ColumnMapping } from "./csvIntake";
+import { canonicalizeUnambiguousDate, type ColumnMapping, type DateCanonicalization } from "./csvIntake";
 
 export type WindowDraft = { start: number; end: number };
 
@@ -68,16 +68,21 @@ export function validateSpecificationDraft(draft: SpecificationDraft): SpecIssue
 
 export function suggestEffectiveTradingDate(calendarDate: string, eventTiming: SpecificationDraft["eventTiming"], observedDates: string[]): string {
   if (!calendarDate || observedDates.length === 0) return "";
-  const sameDayIndex = observedDates.indexOf(calendarDate);
+  const canonicalDates = observedDates
+    .map((value) => canonicalizeUnambiguousDate(value)?.canonical ?? "")
+    .filter(Boolean)
+    .sort();
+  if (canonicalDates.length === 0) return "";
+  const sameDayIndex = canonicalDates.indexOf(calendarDate);
   if (sameDayIndex >= 0 && eventTiming !== "after_market") return calendarDate;
-  const later = observedDates.find((date) => date > calendarDate);
+  const later = canonicalDates.find((date) => date > calendarDate);
   return later ?? "";
 }
 
 export function buildLockedSpecification(
   draft: SpecificationDraft,
   mapping: ColumnMapping,
-  normalization: { sortedAscending: boolean },
+  normalization: { sortedAscending: boolean; dateCanonicalization?: DateCanonicalization },
 ): Record<string, unknown> {
   const issues = validateSpecificationDraft(draft);
   if (issues.length > 0) throw new Error(`SPECIFICATION_BLOCKED:${issues.map((issue) => issue.code).join(",")}`);
@@ -108,6 +113,16 @@ export function buildLockedSpecification(
     },
     normalization: {
       sorted_ascending_with_explicit_approval: normalization.sortedAscending,
+      ...(normalization.dateCanonicalization ? {
+        date_canonicalization: {
+          requested_format: normalization.dateCanonicalization.requestedFormat,
+          detected_source_formats: [...normalization.dateCanonicalization.sourceFormats],
+          canonical_format: normalization.dateCanonicalization.canonicalFormat,
+          transformed_rows: normalization.dateCanonicalization.transformedRows,
+          detection_method: normalization.dateCanonicalization.detectionMethod,
+          explicit_ambiguous_format_selection: normalization.dateCanonicalization.explicitAmbiguousFormatSelection,
+        },
+      } : {}),
     },
   };
 }

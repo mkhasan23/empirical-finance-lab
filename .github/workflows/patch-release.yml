@@ -1,0 +1,32 @@
+name: Stage X v0.1.1 patch release
+
+on:
+  push:
+    branches:
+      - main
+      - stage-v0.1.1-usability-patch
+    tags:
+      - 'v0.1.1'
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  stage10-required:
+    name: stage10-required
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out exact candidate
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.13'
+
+      - name: Verify v0.1.1 patch-release contract
+        run: python tools/check_stage10_patch_release_gate.py

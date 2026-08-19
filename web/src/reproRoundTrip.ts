@@ -1,4 +1,11 @@
-import { normalizeMappedCsv, parseCsv, type ColumnMapping } from "./csvIntake";
+import {
+  isDateInputMode,
+  normalizeMappedCsv,
+  parseCsv,
+  type ColumnMapping,
+  type DateCanonicalization,
+  type DateInputMode,
+} from "./csvIntake";
 import { readStoredZip, type StoredZipFiles } from "./storedZip";
 
 const decoder = new TextDecoder("utf-8", { fatal: true });
@@ -176,6 +183,58 @@ function arraysEqual(a: unknown[], b: unknown[]): boolean {
   return a.length === b.length && a.every((value, index) => value === b[index]);
 }
 
+function objectRecord(value: unknown, label: string): Record<string, unknown> {
+  if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error(`REPRO_OBJECT_INVALID:${label}`);
+  return value as Record<string, unknown>;
+}
+
+function dateCanonicalizationRecord(value: DateCanonicalization): Record<string, unknown> {
+  return {
+    requested_format: value.requestedFormat,
+    detected_source_formats: [...value.sourceFormats],
+    canonical_format: value.canonicalFormat,
+    transformed_rows: value.transformedRows,
+    detection_method: value.detectionMethod,
+    explicit_ambiguous_format_selection: value.explicitAmbiguousFormatSelection,
+  };
+}
+
+function dateInputModeFromNormalization(normalization: Record<string, unknown>): DateInputMode {
+  const dateValue = normalization.date_canonicalization;
+  if (dateValue === undefined) return "auto"; // v0.1.0/V2 archives before date-parser provenance
+  const dateRecord = objectRecord(dateValue, "normalization.date_canonicalization");
+  const requested = dateRecord.requested_format;
+  if (!isDateInputMode(requested)) throw new Error("REPRO_DATE_FORMAT_MODE_INVALID");
+  if (dateRecord.canonical_format !== "YYYY-MM-DD") throw new Error("REPRO_DATE_CANONICAL_FORMAT_INVALID");
+  if (!Array.isArray(dateRecord.detected_source_formats)
+      || !dateRecord.detected_source_formats.every((value) => isDateInputMode(value) && value !== "auto")) {
+    throw new Error("REPRO_DATE_SOURCE_FORMATS_INVALID");
+  }
+  const detectedFormats = dateRecord.detected_source_formats as string[];
+  if (new Set(detectedFormats).size !== detectedFormats.length
+      || [...detectedFormats].sort().some((value, index) => value !== detectedFormats[index])) {
+    throw new Error("REPRO_DATE_SOURCE_FORMATS_NONCANONICAL");
+  }
+  if (!Number.isInteger(dateRecord.transformed_rows) || Number(dateRecord.transformed_rows) < 0) throw new Error("REPRO_DATE_TRANSFORMED_ROWS_INVALID");
+  const detectionMethod = String(dateRecord.detection_method ?? "");
+  if (!["unambiguous_auto_detection", "explicit_user_selection"].includes(detectionMethod)) {
+    throw new Error("REPRO_DATE_DETECTION_METHOD_INVALID");
+  }
+  if (requested === "auto" && detectionMethod === "explicit_user_selection") throw new Error("REPRO_DATE_DETECTION_METHOD_INCONSISTENT");
+  if (requested !== "auto" && detectionMethod !== "explicit_user_selection") throw new Error("REPRO_DATE_DETECTION_METHOD_INCONSISTENT");
+  const yearLastFormats = detectedFormats.filter((value) => value === "MM/DD/YYYY" || value === "DD/MM/YYYY");
+  if (requested === "auto" && yearLastFormats.length !== 0) {
+    throw new Error("REPRO_DATE_DETECTED_FORMAT_INCONSISTENT");
+  }
+  if (requested !== "auto" && (detectedFormats.length !== 1 || detectedFormats[0] !== requested)) {
+    throw new Error("REPRO_DATE_DETECTED_FORMAT_INCONSISTENT");
+  }
+  if (typeof dateRecord.explicit_ambiguous_format_selection !== "boolean") throw new Error("REPRO_DATE_EXPLICIT_SELECTION_INVALID");
+  const expectedExplicitAmbiguous = requested === "MM/DD/YYYY" || requested === "DD/MM/YYYY";
+  if (dateRecord.explicit_ambiguous_format_selection !== expectedExplicitAmbiguous) throw new Error("REPRO_DATE_EXPLICIT_SELECTION_INCONSISTENT");
+  return requested;
+}
+
 export function verifyReproducibilityArchive(bytes: Uint8Array): {
   files: StoredZipFiles;
   manifest: ReproManifest;
@@ -244,7 +303,13 @@ export function verifyReproducibilityArchive(bytes: Uint8Array): {
   }
   const normalization = manifestRaw.normalization;
   if (!normalization || typeof normalization !== "object" || Array.isArray(normalization)) throw new Error("REPRO_NORMALIZATION_MISSING");
-  if ((normalization as Record<string, unknown>).proprietary_raw_data_included !== false) throw new Error("REPRO_RAW_DATA_POLICY_INVALID");
+  const normalizationMap = normalization as Record<string, unknown>;
+  if (normalizationMap.proprietary_raw_data_included !== false) throw new Error("REPRO_RAW_DATA_POLICY_INVALID");
+  dateInputModeFromNormalization(normalizationMap);
+  const normalizationFile = parseJsonFile(files, "normalization.json");
+  if (canonicalJsonText(normalizationFile.normalization) !== canonicalJsonText(normalizationMap)) {
+    throw new Error("REPRO_NORMALIZATION_METADATA_MISMATCH");
+  }
 
   const specification = parseJsonFile(files, "analysis_spec.json");
   const scientificResult = parseJsonFile(files, "scientific_result.json");
@@ -284,8 +349,17 @@ export function verifyReproductionInputs(archiveBytes: Uint8Array, originalBytes
   };
   const parsed = parseCsv(originalText);
   const sortApproved = verified.manifest.normalization.sorted_ascending_with_explicit_approval === true;
-  const normalized = normalizeMappedCsv(parsed, mapping, sortApproved);
+  const dateInputMode = dateInputModeFromNormalization(verified.manifest.normalization);
+  const normalized = normalizeMappedCsv(parsed, mapping, sortApproved, dateInputMode);
   const normalizationFile = parseJsonFile(verified.files, "normalization.json");
+  if (canonicalJsonText(normalizationFile.normalization) !== canonicalJsonText(verified.manifest.normalization)) {
+    throw new Error("REPRO_NORMALIZATION_METADATA_MISMATCH");
+  }
+  const declaredDateCanonicalization = verified.manifest.normalization.date_canonicalization;
+  if (declaredDateCanonicalization !== undefined
+      && canonicalJsonText(dateCanonicalizationRecord(normalized.dateCanonicalization)) !== canonicalJsonText(declaredDateCanonicalization)) {
+    throw new Error("REPRO_DATE_CANONICALIZATION_MISMATCH");
+  }
   const provenanceRaw = normalizationFile.normalized_to_original_source_row;
   if (!Array.isArray(provenanceRaw) || !provenanceRaw.every((value) => Number.isInteger(value))) throw new Error("REPRO_SOURCE_ROW_PROVENANCE_INVALID");
   const provenance = provenanceRaw.map(Number);
