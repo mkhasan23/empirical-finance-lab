@@ -27,7 +27,7 @@ function provenanceContext(runtimeCommit = BUILD_COMMIT): BundleContext {
       referee_report: "# Referee\n",
       primary: { car: 0.03, event_time: [], classical_inference: null, permutation_inference: null },
       reproducibility: {
-        software_version: "0.0.0",
+        software_version: "0.1.1",
         analysis_id: "1".repeat(64),
         execution_id: "2".repeat(64),
         hashes: {
@@ -131,6 +131,14 @@ describe("Stage VII-D2 reproducibility round trip", () => {
     expect(environment.build_provenance).toEqual(expected);
     expect(files["citation.txt"]).toContain(`Build commit: ${BUILD_COMMIT}.`);
     expect(files["README.txt"]).toContain(`Build commit: ${BUILD_COMMIT}`);
+  });
+
+  it("derives release citation links from the authoritative software version", () => {
+    const files = buildReproducibilityFiles(provenanceContext());
+    expect(files["citation.txt"]).toContain("Software version: 0.1.1.");
+    expect(files["citation.txt"]).toContain("Formal release tag: v0.1.1.");
+    expect(files["citation.txt"]).toContain("https://github.com/mkhasan23/empirical-finance-lab/releases/tag/v0.1.1");
+    expect(files["citation.txt"]).not.toContain("Formal release tag: v0.1.0.");
   });
 
   it("rejects disagreement between browser and scientific-core build commits", () => {
