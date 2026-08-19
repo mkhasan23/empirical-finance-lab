@@ -38,6 +38,7 @@ PRIVATE_ARTIFACT_HASHES = {
 }
 
 EXPECTED_PUBLIC_FILE_SHA256 = {
+    "validation/real_data/README.md": "c034dd2a3093b568ca3004263a2048dd3c290780b6c2f6881ae37143388361c3",
     "validation/real_data/stage8c_manifest.json": "7081c3c64afbbc7caffd62983f07522a6ff8d70c2e2488da2e9519e7d76492d8",
     "validation/real_data/stage8c_parity_results.json": "2166705525a6ce4c5b263ea96d5341f8c107106ba36dabee582cba534ef6a981",
     "validation/real_data/stage8c_parity_results.csv": "9500e87f47b0ec77fcbb84e6924f4e2568d49b6e72935e2af88fb52091a5b3b9",
@@ -89,6 +90,26 @@ def numeric_close(a: float, b: float, *, p_value: bool = False) -> bool:
     tol = P_TOL if p_value else ABS_TOL + REL_TOL * abs(b)
     return math.isfinite(a) and math.isfinite(b) and abs(a - b) <= tol
 
+
+# The Stage VI frozen-tree gate deliberately delegates validation/real_data/ to
+# Stage VIII. Close that delegated subtree here so the delegation cannot become
+# an allow-anything hole: only the nine frozen public evidence files may exist.
+actual_public_files: set[str] = set()
+for path in EVIDENCE.rglob("*"):
+    rel = path.relative_to(ROOT).as_posix()
+    if path.is_symlink():
+        errors.append(f"Stage VIII public evidence subtree must not contain symlinks: {rel}")
+        continue
+    if path.is_file():
+        actual_public_files.add(rel)
+
+expected_public_files = set(EXPECTED_PUBLIC_FILE_SHA256)
+missing_public_files = sorted(expected_public_files - actual_public_files)
+unexpected_public_files = sorted(actual_public_files - expected_public_files)
+if missing_public_files:
+    errors.append(f"missing Stage VIII public evidence files: {missing_public_files}")
+if unexpected_public_files:
+    errors.append(f"unexpected Stage VIII public evidence files: {unexpected_public_files}")
 
 # 1. Exact identities of the public evidence/specification files.
 for rel, expected_hash in EXPECTED_PUBLIC_FILE_SHA256.items():
