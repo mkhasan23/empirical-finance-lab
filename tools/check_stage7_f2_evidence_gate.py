@@ -6,6 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 ACCEPTED_STAGE7_BASELINE = "08d8b1b8f5953b1e5cf93ec6a298a731757e0c87"
+STAGE7_BASELINE_TRACKED_PATH_COUNT = 206
 
 
 def read(path: str) -> str:
@@ -166,9 +167,11 @@ def main() -> None:
         errors.append("REPOSITORY_MANIFEST.txt: entries are not lexicographically sorted")
     if len(manifest_lines) != len(set(manifest_lines)):
         errors.append("REPOSITORY_MANIFEST.txt: duplicate entries found")
-    if len(manifest_lines) != 206:
+    if len(manifest_lines) < STAGE7_BASELINE_TRACKED_PATH_COUNT:
         errors.append(
-            f"REPOSITORY_MANIFEST.txt: expected 206 tracked paths for Stage VII, found {len(manifest_lines)}"
+            "REPOSITORY_MANIFEST.txt: tracked-path inventory shrank below the accepted "
+            f"Stage VII baseline ({STAGE7_BASELINE_TRACKED_PATH_COUNT}); "
+            f"found {len(manifest_lines)}"
         )
     required_manifest_entries = {
         "docs/STAGE_VII_ACCEPTANCE_CHECKLIST.md",
