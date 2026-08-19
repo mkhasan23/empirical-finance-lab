@@ -1,0 +1,852 @@
+{
+  "cases": {
+    "KO": {
+      "calendar_event_date": "2025-12-10",
+      "comparisons": {
+        "alpha": {
+          "delta": 1.6263032587282567e-19,
+          "efl_core": 0.00034904914225774333,
+          "external": 0.00034904914225774317,
+          "pass": true,
+          "tolerance": 1.0349049142257744e-12
+        },
+        "ar_0": {
+          "delta": 3.469446951953614e-18,
+          "efl_core": -0.016235190560530497,
+          "external": -0.0162351905605305,
+          "pass": true,
+          "tolerance": 2.62351905605305e-12
+        },
+        "ar_m1": {
+          "delta": 5.421010862427522e-19,
+          "efl_core": 0.0007999582674327714,
+          "external": 0.0007999582674327708,
+          "pass": true,
+          "tolerance": 1.0799958267432771e-12
+        },
+        "ar_p1": {
+          "delta": 0.0,
+          "efl_core": 0.0208550953857085,
+          "external": 0.0208550953857085,
+          "pass": true,
+          "tolerance": 3.0855095385708503e-12
+        },
+        "beta": {
+          "delta": -8.326672684688674e-17,
+          "efl_core": 0.07494576548315833,
+          "external": 0.07494576548315841,
+          "pass": true,
+          "tolerance": 8.494576548315841e-12
+        },
+        "car": {
+          "delta": 5.204170427930421e-18,
+          "efl_core": 0.005419863092610775,
+          "external": 0.00541986309261077,
+          "pass": true,
+          "tolerance": 1.541986309261077e-12
+        },
+        "classical_p": {
+          "delta": -2.220446049250313e-16,
+          "efl_core": 0.7783365600718685,
+          "external": 0.7783365600718687,
+          "pass": true,
+          "tolerance": 1e-10
+        },
+        "classical_se": {
+          "delta": 0.0,
+          "efl_core": 0.019229525159288458,
+          "external": 0.019229525159288458,
+          "pass": true,
+          "tolerance": 2.9229525159288462e-12
+        },
+        "classical_t": {
+          "delta": 2.7755575615628914e-16,
+          "efl_core": 0.28185111424827947,
+          "external": 0.2818511142482792,
+          "pass": true,
+          "tolerance": 2.9185111424827923e-11
+        },
+        "permutation_extreme_count": {
+          "delta": 0,
+          "efl_core": 785,
+          "external": 785,
+          "pass": true,
+          "tolerance": 0
+        },
+        "permutation_p": {
+          "delta": 0.0,
+          "efl_core": 0.785,
+          "external": 0.785,
+          "pass": true,
+          "tolerance": 1e-10
+        },
+        "permutation_t_car": {
+          "delta": 2.7755575615628914e-16,
+          "efl_core": 0.28385410673991013,
+          "external": 0.28385410673990985,
+          "pass": true,
+          "tolerance": 2.9385410673990984e-11
+        },
+        "r_squared": {
+          "delta": 0.0,
+          "efl_core": 0.006818632106152078,
+          "external": 0.006818632106152078,
+          "pass": true,
+          "tolerance": 1.6818632106152077e-12
+        },
+        "residual_scale": {
+          "delta": 0.0,
+          "efl_core": 0.011023829992908771,
+          "external": 0.011023829992908771,
+          "pass": true,
+          "tolerance": 2.102382999290877e-12
+        }
+      },
+      "effective_event_date": "2025-12-11",
+      "efl_core_result": {
+        "alpha": 0.00034904914225774333,
+        "ar_0": -0.016235190560530497,
+        "ar_m1": 0.0007999582674327714,
+        "ar_p1": 0.0208550953857085,
+        "beta": 0.07494576548315833,
+        "car": 0.005419863092610775,
+        "classical_df": 209,
+        "classical_p": 0.7783365600718685,
+        "classical_se": 0.019229525159288458,
+        "classical_t": 0.28185111424827947,
+        "est_end": "2025-10-07",
+        "est_n": 211,
+        "est_start": "2024-12-03",
+        "event_n": 3,
+        "evt_dates": [
+          "2025-12-10",
+          "2025-12-11",
+          "2025-12-12"
+        ],
+        "input_sha256": "04c365ebdd277659ca0df745d3d17bb4b43c193cd4ff9a44c1218cd72a61e930",
+        "perm_ge": 785,
+        "perm_p": 0.785,
+        "perm_t": 0.28385410673991013,
+        "r2": 0.006818632106152078,
+        "resid_scale": 0.011023829992908771
+      },
+      "event_timing": "after_market",
+      "hashes": {
+        "analysis_id": "94417bf85156f227a60e49fb82689bd4b25d1dd3ca3dde0a38ce80ca14f32abd",
+        "canonical_data_sha256": "cc7bbdab6b26a9160ca3c7f184c94c2f6713968f7fbecf253bbf4976d7c932e2",
+        "json_file_sha256": "b02a5f71767383938dfaaa8c8785322deec6f70b2d18f46bf62f089f1c6f5c9b",
+        "raw_file_sha256": "04c365ebdd277659ca0df745d3d17bb4b43c193cd4ff9a44c1218cd72a61e930",
+        "specification_sha256": "b182af748e15c083819d11bbe475002f37d266518c5f40d53ac37e92446ea058"
+      },
+      "independent_external_result": {
+        "alpha": 0.00034904914225774317,
+        "ar_0": -0.0162351905605305,
+        "ar_m1": 0.0007999582674327708,
+        "ar_p1": 0.0208550953857085,
+        "beta": 0.07494576548315841,
+        "car": 0.00541986309261077,
+        "classical_df": 209,
+        "classical_p": 0.7783365600718687,
+        "classical_se": 0.019229525159288458,
+        "classical_t": 0.2818511142482792,
+        "est_end": "2025-10-07",
+        "est_start": "2024-12-03",
+        "evt_dates": [
+          "2025-12-10",
+          "2025-12-11",
+          "2025-12-12"
+        ],
+        "perm_ge": 785,
+        "perm_p": 0.785,
+        "perm_t": 0.28385410673990985,
+        "r2": 0.006818632106152078,
+        "resid_scale": 0.011023829992908771
+      },
+      "permno": 11308
+    },
+    "MSFT": {
+      "calendar_event_date": "2022-01-18",
+      "comparisons": {
+        "alpha": {
+          "delta": 1.3010426069826053e-18,
+          "efl_core": 0.0011930427210045083,
+          "external": 0.001193042721004507,
+          "pass": true,
+          "tolerance": 1.1193042721004508e-12
+        },
+        "ar_0": {
+          "delta": -3.469446951953614e-18,
+          "efl_core": -0.006176846111827446,
+          "external": -0.006176846111827443,
+          "pass": true,
+          "tolerance": 1.6176846111827442e-12
+        },
+        "ar_m1": {
+          "delta": 0.0,
+          "efl_core": 0.016359879317457963,
+          "external": 0.016359879317457963,
+          "pass": true,
+          "tolerance": 2.6359879317457964e-12
+        },
+        "ar_p1": {
+          "delta": 0.0,
+          "efl_core": 0.010426410594139228,
+          "external": 0.010426410594139228,
+          "pass": true,
+          "tolerance": 2.042641059413923e-12
+        },
+        "beta": {
+          "delta": -2.220446049250313e-16,
+          "efl_core": 1.000475375228836,
+          "external": 1.0004753752288362,
+          "pass": true,
+          "tolerance": 1.0104753752288362e-10
+        },
+        "car": {
+          "delta": -3.469446951953614e-18,
+          "efl_core": 0.020609443799769745,
+          "external": 0.02060944379976975,
+          "pass": true,
+          "tolerance": 3.0609443799769747e-12
+        },
+        "classical_p": {
+          "delta": 1.6653345369377348e-16,
+          "efl_core": 0.2348642437791625,
+          "external": 0.23486424377916235,
+          "pass": true,
+          "tolerance": 1e-10
+        },
+        "classical_se": {
+          "delta": 0.0,
+          "efl_core": 0.01729911924824959,
+          "external": 0.01729911924824959,
+          "pass": true,
+          "tolerance": 2.729911924824959e-12
+        },
+        "classical_t": {
+          "delta": -2.220446049250313e-16,
+          "efl_core": 1.191357982103922,
+          "external": 1.1913579821039222,
+          "pass": true,
+          "tolerance": 1.2013579821039223e-10
+        },
+        "permutation_extreme_count": {
+          "delta": 0,
+          "efl_core": 224,
+          "external": 224,
+          "pass": true,
+          "tolerance": 0
+        },
+        "permutation_p": {
+          "delta": 0.0,
+          "efl_core": 0.224,
+          "external": 0.224,
+          "pass": true,
+          "tolerance": 1e-10
+        },
+        "permutation_t_car": {
+          "delta": -2.220446049250313e-16,
+          "efl_core": 1.2136664897451885,
+          "external": 1.2136664897451888,
+          "pass": true,
+          "tolerance": 1.2236664897451887e-10
+        },
+        "r_squared": {
+          "delta": 0.0,
+          "efl_core": 0.4078241101283754,
+          "external": 0.4078241101283754,
+          "pass": true,
+          "tolerance": 4.1782411012837545e-11
+        },
+        "residual_scale": {
+          "delta": 0.0,
+          "efl_core": 0.009804067283874432,
+          "external": 0.009804067283874432,
+          "pass": true,
+          "tolerance": 1.9804067283874433e-12
+        }
+      },
+      "effective_event_date": "2022-01-18",
+      "efl_core_result": {
+        "alpha": 0.0011930427210045083,
+        "ar_0": -0.006176846111827446,
+        "ar_m1": 0.016359879317457963,
+        "ar_p1": 0.010426410594139228,
+        "beta": 1.000475375228836,
+        "car": 0.020609443799769745,
+        "classical_df": 209,
+        "classical_p": 0.2348642437791625,
+        "classical_se": 0.01729911924824959,
+        "classical_t": 1.191357982103922,
+        "est_end": "2021-11-10",
+        "est_n": 211,
+        "est_start": "2021-01-12",
+        "event_n": 3,
+        "evt_dates": [
+          "2022-01-14",
+          "2022-01-18",
+          "2022-01-19"
+        ],
+        "input_sha256": "1ba8d4c223e68153e7a8ca2c857054c1bcddfb98a6d863022202468f90c3f48e",
+        "perm_ge": 224,
+        "perm_p": 0.224,
+        "perm_t": 1.2136664897451885,
+        "r2": 0.4078241101283754,
+        "resid_scale": 0.009804067283874432
+      },
+      "event_timing": "during_or_before_market",
+      "hashes": {
+        "analysis_id": "79dcd309c5f8daa1f8f5add433546d691c973d2bfb21675ab712c87489a40c9d",
+        "canonical_data_sha256": "5f15351918215db9e246dc2cd959191a547c64c0b7be50d0ca2cb6a9facf296b",
+        "json_file_sha256": "5c8a2e0d5805dd6198be852d2ac12a2bb49367e5f2210d986933f8b030adc7a8",
+        "raw_file_sha256": "1ba8d4c223e68153e7a8ca2c857054c1bcddfb98a6d863022202468f90c3f48e",
+        "specification_sha256": "45216ec7b5c0849e76bae1e33b4c79181ce8fe9a17ba086195e0678fca307f0d"
+      },
+      "independent_external_result": {
+        "alpha": 0.001193042721004507,
+        "ar_0": -0.006176846111827443,
+        "ar_m1": 0.016359879317457963,
+        "ar_p1": 0.010426410594139228,
+        "beta": 1.0004753752288362,
+        "car": 0.02060944379976975,
+        "classical_df": 209,
+        "classical_p": 0.23486424377916235,
+        "classical_se": 0.01729911924824959,
+        "classical_t": 1.1913579821039222,
+        "est_end": "2021-11-10",
+        "est_start": "2021-01-12",
+        "evt_dates": [
+          "2022-01-14",
+          "2022-01-18",
+          "2022-01-19"
+        ],
+        "perm_ge": 224,
+        "perm_p": 0.224,
+        "perm_t": 1.2136664897451888,
+        "r2": 0.4078241101283754,
+        "resid_scale": 0.009804067283874432
+      },
+      "permno": 10107
+    },
+    "NVDA": {
+      "calendar_event_date": "2024-05-22",
+      "comparisons": {
+        "alpha": {
+          "delta": 3.903127820947816e-18,
+          "efl_core": 0.0034618832639391937,
+          "external": 0.0034618832639391897,
+          "pass": true,
+          "tolerance": 1.346188326393919e-12
+        },
+        "ar_0": {
+          "delta": 0.0,
+          "efl_core": 0.10802999037812944,
+          "external": 0.10802999037812944,
+          "pass": true,
+          "tolerance": 1.1802999037812944e-11
+        },
+        "ar_m1": {
+          "delta": -4.336808689942018e-18,
+          "efl_core": -2.2738979008949875e-05,
+          "external": -2.2738979008945538e-05,
+          "pass": true,
+          "tolerance": 1.0022738979008945e-12
+        },
+        "ar_p1": {
+          "delta": -3.469446951953614e-18,
+          "efl_core": 0.006771020401104357,
+          "external": 0.006771020401104361,
+          "pass": true,
+          "tolerance": 1.677102040110436e-12
+        },
+        "beta": {
+          "delta": 0.0,
+          "efl_core": 2.120768939616162,
+          "external": 2.120768939616162,
+          "pass": true,
+          "tolerance": 2.1307689396161621e-10
+        },
+        "car": {
+          "delta": 0.0,
+          "efl_core": 0.11477827180022485,
+          "external": 0.11477827180022485,
+          "pass": true,
+          "tolerance": 1.2477827180022484e-11
+        },
+        "classical_p": {
+          "delta": 0.0,
+          "efl_core": 0.016684673520858787,
+          "external": 0.016684673520858787,
+          "pass": true,
+          "tolerance": 1e-10
+        },
+        "classical_se": {
+          "delta": 0.0,
+          "efl_core": 0.04756664602574338,
+          "external": 0.04756664602574338,
+          "pass": true,
+          "tolerance": 5.756664602574338e-12
+        },
+        "classical_t": {
+          "delta": 0.0,
+          "efl_core": 2.412999052699787,
+          "external": 2.412999052699787,
+          "pass": true,
+          "tolerance": 2.422999052699787e-10
+        },
+        "permutation_extreme_count": {
+          "delta": 0,
+          "efl_core": 18,
+          "external": 18,
+          "pass": true,
+          "tolerance": 0
+        },
+        "permutation_p": {
+          "delta": 0.0,
+          "efl_core": 0.018,
+          "external": 0.018,
+          "pass": true,
+          "tolerance": 1e-10
+        },
+        "permutation_t_car": {
+          "delta": 0.0,
+          "efl_core": 2.4325420559524953,
+          "external": 2.4325420559524953,
+          "pass": true,
+          "tolerance": 2.4425420559524954e-10
+        },
+        "r_squared": {
+          "delta": 0.0,
+          "efl_core": 0.24911124706051435,
+          "external": 0.24911124706051435,
+          "pass": true,
+          "tolerance": 2.5911124706051434e-11
+        },
+        "residual_scale": {
+          "delta": 0.0,
+          "efl_core": 0.027241981678722504,
+          "external": 0.027241981678722504,
+          "pass": true,
+          "tolerance": 3.7241981678722505e-12
+        }
+      },
+      "effective_event_date": "2024-05-23",
+      "efl_core_result": {
+        "alpha": 0.0034618832639391937,
+        "ar_0": 0.10802999037812944,
+        "ar_m1": -2.2738979008949875e-05,
+        "ar_p1": 0.006771020401104357,
+        "beta": 2.120768939616162,
+        "car": 0.11477827180022485,
+        "classical_df": 209,
+        "classical_p": 0.016684673520858787,
+        "classical_se": 0.04756664602574338,
+        "classical_t": 2.412999052699787,
+        "est_end": "2024-03-19",
+        "est_n": 211,
+        "est_start": "2023-05-17",
+        "event_n": 3,
+        "evt_dates": [
+          "2024-05-22",
+          "2024-05-23",
+          "2024-05-24"
+        ],
+        "input_sha256": "b1e2e319452fca14a1afce86a5d84d81943972079cac23afddf90ec9c246d278",
+        "perm_ge": 18,
+        "perm_p": 0.018,
+        "perm_t": 2.4325420559524953,
+        "r2": 0.24911124706051435,
+        "resid_scale": 0.027241981678722504
+      },
+      "event_timing": "after_market",
+      "hashes": {
+        "analysis_id": "5d9b3bb9e866a1847d7f21b4945bbc90140be7fdee3ba7d6bb9ef1af0b13b02b",
+        "canonical_data_sha256": "53a64ce4624ee449b62f4af036131eb00306eaf1925b4fe67e5e95753e3201d3",
+        "json_file_sha256": "1e907f83b2e9abf6dd6b95263f7a7592fcdc79c1b55374f11c57f646b1f9a457",
+        "raw_file_sha256": "b1e2e319452fca14a1afce86a5d84d81943972079cac23afddf90ec9c246d278",
+        "specification_sha256": "ae9a2c71819a4d4d8cbfb0c759c0d43e0fd928464a34cf3fe830c7bf36130a2a"
+      },
+      "independent_external_result": {
+        "alpha": 0.0034618832639391897,
+        "ar_0": 0.10802999037812944,
+        "ar_m1": -2.2738979008945538e-05,
+        "ar_p1": 0.006771020401104361,
+        "beta": 2.120768939616162,
+        "car": 0.11477827180022485,
+        "classical_df": 209,
+        "classical_p": 0.016684673520858787,
+        "classical_se": 0.04756664602574338,
+        "classical_t": 2.412999052699787,
+        "est_end": "2024-03-19",
+        "est_start": "2023-05-17",
+        "evt_dates": [
+          "2024-05-22",
+          "2024-05-23",
+          "2024-05-24"
+        ],
+        "perm_ge": 18,
+        "perm_p": 0.018,
+        "perm_t": 2.4325420559524953,
+        "r2": 0.24911124706051435,
+        "resid_scale": 0.027241981678722504
+      },
+      "permno": 86580
+    },
+    "PG": {
+      "calendar_event_date": "2024-04-09",
+      "comparisons": {
+        "alpha": {
+          "delta": 1.8973538018496328e-19,
+          "efl_core": 0.00018549089782722762,
+          "external": 0.00018549089782722743,
+          "pass": true,
+          "tolerance": 1.0185490897827227e-12
+        },
+        "ar_0": {
+          "delta": -8.673617379884035e-19,
+          "efl_core": 0.006967230598138194,
+          "external": 0.006967230598138195,
+          "pass": true,
+          "tolerance": 1.6967230598138196e-12
+        },
+        "ar_m1": {
+          "delta": 0.0,
+          "efl_core": 0.0032301899474797787,
+          "external": 0.0032301899474797787,
+          "pass": true,
+          "tolerance": 1.3230189947479778e-12
+        },
+        "ar_p1": {
+          "delta": 1.734723475976807e-18,
+          "efl_core": -0.011062307560177802,
+          "external": -0.011062307560177804,
+          "pass": true,
+          "tolerance": 2.10623075601778e-12
+        },
+        "beta": {
+          "delta": -1.1102230246251565e-16,
+          "efl_core": 0.31048420874261484,
+          "external": 0.31048420874261495,
+          "pass": true,
+          "tolerance": 3.20484208742615e-11
+        },
+        "car": {
+          "delta": 1.734723475976807e-18,
+          "efl_core": -0.000864887014559829,
+          "external": -0.0008648870145598307,
+          "pass": true,
+          "tolerance": 1.086488701455983e-12
+        },
+        "classical_p": {
+          "delta": 1.1102230246251565e-16,
+          "efl_core": 0.9571739985141059,
+          "external": 0.9571739985141058,
+          "pass": true,
+          "tolerance": 1e-10
+        },
+        "classical_se": {
+          "delta": 0.0,
+          "efl_core": 0.016086524702481085,
+          "external": 0.016086524702481085,
+          "pass": true,
+          "tolerance": 2.6086524702481087e-12
+        },
+        "classical_t": {
+          "delta": 1.1102230246251565e-16,
+          "efl_core": -0.053764690046846114,
+          "external": -0.053764690046846225,
+          "pass": true,
+          "tolerance": 6.376469004684622e-12
+        },
+        "permutation_extreme_count": {
+          "delta": 0,
+          "efl_core": 951,
+          "external": 951,
+          "pass": true,
+          "tolerance": 0
+        },
+        "permutation_p": {
+          "delta": 0.0,
+          "efl_core": 0.951,
+          "external": 0.951,
+          "pass": true,
+          "tolerance": 1e-10
+        },
+        "permutation_t_car": {
+          "delta": 1.0408340855860843e-16,
+          "efl_core": -0.05416914399443605,
+          "external": -0.054169143994436154,
+          "pass": true,
+          "tolerance": 6.416914399443616e-12
+        },
+        "r_squared": {
+          "delta": 0.0,
+          "efl_core": 0.05954516416452338,
+          "external": 0.05954516416452338,
+          "pass": true,
+          "tolerance": 6.954516416452338e-12
+        },
+        "residual_scale": {
+          "delta": 0.0,
+          "efl_core": 0.009218213799465223,
+          "external": 0.009218213799465223,
+          "pass": true,
+          "tolerance": 1.9218213799465223e-12
+        }
+      },
+      "effective_event_date": "2024-04-10",
+      "efl_core_result": {
+        "alpha": 0.00018549089782722762,
+        "ar_0": 0.006967230598138194,
+        "ar_m1": 0.0032301899474797787,
+        "ar_p1": -0.011062307560177802,
+        "beta": 0.31048420874261484,
+        "car": -0.000864887014559829,
+        "classical_df": 209,
+        "classical_p": 0.9571739985141059,
+        "classical_se": 0.016086524702481085,
+        "classical_t": -0.053764690046846114,
+        "est_end": "2024-02-02",
+        "est_n": 211,
+        "est_start": "2023-04-03",
+        "event_n": 3,
+        "evt_dates": [
+          "2024-04-09",
+          "2024-04-10",
+          "2024-04-11"
+        ],
+        "input_sha256": "11a52d965665982804b4e1504763db4f8f79f6dcb720bf15aecb06995da86ca7",
+        "perm_ge": 951,
+        "perm_p": 0.951,
+        "perm_t": -0.05416914399443605,
+        "r2": 0.05954516416452338,
+        "resid_scale": 0.009218213799465223
+      },
+      "event_timing": "after_market",
+      "hashes": {
+        "analysis_id": "da9ca93b20241014b4644b6f9b5bc5c1b2f1fabf038c5b9f69135abe35810811",
+        "canonical_data_sha256": "ae57807bda7822163e2352e9312951b24fda7bcbd72ddcdbad952181e3706309",
+        "json_file_sha256": "394574d6c04146681c977bdefca31eaf5a82075aeba6d9b36fbb8f3f0023da4d",
+        "raw_file_sha256": "11a52d965665982804b4e1504763db4f8f79f6dcb720bf15aecb06995da86ca7",
+        "specification_sha256": "e96d6d850bce91b0894641470d64e8fb2b77c2fd39c0136de3c6ac2332062093"
+      },
+      "independent_external_result": {
+        "alpha": 0.00018549089782722743,
+        "ar_0": 0.006967230598138195,
+        "ar_m1": 0.0032301899474797787,
+        "ar_p1": -0.011062307560177804,
+        "beta": 0.31048420874261495,
+        "car": -0.0008648870145598307,
+        "classical_df": 209,
+        "classical_p": 0.9571739985141058,
+        "classical_se": 0.016086524702481085,
+        "classical_t": -0.053764690046846225,
+        "est_end": "2024-02-02",
+        "est_start": "2023-04-03",
+        "evt_dates": [
+          "2024-04-09",
+          "2024-04-10",
+          "2024-04-11"
+        ],
+        "perm_ge": 951,
+        "perm_p": 0.951,
+        "perm_t": -0.054169143994436154,
+        "r2": 0.05954516416452338,
+        "resid_scale": 0.009218213799465223
+      },
+      "permno": 18163
+    },
+    "WMT": {
+      "calendar_event_date": "2024-11-19",
+      "comparisons": {
+        "alpha": {
+          "delta": 0.0,
+          "efl_core": 0.0015732779513901937,
+          "external": 0.0015732779513901937,
+          "pass": true,
+          "tolerance": 1.1573277951390194e-12
+        },
+        "ar_0": {
+          "delta": 0.0,
+          "efl_core": 0.027073493606767682,
+          "external": 0.027073493606767682,
+          "pass": true,
+          "tolerance": 3.707349360676768e-12
+        },
+        "ar_m1": {
+          "delta": 0.0,
+          "efl_core": -0.004844048134420357,
+          "external": -0.004844048134420357,
+          "pass": true,
+          "tolerance": 1.4844048134420357e-12
+        },
+        "ar_p1": {
+          "delta": 0.0,
+          "efl_core": 0.004960549646598242,
+          "external": 0.004960549646598242,
+          "pass": true,
+          "tolerance": 1.4960549646598242e-12
+        },
+        "beta": {
+          "delta": -5.551115123125783e-17,
+          "efl_core": 0.2813317276061449,
+          "external": 0.28133172760614494,
+          "pass": true,
+          "tolerance": 2.9133172760614496e-11
+        },
+        "car": {
+          "delta": 0.0,
+          "efl_core": 0.027189995118945567,
+          "external": 0.027189995118945567,
+          "pass": true,
+          "tolerance": 3.718999511894557e-12
+        },
+        "classical_p": {
+          "delta": -1.3877787807814457e-16,
+          "efl_core": 0.19375777572219235,
+          "external": 0.1937577757221925,
+          "pass": true,
+          "tolerance": 1e-10
+        },
+        "classical_se": {
+          "delta": -3.469446951953614e-18,
+          "efl_core": 0.020855444376305633,
+          "external": 0.020855444376305637,
+          "pass": true,
+          "tolerance": 3.085544437630564e-12
+        },
+        "classical_t": {
+          "delta": 2.220446049250313e-16,
+          "efl_core": 1.3037360714229982,
+          "external": 1.303736071422998,
+          "pass": true,
+          "tolerance": 1.313736071422998e-10
+        },
+        "permutation_extreme_count": {
+          "delta": 0,
+          "efl_core": 105,
+          "external": 105,
+          "pass": true,
+          "tolerance": 0
+        },
+        "permutation_p": {
+          "delta": 0.0,
+          "efl_core": 0.105,
+          "external": 0.105,
+          "pass": true,
+          "tolerance": 1e-10
+        },
+        "permutation_t_car": {
+          "delta": 2.220446049250313e-16,
+          "efl_core": 1.3135970281619214,
+          "external": 1.3135970281619211,
+          "pass": true,
+          "tolerance": 1.323597028161921e-10
+        },
+        "r_squared": {
+          "delta": 2.220446049250313e-16,
+          "efl_core": 0.033098005240757566,
+          "external": 0.033098005240757344,
+          "pass": true,
+          "tolerance": 4.309800524075734e-12
+        },
+        "residual_scale": {
+          "delta": -1.734723475976807e-18,
+          "efl_core": 0.011950507396590114,
+          "external": 0.011950507396590116,
+          "pass": true,
+          "tolerance": 2.1950507396590117e-12
+        }
+      },
+      "effective_event_date": "2024-11-19",
+      "efl_core_result": {
+        "alpha": 0.0015732779513901937,
+        "ar_0": 0.027073493606767682,
+        "ar_m1": -0.004844048134420357,
+        "ar_p1": 0.004960549646598242,
+        "beta": 0.2813317276061449,
+        "car": 0.027189995118945567,
+        "classical_df": 209,
+        "classical_p": 0.19375777572219235,
+        "classical_se": 0.020855444376305633,
+        "classical_t": 1.3037360714229982,
+        "est_end": "2024-09-16",
+        "est_n": 211,
+        "est_start": "2023-11-13",
+        "event_n": 3,
+        "evt_dates": [
+          "2024-11-18",
+          "2024-11-19",
+          "2024-11-20"
+        ],
+        "input_sha256": "db99fbff850941d1839951ec2e47b16cfa7f7caf9966338d7f5afb484f1bc319",
+        "perm_ge": 105,
+        "perm_p": 0.105,
+        "perm_t": 1.3135970281619214,
+        "r2": 0.033098005240757566,
+        "resid_scale": 0.011950507396590114
+      },
+      "event_timing": "during_or_before_market",
+      "hashes": {
+        "analysis_id": "a22617f7be1ee84e71651be915e7ad8d5422da5432c582885553950da1f4879c",
+        "canonical_data_sha256": "5163beaf147b177f6d4456bff6c6d32502597e3c34d73be5537d87f1e5b68699",
+        "json_file_sha256": "061b839088a460ec81b40592c0e713cfd98b82d44c49e3fb37b99735c6e3cf1c",
+        "raw_file_sha256": "db99fbff850941d1839951ec2e47b16cfa7f7caf9966338d7f5afb484f1bc319",
+        "specification_sha256": "c969841b5e882f34b340c2747b086b8c4982805ee4d9511e56cc2ecd416dc939"
+      },
+      "independent_external_result": {
+        "alpha": 0.0015732779513901937,
+        "ar_0": 0.027073493606767682,
+        "ar_m1": -0.004844048134420357,
+        "ar_p1": 0.004960549646598242,
+        "beta": 0.28133172760614494,
+        "car": 0.027189995118945567,
+        "classical_df": 209,
+        "classical_p": 0.1937577757221925,
+        "classical_se": 0.020855444376305637,
+        "classical_t": 1.303736071422998,
+        "est_end": "2024-09-16",
+        "est_start": "2023-11-13",
+        "evt_dates": [
+          "2024-11-18",
+          "2024-11-19",
+          "2024-11-20"
+        ],
+        "perm_ge": 105,
+        "perm_p": 0.105,
+        "perm_t": 1.3135970281619211,
+        "r2": 0.033098005240757344,
+        "resid_scale": 0.011950507396590116
+      },
+      "permno": 55976
+    }
+  },
+  "efl_commit": "ebbb1d0629f9fd1a128ff3d09f1494bbcaf1fb39",
+  "max_abs_numeric_delta": 2.7755575615628914e-16,
+  "parity_tolerance": {
+    "ABS_TOL": 1e-12,
+    "P_TOL": 1e-10,
+    "REL_TOL": 1e-10
+  },
+  "raw_crsp_source_sha256": "68d365faad1290ac01d9d07b64cdb037375d234aa5298e25b94897989d2a1557",
+  "specification": {
+    "direction": "two_sided",
+    "estimation_window": [
+      -256,
+      -46
+    ],
+    "event_window": [
+      -1,
+      1
+    ],
+    "model": "market_model",
+    "permutation_B": 1000,
+    "placebo_enabled": false,
+    "return_units": "decimal",
+    "robustness_models": [],
+    "robustness_windows": [],
+    "seed": 20260817
+  },
+  "stage": "VIII-C",
+  "status": "PASS"
+}

@@ -53,6 +53,9 @@ else:
         for path in sorted((ROOT / relroot).rglob("*")):
             if path.is_file() and "__pycache__" not in path.parts:
                 rel = path.relative_to(ROOT).as_posix()
+                # Stage VIII owns and closes its later real-data evidence subtree.
+                if rel.startswith("validation/real_data/"):
+                    continue
                 current[rel] = sha256(path)
     if set(current) != set(expected):
         errors.append("Frozen scientific-tree file set changed")

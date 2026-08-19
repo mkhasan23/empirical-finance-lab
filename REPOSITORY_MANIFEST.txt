@@ -8,6 +8,7 @@
 .github/workflows/browser-runtime.yml
 .github/workflows/corpus-integrity.yml
 .github/workflows/numerical-core.yml
+.github/workflows/real-data-validation.yml
 .github/workflows/release-hardening.yml
 .gitignore
 CHANGELOG.md
@@ -17,6 +18,7 @@ LICENSE
 README.md
 REPOSITORY_MANIFEST.txt
 SECURITY.md
+docs/STAGE_VIII_REAL_DATA_VALIDATION.md
 docs/STAGE_VII_ACCEPTANCE_CHECKLIST.md
 docs/STAGE_VII_EVIDENCE_REPORT.md
 docs/governance/DEPENDENCY_UPDATE_POLICY.md
@@ -89,6 +91,7 @@ tools/check_stage7_e2_accessibility_gate.py
 tools/check_stage7_f1_release_docs_gate.py
 tools/check_stage7_f2_evidence_gate.py
 tools/check_stage7_static_gate.py
+tools/check_stage8_real_data_gate.py
 tools/stage7_dist_manifest.py
 tools/write_stage7_f2_ci_evidence.py
 validation/README.md
@@ -162,6 +165,15 @@ validation/placebo/PLC-001/README.md
 validation/placebo/PLC-001/data.csv
 validation/placebo/PLC-001/expected.json
 validation/placebo/PLC-001/specification.json
+validation/real_data/README.md
+validation/real_data/specifications/efl_stage8_ko_specification.json
+validation/real_data/specifications/efl_stage8_msft_specification.json
+validation/real_data/specifications/efl_stage8_nvda_specification.json
+validation/real_data/specifications/efl_stage8_pg_specification.json
+validation/real_data/specifications/efl_stage8_wmt_specification.json
+validation/real_data/stage8c_manifest.json
+validation/real_data/stage8c_parity_results.csv
+validation/real_data/stage8c_parity_results.json
 validation/robustness/ROB-001/data.csv
 validation/robustness/ROB-001/expected.json
 validation/robustness/ROB-001/specification.json

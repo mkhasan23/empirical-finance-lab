@@ -17,3 +17,9 @@ test-results/
 web/public/efl-core.json
 web/public/stage5-parity-cases.json
 web/public/stage5-runtime-pin.json
+
+# Stage VIII licensed/private real-data artifacts (never commit).
+efl_stage8_crsp_raw.csv
+efl_stage8_*_input.csv
+EFL_StageVIII_C_Private_CRSP_Parity_Package.zip
+validation/real_data/private/

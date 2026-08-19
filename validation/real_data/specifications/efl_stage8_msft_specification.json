@@ -1,0 +1,36 @@
+{
+  "calendar_event_date": "2022-01-18",
+  "effective_event_date": "2022-01-18",
+  "estimation_window": {
+    "end": -46,
+    "start": -256
+  },
+  "event_timing": "during_or_before_market",
+  "event_window": {
+    "end": 1,
+    "start": -1
+  },
+  "excluded_dates": [],
+  "inference": {
+    "direction": "two_sided",
+    "permutation_B": 1000,
+    "seed": 20260817
+  },
+  "locked": true,
+  "model": "market_model",
+  "normalization": {
+    "sorted_ascending_with_explicit_approval": false
+  },
+  "placebo": {
+    "enabled": false
+  },
+  "return_units": "decimal",
+  "robustness_models": [],
+  "robustness_windows": [],
+  "schema_version": "0.1.0",
+  "source_columns": {
+    "benchmark_return": "benchmark_return",
+    "date": "date",
+    "security_return": "security_return"
+  }
+}
