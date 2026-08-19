@@ -1,10 +1,18 @@
-# Stage VII accepted release-hardening browser application
+# Empirical Finance Lab v0.1.0 browser application
 
-This directory contains the browser application for the Empirical Finance Lab v0.1 workflow. Stage VII release hardening is **accepted on `main`** at baseline `08d8b1b8f5953b1e5cf93ec6a298a731757e0c87`. The project remains pre-release: it is not Public Beta and is not a formal `v0.1.0` release.
+This directory contains the browser application for the Empirical Finance Lab v0.1 workflow. The scholarly software-version authority is the validated Python core, which reports version `0.1.0` in runtime and reproducibility metadata.
 
-Scientific calculations remain in `src/empirical_finance_lab/` and execute through the validated Pyodide module Web Worker. Stage VII adds release/deployment, security, provenance, reproducibility, onboarding, and accessibility hardening without creating a second econometric implementation.
+The accepted Stage VII release-hardening baseline remains `08d8b1b8f5953b1e5cf93ec6a298a731757e0c87`. The accepted Stage VIII scientific/external-validation baseline remains `a694d49df9716f9f87d359385598237363e4c3fc`. The exact formal release is the immutable `v0.1.0` tag after its Stage IX tag gate passes.
+
+Scientific calculations remain in `src/empirical_finance_lab/` and execute through the validated Pyodide module Web Worker. The browser application does not create a second econometric implementation.
 
 For the first-run tutorial, see [`../docs/quickstart.md`](../docs/quickstart.md). For the exact release boundary and acceptance record, see [`../docs/release_status.md`](../docs/release_status.md).
+
+## Real-data validation
+
+Five heterogeneous real CRSP event-study cases were independently recomputed outside the EFL production core and matched EFL within machine precision; the maximum absolute numerical delta was `2.7755575615628914e-16`, and all five permutation extreme counts matched exactly.
+
+Licensed CRSP observations and private derived input CSVs are not distributed. This is tested-case numerical parity, not CRSP/WRDS/vendor endorsement or causal certification.
 
 ## Environment separation
 
@@ -12,7 +20,7 @@ For the first-run tutorial, see [`../docs/quickstart.md`](../docs/quickstart.md)
 - `tsconfig.node.json`: Playwright/Vite/tooling tests with explicit Node types.
 - `vitest.config.ts`: unit tests only under `src/**/*.test.ts`.
 - `playwright.config.ts`: accepted Stage V/VI real-browser tests.
-- `playwright.stage7.config.ts`: Stage VII production-subpath tests.
+- `playwright.stage7.config.ts`: production-subpath tests.
 - `playwright.stage7.live.config.ts`: real deployed GitHub Pages verification.
 
 ## Application and release-hardening modules
@@ -31,7 +39,7 @@ For the first-run tutorial, see [`../docs/quickstart.md`](../docs/quickstart.md)
 
 Research files are opened into browser memory. The application does not persist them to localStorage/sessionStorage and does not transmit them to an EFL service. The original local-file SHA-256 is computed before mapping/normalization. The reproducibility archive records original and engine-input hashes separately and does not automatically include the proprietary source CSV.
 
-Stage VII verifies zero analysis-time network requests, exact deployed-artifact parity, document security policy, and the reproducibility ZIP round trip on the live HTTPS Pages deployment.
+Production validation verifies zero analysis-time network requests, exact deployed-artifact parity, document security policy, and the reproducibility ZIP round trip on the live HTTPS Pages deployment.
 
 ## Generated scientific assets
 
@@ -49,6 +57,8 @@ python tools/check_stage7_e1_onboarding_gate.py
 python tools/check_stage7_e2_accessibility_gate.py
 python tools/check_stage7_f1_release_docs_gate.py
 python tools/check_stage7_f2_evidence_gate.py
+python tools/check_stage8_real_data_gate.py
+python tools/check_stage9_release_gate.py
 ```
 
 From `web/` after installing the locked development dependencies:
@@ -61,6 +71,8 @@ npm run build:pages
 npm run test:e2e:stage7
 ```
 
-The live deployed-site suite is executed by the Stage VII workflow after deployment and is not a substitute for the accepted Stage V/VI cross-browser gates.
+The live deployed-site suite is executed by the Stage VII workflow after deployment.
 
-Stage VII is an **accepted pre-release baseline**, not Public Beta and not a scholarly software release. Stage VIII external validation is a separate later milestone.
+## Feedback
+
+Use the repository's **Researcher feedback** issue form for workflow, documentation, browser/runtime, reproducibility, accessibility, or usability feedback. Do not attach proprietary, licensed, confidential, or observation-level research data to public issues.

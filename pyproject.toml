@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "empirical-finance-lab"
-version = "0.0.0"
+version = "0.1.0"
 description = "Open-source, audit-first tools for credible empirical finance research."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -12,7 +12,7 @@ license = "BSD-3-Clause"
 authors = [{name = "Muhammad Kamrul Hasan"}]
 keywords = ["empirical finance", "event study", "econometrics", "reproducibility"]
 classifiers = [
-  "Development Status :: 2 - Pre-Alpha",
+  "Development Status :: 3 - Alpha",
   "Intended Audience :: Science/Research",
   "Programming Language :: Python :: 3",
   "Topic :: Scientific/Engineering",
@@ -30,6 +30,8 @@ test = [
 
 [project.urls]
 Repository = "https://github.com/mkhasan23/empirical-finance-lab"
+Documentation = "https://mkhasan23.github.io/empirical-finance-lab/"
+Release = "https://github.com/mkhasan23/empirical-finance-lab/releases/tag/v0.1.0"
 
 [tool.setuptools.packages.find]
 where = ["src"]

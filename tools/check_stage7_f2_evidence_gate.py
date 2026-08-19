@@ -112,6 +112,8 @@ def main() -> None:
         '"stage7_accepted": is_main',
         '"main_integration_and_main_rerun_required": not is_main',
         '"repository_governance_settings_machine_verified": False',
+        '"release_candidate_v0_1_0"',
+        '"stage9_release_tag_required"',
     ):
         require(writer, token, "F2 evidence writer", errors)
 
@@ -139,24 +141,24 @@ def main() -> None:
 
     status = read("docs/release_status.md")
     for token in (
-        "accepted Stage VII release-hardening baseline on `main`",
+        "Accepted Stage VII release-hardening baseline",
         ACCEPTED_STAGE7_BASELINE,
         "STAGE_VII_EVIDENCE_REPORT.md",
         "STAGE_VII_ACCEPTANCE_CHECKLIST.md",
-        "stage7-acceptance-evidence",
-        "repository administrator-confirmed",
-        "not Public Beta",
-        "no formal `v0.1.0` release",
-        "no version-specific DOI",
+        "Repository administrator-confirmed",
+        "v0.1.0",
+        "Stage VIII",
+        "Stage IX",
+        "Formal release tag: `v0.1.0`",
+        "No version-specific DOI is claimed unless",
     ):
         require(status, token, "docs/release_status.md", errors)
     reject(status, "Stage VII as a whole is **not yet accepted**", "docs/release_status.md", errors)
 
     citation = read("CITATION.cff")
-    require(citation, "version: 0.0.0", "CITATION.cff", errors)
-    for line in citation.splitlines():
-        if line.strip().lower().startswith(("doi:", "identifiers:")):
-            errors.append("CITATION.cff: pre-release metadata must not claim a DOI/identifier block")
+    require(citation, "version: 0.1.0", "CITATION.cff", errors)
+    require(citation, "date-released: 2026-08-19", "CITATION.cff", errors)
+    require(citation, "/releases/tag/v0.1.0", "CITATION.cff", errors)
 
     manifest_lines = [
         line.strip()

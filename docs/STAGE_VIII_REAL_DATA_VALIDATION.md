@@ -123,4 +123,4 @@ This is deliberately narrower than a live-data replication gate. A full CRSP re-
 
 The Stage VIII exercise validates **numerical implementation and cross-implementation parity** on heterogeneous real events. It does not establish that each event caused the observed return, that the chosen companies constitute a random sample, or that the resulting p-values have causal interpretation. EFL's audit/referee layer remains responsible for keeping computation distinct from identification.
 
-Acceptance of this evidence is also distinct from release-state promotion: EFL remains pre-release, not Public Beta, with no formal `v0.1.0` release and no version-specific DOI.
+This Stage VIII acceptance record was completed before formal release promotion. The same accepted real-data evidence is now carried forward into the v0.1.0 release line without changing the scientific results or redistributing licensed CRSP observations. The tested-case parity evidence does not imply CRSP/WRDS/vendor endorsement or causal certification. No version-specific DOI is claimed unless an archival DOI is actually minted and recorded with the immutable release.

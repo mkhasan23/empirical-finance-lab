@@ -2,11 +2,13 @@
 .github/ISSUE_TEMPLATE/bug_report.yml
 .github/ISSUE_TEMPLATE/config.yml
 .github/ISSUE_TEMPLATE/methodology_change.yml
+.github/ISSUE_TEMPLATE/researcher_feedback.yml
 .github/dependabot.yml
 .github/pull_request_template.md
 .github/workflows/application-ui.yml
 .github/workflows/browser-runtime.yml
 .github/workflows/corpus-integrity.yml
+.github/workflows/formal-release.yml
 .github/workflows/numerical-core.yml
 .github/workflows/real-data-validation.yml
 .github/workflows/release-hardening.yml
@@ -31,6 +33,7 @@ docs/release_status.md
 docs/specifications/STAGE_III_VALIDATION_CORPUS.md
 docs/specifications/STAGE_II_TECHNICAL_ARCHITECTURE.md
 docs/specifications/STAGE_IV_NUMERICAL_CORE.md
+docs/specifications/STAGE_IX_FORMAL_RELEASE.md
 docs/specifications/STAGE_I_SCIENTIFIC_SPEC.md
 docs/specifications/STAGE_VII_D2_REPRODUCIBILITY_ROUND_TRIP.md
 docs/specifications/STAGE_VII_E2_ACCESSIBILITY_RESPONSIVE.md
@@ -92,6 +95,7 @@ tools/check_stage7_f1_release_docs_gate.py
 tools/check_stage7_f2_evidence_gate.py
 tools/check_stage7_static_gate.py
 tools/check_stage8_real_data_gate.py
+tools/check_stage9_release_gate.py
 tools/stage7_dist_manifest.py
 tools/write_stage7_f2_ci_evidence.py
 validation/README.md

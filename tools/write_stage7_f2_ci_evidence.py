@@ -9,6 +9,7 @@ import os
 import platform
 import re
 import subprocess
+import tomllib
 from pathlib import Path
 from typing import Any
 
@@ -19,6 +20,8 @@ SHA40 = re.compile(r"^[0-9a-f]{40}$")
 SHA64 = re.compile(r"^[0-9a-f]{64}$")
 EXPECTED_PAGE_PREFIX = "https://mkhasan23.github.io/empirical-finance-lab/"
 ACCEPTED_STAGE7_BASELINE = "08d8b1b8f5953b1e5cf93ec6a298a731757e0c87"
+FORMAL_RELEASE_VERSION = "0.1.0"
+FORMAL_RELEASE_TAG = "v0.1.0"
 
 
 def sha256(path: Path) -> str:
@@ -38,6 +41,11 @@ def required_env(name: str) -> str:
 
 def command_version(args: list[str]) -> str:
     return subprocess.check_output(args, cwd=ROOT, text=True).strip()
+
+
+def source_release_version() -> str:
+    raw = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
+    return str(raw.get("project", {}).get("version", ""))
 
 
 def workflow_action_pins() -> list[dict[str, str]]:
@@ -163,10 +171,20 @@ def main() -> None:
         run_attempt = int(required_env("GITHUB_RUN_ATTEMPT"))
         workflow = required_env("GITHUB_WORKFLOW")
         ref = required_env("GITHUB_REF")
+        ref_type = os.environ.get("GITHUB_REF_TYPE", "").strip()
+        ref_name = os.environ.get("GITHUB_REF_NAME", "").strip()
         page_url = required_env("EFL_STAGE7_PAGE_URL")
         if not page_url.startswith(EXPECTED_PAGE_PREFIX):
             raise ValueError(f"unexpected GitHub Pages URL: {page_url}")
         is_main = ref == "refs/heads/main"
+
+        release_version = source_release_version()
+        release_candidate_v0_1_0 = release_version == FORMAL_RELEASE_VERSION
+        is_release_tag = (
+            release_candidate_v0_1_0
+            and ref_type == "tag"
+            and ref_name == FORMAL_RELEASE_TAG
+        )
 
         job_results = {
             "build": required_env("EFL_STAGE7_BUILD_RESULT"),
@@ -185,6 +203,7 @@ def main() -> None:
         tracked_hashes = {}
         for relative in (
             ".github/workflows/release-hardening.yml",
+            ".github/workflows/formal-release.yml",
             "CITATION.cff",
             "REPOSITORY_MANIFEST.txt",
             "pyproject.toml",
@@ -229,7 +248,9 @@ def main() -> None:
                 "branch_candidate_evidence_complete": True,
                 "stage7_accepted": is_main,
                 "public_beta": False,
-                "formal_v0_1_0": False,
+                "release_candidate_v0_1_0": release_candidate_v0_1_0,
+                "formal_v0_1_0": is_release_tag,
+                "stage9_release_tag_required": release_candidate_v0_1_0 and not is_release_tag,
                 "version_specific_doi": False,
                 "main_integration_and_main_rerun_required": not is_main,
                 "repository_governance_settings_machine_verified": False,
@@ -243,6 +264,11 @@ def main() -> None:
                     else
                     "This artifact proves the exact deployed branch commit under the Stage VII CI contract; "
                     "Stage VII remains accepted at the separately recorded main baseline."
+                ),
+                (
+                    f"Source metadata identifies release line {release_version}; the immutable "
+                    f"{FORMAL_RELEASE_TAG} tag is the formal release authority only after the "
+                    "Stage IX tag gate passes."
                 ),
                 "Automated accessibility checks are not a WCAG certification or manual assistive-technology study.",
                 "Pinned runtime initialization may use the allowed jsDelivr Pyodide host; scientific analysis-phase network traffic must remain zero.",
@@ -260,10 +286,13 @@ def main() -> None:
         print(f" - ref: {ref}")
         print(f" - stage7 accepted: {is_main}")
         print(f" - accepted baseline: {ACCEPTED_STAGE7_BASELINE}")
+        print(f" - source release version: {release_version}")
+        print(f" - formal release tag observed: {is_release_tag}")
         print(f" - run: {run_id} attempt {run_attempt}")
         print(f" - production tree: {manifest['tree_sha256']}")
-        print(f" - browsers: {', '.join(f'{k} {v["browser_version"]}' for k, v in browsers.items())}")
-    except (OSError, ValueError, KeyError, json.JSONDecodeError, subprocess.CalledProcessError) as error:
+        browser_summary = ", ".join(f"{name} {metadata['browser_version']}" for name, metadata in browsers.items())
+        print(f" - browsers: {browser_summary}")
+    except (OSError, ValueError, KeyError, json.JSONDecodeError, subprocess.CalledProcessError, tomllib.TOMLDecodeError) as error:
         print(f"STAGE VII-F2 CI EVIDENCE: FAIL - {error}")
         raise SystemExit(1) from error
 

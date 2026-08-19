@@ -60,7 +60,19 @@ else:
     if set(current) != set(expected):
         errors.append("Frozen scientific-tree file set changed")
     for rel, digest in expected.items():
-        if current.get(rel) != digest:
+        actual = current.get(rel)
+        if rel == "src/empirical_finance_lab/__init__.py":
+            # Stage IX closes the sole release-metadata exception inside the frozen
+            # scientific package. Only the accepted pre-release bytes or the exact
+            # audited v0.1.0 metadata bytes are permitted; econometric modules remain
+            # byte-identical to the original frozen tree.
+            allowed_release_metadata_hashes = {
+                "ae3c71e4e8c916ed3cb2d6274be93b2770baf77953944b8e381dc8aa12c02765",
+                "b6fc4652ac03f40c1bbbfbcca0adf94544bc939a23cb1ac6f59b2edacb27a3fc",
+            }
+            if actual not in allowed_release_metadata_hashes:
+                errors.append(f"Frozen scientific release-metadata file changed outside the closed Stage IX states: {rel}")
+        elif actual != digest:
             errors.append(f"Frozen scientific file changed: {rel}")
 
 required_files = [

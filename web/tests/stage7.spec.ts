@@ -39,7 +39,7 @@ test("production Pages base path preserves pinned runtime parity, build provenan
   expect(runtime.python_version).toBe("3.14.2");
   expect(runtime.numpy_version).toBe("2.4.3");
   expect(runtime.scipy_version).toBe("1.18.0");
-  expect(runtime.efl_version).toBe("0.0.0");
+  expect(runtime.efl_version).toBe("0.1.0");
   expect(runtime.build_commit).toBe(EXPECTED_BUILD_COMMIT);
   expect(runtime.build_mode).toBe("github-pages");
   expect(runtime.build_source).toBe("github-actions");
