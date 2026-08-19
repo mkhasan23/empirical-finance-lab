@@ -2,7 +2,7 @@
 
 **Audit-first research software for credible, transparent, and reproducible empirical finance.**
 
-> **Current status — Stage VII release hardening accepted on `main` (pre-release).** The accepted Stage VII baseline is exact `main` commit `08d8b1b8f5953b1e5cf93ec6a298a731757e0c87`, after governed integration and fresh Stage III–VII validation on `main`. Empirical Finance Lab is **not Public Beta**, and there is no formal `v0.1.0` release or version-specific DOI.
+> **Current status — Stage VIII real-data external validation accepted on `main` (pre-release).** The Stage VII release hardening accepted on `main` remains the preserved release-engineering foundation at exact baseline `08d8b1b8f5953b1e5cf93ec6a298a731757e0c87`; the accepted Stage VIII external-validation baseline is exact `main` commit `a694d49df9716f9f87d359385598237363e4c3fc`. Empirical Finance Lab is **not Public Beta**, and there is **no formal `v0.1.0` release** or version-specific DOI.
 
 **Live validated pre-release application:** https://mkhasan23.github.io/empirical-finance-lab/
 
@@ -61,7 +61,17 @@ Stage VII adds release engineering around the accepted scientific/application st
 - deterministic synthetic onboarding data tied to a frozen known answer;
 - automated keyboard, hidden-state, and responsive checks at 320/390/768/1280 px.
 
-These controls form the **accepted Stage VII pre-release baseline**. Acceptance does **not** promote the project to Public Beta or a formal scholarly release. Stage VIII remains the separate Public Beta / external-validation phase.
+These controls form the **accepted Stage VII pre-release baseline** at `08d8b1b8f5953b1e5cf93ec6a298a731757e0c87`.
+
+## Stage VIII accepted real-data external validation
+
+Stage VIII adds a public-safe real-data validation evidence layer without changing the frozen numerical authority. Five heterogeneous CRSP event-study cases were independently recomputed from authorized local data and compared with the frozen EFL scientific core under one prespecified design. All scientific comparison fields passed the established browser-parity tolerances, and all five permutation extreme counts matched exactly.
+
+The accepted Stage VIII external-validation baseline is `a694d49df9716f9f87d359385598237363e4c3fc` (tree `621b0cafdcad3711d2aba3bef698d2e78d022144`). Stages III–VIII passed on that exact merged `main` state; Stage VI's first main attempt encountered a transient WebKit cold-start/runtime stall, and the same-commit failed-job rerun passed without any source change.
+
+Licensed CRSP observations and the five derived EFL input CSVs remain outside the public repository. Only locked specifications, hashes, numerical summaries, and public-safe parity evidence are committed. See [`docs/STAGE_VIII_REAL_DATA_VALIDATION.md`](docs/STAGE_VIII_REAL_DATA_VALIDATION.md).
+
+Stage VIII external-validation acceptance does **not** by itself promote EFL to Public Beta, a formal scholarly release, or a causal-validation claim. Public Beta remains a deliberate promotion/issue-discovery decision.
 
 ## Validation authority
 
@@ -81,6 +91,7 @@ python tools/check_stage7_e1_onboarding_gate.py
 python tools/check_stage7_e2_accessibility_gate.py
 python tools/check_stage7_f1_release_docs_gate.py
 python tools/check_stage7_f2_evidence_gate.py
+python tools/check_stage8_real_data_gate.py
 ```
 
 Browser/runtime/application gates additionally run TypeScript/Vitest/Vite and Playwright in their stage-specific workflows.
@@ -103,7 +114,7 @@ Not supported: multi-firm CAAR inference, cross-sectional event-study tests, lon
 
 ## Governance and security
 
-Scientific changes are classified separately from software/reporting changes. The frozen Stage VI scientific-tree manifest continues to protect the Stage III validation corpus and Stage IV Python core.
+Scientific changes are classified separately from software/reporting changes. The frozen Stage VI scientific-tree manifest continues to protect the Stage III validation corpus and Stage IV Python core; Stage VIII owns and closes only its delegated `validation/real_data/` public-evidence subtree.
 
 - Release policy: [`docs/governance/release_policy.md`](docs/governance/release_policy.md)
 - Dependency policy: [`docs/governance/DEPENDENCY_UPDATE_POLICY.md`](docs/governance/DEPENDENCY_UPDATE_POLICY.md)
@@ -113,7 +124,7 @@ Scientific changes are classified separately from software/reporting changes. Th
 
 ## Citation
 
-`CITATION.cff` intentionally remains at `0.0.0` while the project is pre-release. There is no version-specific DOI. Formal scholarly citation should use a future validated release and its exact release metadata rather than treating the accepted Stage VII pre-release deployment as a formal release.
+`CITATION.cff` intentionally remains at `0.0.0` while the project is pre-release. There is no version-specific DOI. Formal scholarly citation should use a future validated release and its exact release metadata rather than treating the accepted Stage VIII external-validation baseline as a formal release.
 
 ## License
 
