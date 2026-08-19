@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.0.0 - Stage VIII real-data external validation accepted (2026-08-18)
+
+- Added a public-safe Stage VIII real-data validation evidence layer anchored to authorized local CRSP source data without committing observation-level CRSP data or the five derived EFL input CSVs.
+- Independently recomputed five heterogeneous event-study cases under one prespecified market-model design and matched the frozen EFL scientific core at essentially machine precision; every permutation extreme count matched exactly.
+- Preserved the Stage III validation corpus and Stage IV numerical authority; Stage VIII did not change the scientific core.
+- Added a closed Stage VIII evidence subtree and CI gate that validates the five locked specifications, hashes, analysis IDs, parity summaries, exact permutation counts, and CRSP licensing/privacy boundary.
+- Integrated the validated Stage VIII branch through pull request #10 to exact main baseline `a694d49df9716f9f87d359385598237363e4c3fc` with repository tree `621b0cafdcad3711d2aba3bef698d2e78d022144`.
+- Fresh Stage III–VIII main-push workflows passed on that baseline. Stage VI's first main attempt encountered a transient WebKit cold-start/runtime stall; rerunning only the failed jobs on the same commit passed without any source change.
+- Stage VIII external-validation acceptance remains **pre-release**: EFL is **not Public Beta**, there is no formal `v0.1.0` release, and there is no version-specific DOI.
+
 ## 0.0.0 - Stage VII release hardening accepted (2026-08-17)
 
 - Added a committed frontend lockfile and converted controlled CI installation to `npm ci`.
@@ -7,7 +17,7 @@
 - Added an enforcing document CSP/referrer boundary, explicit browser privacy/network checks, and a documented worker/network security boundary.
 - Added full-SHA GitHub Actions governance, scoped Dependabot configuration, and dependency-update policy without placing the scientific Python authority on automatic version updates.
 - Added deterministic build provenance tied to the exact Git commit and propagated the build commit/mode/source through the browser runtime, Python environment, and reproducibility export.
-- Added a strict privacy-preserving reproducibility ZIP round-trip contract: verify the exact original local CSV externally, reconstruct normalized engine input, rerun the authoritative browser core, compare identities/scientific results, and require deterministic byte-identical re-export.
+- Added strict privacy-preserving reproducibility ZIP round-trip contract: verify the exact original local CSV externally, reconstruct normalized engine input, rerun the authoritative browser core, compare identities/scientific results, and require deterministic byte-identical re-export.
 - Added a deterministic 180-row synthetic onboarding dataset and quickstart tied to the frozen KA-003 AR/CAR known answer.
 - Added automated accessibility/keyboard/responsive contracts, including native `hidden` semantics and completed-result containment at 320/390/768/1280 px.
 - Added formal Stage VII branch evidence and exact-commit acceptance evidence, followed by governed squash integration to `main` and fresh Stage III–VII main-branch validation.

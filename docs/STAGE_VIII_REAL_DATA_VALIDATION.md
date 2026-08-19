@@ -4,7 +4,28 @@
 
 **Stage VIII-C scientific parity: PASS.**
 
+**Stage VIII real-data external-validation evidence: ACCEPTED on `main` at `a694d49df9716f9f87d359385598237363e4c3fc`.**
+
+Accepted repository tree: `621b0cafdcad3711d2aba3bef698d2e78d022144`.
+
 This record documents a five-case real-data validation exercise performed after the Stage VII release-hardening baseline and main-branch governance were accepted. It is evidence of numerical parity on selected real CRSP cases; it is **not** a claim that CRSP data are redistributed with EFL, that the five events form a representative economic sample, or that event-study identification is causal.
+
+## Acceptance record
+
+The governed Stage VIII branch head was `6122a2b5ff0aaada0acb042b5d8f1d73621d7beb`. Pull request #10 was squash-integrated to `main` at `a694d49df9716f9f87d359385598237363e4c3fc`. The validated branch tree, the pull-request merge-candidate tree, and the resulting squash-merged main tree were identical (`621b0cafdcad3711d2aba3bef698d2e78d022144`).
+
+Fresh main-push validation then passed Stages III–VIII on that exact main baseline:
+
+- Stage III corpus integrity #68;
+- Stage IV numerical core #66;
+- Stage V browser runtime parity #63;
+- Stage VI application UI #53;
+- Stage VII release hardening #44; and
+- Stage VIII real-data evidence #5.
+
+Stage VI run `32210822522` failed on its first attempt only because the WebKit researcher-journey test stalled during browser-runtime initialization. The failed jobs were rerun on the same commit; attempt 2 passed preflight, Chromium, Firefox, WebKit, and the `stage6-required` wrapper. No source change was made in response, so this is recorded as a transient browser/runtime event rather than a scientific or application correction.
+
+This acceptance record is reporting/governance only. It does not redefine the frozen scientific-core anchor below and does not declare Public Beta, `v0.1.0`, or a DOI.
 
 ## Frozen software anchor
 
@@ -101,3 +122,5 @@ This is deliberately narrower than a live-data replication gate. A full CRSP re-
 ## Interpretation boundary
 
 The Stage VIII exercise validates **numerical implementation and cross-implementation parity** on heterogeneous real events. It does not establish that each event caused the observed return, that the chosen companies constitute a random sample, or that the resulting p-values have causal interpretation. EFL's audit/referee layer remains responsible for keeping computation distinct from identification.
+
+Acceptance of this evidence is also distinct from release-state promotion: EFL remains pre-release, not Public Beta, with no formal `v0.1.0` release and no version-specific DOI.
