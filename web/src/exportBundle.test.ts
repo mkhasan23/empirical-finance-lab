@@ -138,6 +138,9 @@ describe("Stage VII-D2 reproducibility round trip", () => {
     expect(files["citation.txt"]).toContain("Software version: 0.1.1.");
     expect(files["citation.txt"]).toContain("Formal release tag: v0.1.1.");
     expect(files["citation.txt"]).toContain("https://github.com/mkhasan23/empirical-finance-lab/releases/tag/v0.1.1");
+    expect(files["citation.txt"]).toContain("Version DOI: 10.5281/zenodo.22018410.");
+    expect(files["citation.txt"]).toContain("Concept DOI (all versions): 10.5281/zenodo.22018409.");
+    expect(files["citation.txt"]).not.toContain("Version DOI: 10.5281/zenodo.22018409.");
     expect(files["citation.txt"]).not.toContain("Formal release tag: v0.1.0.");
   });
 

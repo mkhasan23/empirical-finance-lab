@@ -21,6 +21,11 @@ export type BundleContext = {
   runtime: Record<string, unknown> | null;
 };
 
+const VERSION_DOI_BY_RELEASE: Record<string, string> = {
+  "0.1.1": "10.5281/zenodo.22018410",
+};
+const EFL_CONCEPT_DOI = "10.5281/zenodo.22018409";
+
 type ExportBuildProvenance = {
   build_commit: string;
   build_mode: string;
@@ -112,6 +117,7 @@ export function buildReproducibilityFiles(context: BundleContext): Record<string
   const releaseUrl = releaseTag === "UNAVAILABLE"
     ? "UNAVAILABLE"
     : `https://github.com/mkhasan23/empirical-finance-lab/releases/tag/${releaseTag}`;
+  const versionDoi = VERSION_DOI_BY_RELEASE[releaseVersion] ?? "UNAVAILABLE";
   const citation = [
     "Empirical Finance Lab: Audit-First Tools for Credible Empirical Finance Research.",
     "Author: Muhammad Kamrul Hasan.",
@@ -121,6 +127,8 @@ export function buildReproducibilityFiles(context: BundleContext): Record<string
     "Repository: https://github.com/mkhasan23/empirical-finance-lab",
     `Formal release tag: ${releaseTag}.`,
     `Release page: ${releaseUrl}`,
+    `Version DOI: ${versionDoi}.`,
+    `Concept DOI (all versions): ${EFL_CONCEPT_DOI}.`,
     "No version-specific DOI is claimed unless an archival DOI is actually minted and recorded with the release.",
     "",
   ].join("\n");
@@ -143,6 +151,8 @@ export function buildReproducibilityFiles(context: BundleContext): Record<string
     `ExecutionID: ${executionId}`,
     `Build commit: ${buildProvenance.build_commit}`,
     `Build mode/source: ${buildProvenance.build_mode}/${buildProvenance.build_source}`,
+    `Version DOI: ${versionDoi}`,
+    `Concept DOI (all versions): ${EFL_CONCEPT_DOI}`,
     "",
   ].join("\n");
 

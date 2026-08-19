@@ -1,14 +1,18 @@
 cff-version: 1.2.0
 message: >-
   If Empirical Finance Lab contributes to your research, please cite the exact
-  v0.1.1 release. If a version-specific archival DOI is later issued, use
-  the DOI recorded with that release.
+  v0.1.1 release using the version-specific Zenodo DOI recorded below.
 title: "Empirical Finance Lab: Audit-First Tools for Credible Empirical Finance Research"
 type: software
 authors:
   - family-names: Hasan
     given-names: Muhammad Kamrul
 version: 0.1.1
+doi: "10.5281/zenodo.22018410"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.22018409"
+    description: "Concept DOI for all versions of Empirical Finance Lab."
 date-released: 2026-08-19
 license: BSD-3-Clause
 repository-code: "https://github.com/mkhasan23/empirical-finance-lab"

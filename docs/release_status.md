@@ -8,9 +8,9 @@ Empirical Finance Lab is configured for the **v0.1.1 validated patch release lin
 - Accepted Stage VIII scientific/external-validation baseline: `a694d49df9716f9f87d359385598237363e4c3fc`.
 - Accepted Stage VIII scientific repository tree: `621b0cafdcad3711d2aba3bef698d2e78d022144`.
 - Immutable historical v0.1.0 release tag: `v0.1.0`, fixed at `faf3dc6c5702dad3f5abd1dd15f7697fab5a5831`.
-- Intended patch release tag: `v0.1.1`.
-- Before `v0.1.1` exists and passes the Stage X tag gate, the governed candidate state is not yet the immutable formal patch-release authority.
-- No version-specific DOI is claimed unless an archival DOI is actually minted and recorded.
+- Intended patch release tag: `v0.1.1`; this tag is now issued and validated at `55bc447141dde59853e670687bf46e383679eb78`.
+- Formal v0.1.1 patch-release authority: immutable tag `v0.1.1` at `55bc447141dde59853e670687bf46e383679eb78`.
+- No version-specific DOI is claimed unless an archival DOI is actually minted and recorded; that condition is now satisfied for v0.1.1 with version DOI `10.5281/zenodo.22018410`. The all-versions Concept DOI is `10.5281/zenodo.22018409`.
 
 The public GitHub Pages application is:
 
@@ -84,9 +84,11 @@ The release tag must never be moved to a different commit.
 
 ## Citation and DOI boundary
 
-`CITATION.cff` identifies version `0.1.1` and release date `2026-08-19`. The formal patch-release citation authority becomes the validated `v0.1.1` tag.
+`CITATION.cff` identifies version `0.1.1`, release date `2026-08-19`, and the exact Zenodo version DOI `10.5281/zenodo.22018410`. The formal patch-release citation authority is the validated immutable `v0.1.1` tag at `55bc447141dde59853e670687bf46e383679eb78`.
 
-A DOI is optional to the GitHub software release itself. If an archival service mints a version-specific DOI, that DOI must refer to the exact immutable `v0.1.1` release. EFL must never invent, guess, or advertise an identifier that has not actually been issued.
+Zenodo archived the exact v0.1.1 GitHub release snapshot and assigned version DOI `10.5281/zenodo.22018410`. The Concept DOI `10.5281/zenodo.22018409` represents the EFL software collection across versions and resolves to the latest archived version. Exact-version reproducibility citations should use `10.5281/zenodo.22018410`.
+
+EFL must never invent, guess, swap, or advertise an identifier that has not actually been issued and verified against the archival record.
 
 ## External feedback
 
