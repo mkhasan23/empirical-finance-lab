@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.1.0 - 2026-08-19
+
+- Established the first governed formal EFL release line, with version `0.1.0` synchronized across Python package metadata, runtime reporting, citation metadata, browser expectations, and reproducibility exports.
+- Preserved the accepted Stage III validation corpus and all Stage IV econometric modules; the only permitted change inside `src/empirical_finance_lab/**` is the exact release-metadata update in `__init__.py`.
+- Carried forward the accepted Stage VIII real-data validation: five heterogeneous CRSP event studies independently recomputed outside the EFL production core matched EFL within machine precision, with maximum absolute delta `2.7755575615628914e-16` and exact permutation extreme-count agreement in all five cases.
+- Added a Stage IX formal-release gate that verifies version consistency, release/citation state, the closed scientific-core metadata exception, repository inventory, CRSP licensing boundary, indexable release UI, feedback privacy boundary, and exact `v0.1.0` tag semantics.
+- Added structured Researcher feedback intake while prohibiting proprietary, licensed, confidential, or observation-level research data in public issues.
+- The CRSP validation statement is a tested-case numerical-parity claim; it is not CRSP/WRDS/vendor endorsement, universal validation, or causal certification.
+- The exact formal release is the immutable `v0.1.0` tag after the tag-specific Stage IX gate passes. No version-specific DOI is claimed unless an archival DOI is actually minted and recorded.
+
 ## 0.0.0 - Stage VIII real-data external validation accepted (2026-08-18)
 
 - Added a public-safe Stage VIII real-data validation evidence layer anchored to authorized local CRSP source data without committing observation-level CRSP data or the five derived EFL input CSVs.

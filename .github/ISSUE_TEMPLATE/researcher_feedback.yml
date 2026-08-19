@@ -1,0 +1,101 @@
+name: Researcher feedback
+description: Report workflow, usability, documentation, browser/runtime, or reproducibility feedback without sharing proprietary research data
+title: "[FEEDBACK] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for using Empirical Finance Lab.
+
+        Do not attach proprietary, licensed, confidential, or observation-level research data. If a data-dependent problem needs a reproduction, use a minimal synthetic example whenever possible.
+
+  - type: dropdown
+    id: feedback_area
+    attributes:
+      label: Feedback area
+      options:
+        - Researcher workflow / usability
+        - Documentation / onboarding
+        - Browser / runtime behavior
+        - Reproducibility export / replay
+        - Audit / Referee Mode presentation
+        - Accessibility / responsive behavior
+        - Other non-methodology feedback
+    validations:
+      required: true
+
+  - type: textarea
+    id: observation
+    attributes:
+      label: What did you observe?
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+    validations:
+      required: true
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version
+      placeholder: "Example: Chrome 151, Firefox 153, Safari 26"
+    validations:
+      required: true
+
+  - type: input
+    id: operating_system
+    attributes:
+      label: Operating system
+      placeholder: "Example: Windows 11, macOS 26, Ubuntu 24.04"
+    validations:
+      required: true
+
+  - type: input
+    id: efl_commit
+    attributes:
+      label: EFL build commit
+      description: Use the 40-character commit recorded in the application's build/reproducibility provenance.
+      placeholder: "40-character Git commit"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: tutorial_completed
+    attributes:
+      label: Did the deterministic quickstart complete successfully?
+      options:
+        - "Yes"
+        - "No"
+        - "Not attempted"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: own_data_attempted
+    attributes:
+      label: Did you test an authorized local research-data workflow?
+      options:
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps or minimal synthetic example
+      description: Do not paste or attach licensed/proprietary observations.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: privacy_confirmation
+    attributes:
+      label: Public-data confirmation
+      options:
+        - label: I have not included proprietary, licensed, confidential, or observation-level research data in this issue.
+          required: true

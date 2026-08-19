@@ -2,9 +2,9 @@
 
 **Audit-first research software for credible, transparent, and reproducible empirical finance.**
 
-> **Current status — Stage VIII real-data external validation accepted on `main` (pre-release).** The Stage VII release hardening accepted on `main` remains the preserved release-engineering foundation at exact baseline `08d8b1b8f5953b1e5cf93ec6a298a731757e0c87`; the accepted Stage VIII external-validation baseline is exact `main` commit `a694d49df9716f9f87d359385598237363e4c3fc`. Empirical Finance Lab is **not Public Beta**, and there is **no formal `v0.1.0` release** or version-specific DOI.
+> **Current software line — v0.1.0 validated release.** The frozen scientific/external-validation baseline remains `a694d49df9716f9f87d359385598237363e4c3fc` (tree `621b0cafdcad3711d2aba3bef698d2e78d022144`). The exact formal release is the immutable `v0.1.0` tag after the Stage IX tag gate passes; before that tag exists, the same governed default-branch state is the release candidate. The Stage VII release-engineering baseline remains `08d8b1b8f5953b1e5cf93ec6a298a731757e0c87`.
 
-**Live validated pre-release application:** https://mkhasan23.github.io/empirical-finance-lab/
+**Live validated application:** https://mkhasan23.github.io/empirical-finance-lab/
 
 Start with [`docs/quickstart.md`](docs/quickstart.md). For the exact pre-release boundary and acceptance record, see [`docs/release_status.md`](docs/release_status.md).
 
@@ -61,7 +61,7 @@ Stage VII adds release engineering around the accepted scientific/application st
 - deterministic synthetic onboarding data tied to a frozen known answer;
 - automated keyboard, hidden-state, and responsive checks at 320/390/768/1280 px.
 
-These controls form the **accepted Stage VII pre-release baseline** at `08d8b1b8f5953b1e5cf93ec6a298a731757e0c87`.
+These controls form the **accepted Stage VII release-hardening baseline** at `08d8b1b8f5953b1e5cf93ec6a298a731757e0c87`.
 
 ## Stage VIII accepted real-data external validation
 
@@ -71,7 +71,15 @@ The accepted Stage VIII external-validation baseline is `a694d49df9716f9f87d3593
 
 Licensed CRSP observations and the five derived EFL input CSVs remain outside the public repository. Only locked specifications, hashes, numerical summaries, and public-safe parity evidence are committed. See [`docs/STAGE_VIII_REAL_DATA_VALIDATION.md`](docs/STAGE_VIII_REAL_DATA_VALIDATION.md).
 
-Stage VIII external-validation acceptance does **not** by itself promote EFL to Public Beta, a formal scholarly release, or a causal-validation claim. Public Beta remains a deliberate promotion/issue-discovery decision.
+Stage VIII supplies the real-data numerical validation evidence used by the v0.1.0 release line. It does not imply CRSP, WRDS, or any data vendor endorses or certifies EFL, and it does not convert event-study association into causal identification.
+
+## v0.1.0 release validation
+
+The v0.1.0 release line is backed by five heterogeneous real CRSP event-study cases that were independently recomputed outside the EFL production core under one prespecified design. The independently recomputed scientific quantities matched EFL within machine precision; the maximum absolute comparison delta was `2.7755575615628914e-16`, and all five permutation extreme counts matched exactly.
+
+This is a **tested-case validation claim**, not a universal claim about every possible security, event, specification, dataset, or identification design. Licensed CRSP observations and the five derived EFL input CSVs are not distributed with the repository.
+
+External feedback remains open after release. Use the repository's **Researcher feedback** issue form for workflow, documentation, browser/runtime, reproducibility, accessibility, or usability feedback. Never attach proprietary, licensed, confidential, or observation-level research data to a public issue; use a minimal synthetic reproduction where possible.
 
 ## Validation authority
 
@@ -124,7 +132,7 @@ Scientific changes are classified separately from software/reporting changes. Th
 
 ## Citation
 
-`CITATION.cff` intentionally remains at `0.0.0` while the project is pre-release. There is no version-specific DOI. Formal scholarly citation should use a future validated release and its exact release metadata rather than treating the accepted Stage VIII external-validation baseline as a formal release.
+`CITATION.cff` is configured for version `0.1.0`. The immutable `v0.1.0` tag is the formal release authority once its Stage IX tag gate passes. No version-specific DOI is claimed unless an archival DOI is actually minted and recorded in the release metadata. Researchers should cite the exact released version they use.
 
 ## License
 

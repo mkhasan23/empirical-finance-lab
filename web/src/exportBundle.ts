@@ -107,15 +107,17 @@ export function buildReproducibilityFiles(context: BundleContext): Record<string
   const placeboEvents = Array.isArray(placebo.candidate_dates) && Array.isArray(placebo.placebo_cars)
     ? placebo.candidate_dates.map((date, index) => ({ date, placebo_car: (placebo.placebo_cars as unknown[])[index] }))
     : [];
+  const releaseVersion = String(coreRepro.software_version ?? "UNAVAILABLE");
   const citation = [
     "Empirical Finance Lab: Audit-First Tools for Credible Empirical Finance Research.",
     "Author: Muhammad Kamrul Hasan.",
-    `Software version: ${String(coreRepro.software_version ?? "0.0.0")}.`,
+    `Software version: ${releaseVersion}.`,
     `Build commit: ${buildProvenance.build_commit}.`,
     `Build mode/source: ${buildProvenance.build_mode}/${buildProvenance.build_source}.`,
     "Repository: https://github.com/mkhasan23/empirical-finance-lab",
-    "Pre-alpha software: no version-specific DOI has been assigned yet.",
-    "If a future validated release materially contributes to your research, cite the exact released version and DOI provided with that release.",
+    "Formal release tag: v0.1.0.",
+    "Release page: https://github.com/mkhasan23/empirical-finance-lab/releases/tag/v0.1.0",
+    "No version-specific DOI is claimed unless an archival DOI is actually minted and recorded with the release.",
     "",
   ].join("\n");
   const readme = [
@@ -132,6 +134,7 @@ export function buildReproducibilityFiles(context: BundleContext): Record<string
     "event_time.csv reports the event-window values returned by the scientific core; no econometric quantity is recomputed by the exporter.",
     "Referee Mode is a deterministic synthesis of version-controlled audit rules and is not causal certification.",
     "",
+    `Software version: ${releaseVersion}`,
     `AnalysisID: ${analysisId}`,
     `ExecutionID: ${executionId}`,
     `Build commit: ${buildProvenance.build_commit}`,
@@ -159,7 +162,7 @@ export function buildReproducibilityFiles(context: BundleContext): Record<string
   const payloadIntegrity = buildPayloadIntegrity(payloadFiles);
   const manifest = {
     bundle_schema: REPRO_BUNDLE_SCHEMA,
-    software_version: coreRepro.software_version ?? "0.0.0",
+    software_version: coreRepro.software_version ?? "UNAVAILABLE",
     analysis_id: analysisId,
     execution_id: executionId,
     build_provenance: buildProvenance,

@@ -5,6 +5,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 ACCEPTED_STAGE7_BASELINE = "08d8b1b8f5953b1e5cf93ec6a298a731757e0c87"
+RELEASE_VERSION = "0.1.0"
+RELEASE_TAG = "v0.1.0"
 
 
 def read(path: str) -> str:
@@ -45,52 +47,63 @@ def main() -> None:
     errors: list[str] = []
 
     root_readme = read("README.md")
-    require(root_readme, "Stage VII release hardening accepted on `main`", "README.md", errors)
-    require(root_readme, ACCEPTED_STAGE7_BASELINE, "README.md", errors)
-    require(root_readme, "not Public Beta", "README.md", errors)
-    require(root_readme, "no formal `v0.1.0` release", "README.md", errors)
-    require(root_readme, "docs/quickstart.md", "README.md", errors)
-    require(root_readme, "docs/release_status.md", "README.md", errors)
-    require(root_readme, "SECURITY.md", "README.md", errors)
-    require(root_readme, "docs/governance/release_policy.md", "README.md", errors)
-    require(
-        root_readme,
+    for token in (
+        "Stage VII release",
+        ACCEPTED_STAGE7_BASELINE,
+        "v0.1.0 validated release",
+        "five heterogeneous real CRSP event-study cases",
+        "2.7755575615628914e-16",
+        "Researcher feedback",
+        "docs/quickstart.md",
+        "docs/release_status.md",
+        "SECURITY.md",
+        "docs/governance/release_policy.md",
         "https://mkhasan23.github.io/empirical-finance-lab/",
-        "README.md",
-        errors,
-    )
+    ):
+        require(root_readme, token, "README.md", errors)
     reject(root_readme, "Stage VII as a whole is **not yet accepted**", "README.md", errors)
     reject(root_readme, "Stage VI application-UI CI candidate", "README.md", errors)
-    reject(root_readme, "Stage VI is **not accepted**", "README.md", errors)
 
     web_readme = read("web/README.md")
-    require(web_readme, "# Stage VII accepted release-hardening browser application", "web/README.md", errors)
-    require(web_readme, ACCEPTED_STAGE7_BASELINE, "web/README.md", errors)
-    require(web_readme, "not Public Beta", "web/README.md", errors)
-    require(web_readme, "../docs/quickstart.md", "web/README.md", errors)
-    require(web_readme, "../docs/release_status.md", "web/README.md", errors)
-    require(web_readme, "npm run build:pages", "web/README.md", errors)
-    require(web_readme, "npm run test:e2e:stage7", "web/README.md", errors)
+    for token in (
+        "# Empirical Finance Lab v0.1.0 browser application",
+        ACCEPTED_STAGE7_BASELINE,
+        "v0.1.0",
+        "Five heterogeneous real CRSP event-study cases",
+        "Researcher feedback",
+        "../docs/quickstart.md",
+        "../docs/release_status.md",
+        "npm run build:pages",
+        "npm run test:e2e:stage7",
+        "python tools/check_stage9_release_gate.py",
+    ):
+        require(web_readme, token, "web/README.md", errors)
     reject(web_readme, "pre-release Stage VII release-hardening candidate", "web/README.md", errors)
     reject(web_readme, "# Stage VI research application UI CI candidate", "web/README.md", errors)
 
     changelog = read("CHANGELOG.md")
-    require(changelog, "Stage VII release hardening accepted", "CHANGELOG.md", errors)
-    require(changelog, ACCEPTED_STAGE7_BASELINE, "CHANGELOG.md", errors)
-    require(changelog, "reproducibility ZIP round-trip", "CHANGELOG.md", errors)
-    require(changelog, "not Public Beta", "CHANGELOG.md", errors)
-    require(changelog, "no version-specific DOI", "CHANGELOG.md", errors)
+    for token in (
+        "## 0.1.0 - 2026-08-19",
+        "Stage VII release hardening accepted",
+        ACCEPTED_STAGE7_BASELINE,
+        "reproducibility ZIP round-trip",
+        "five heterogeneous CRSP event studies",
+        "Stage IX formal-release gate",
+        "No version-specific DOI",
+    ):
+        require(changelog, token, "CHANGELOG.md", errors)
 
     status = read("docs/release_status.md")
     for token in (
-        "accepted Stage VII release-hardening baseline on `main`",
+        "v0.1.0 validated formal release line",
         ACCEPTED_STAGE7_BASELINE,
-        "not Public Beta",
-        "no formal `v0.1.0` release",
-        "no version-specific DOI",
+        "a694d49df9716f9f87d359385598237363e4c3fc",
+        "621b0cafdcad3711d2aba3bef698d2e78d022144",
         "Stage VIII",
         "Stage IX",
-        "repository administrator-confirmed",
+        "Formal release tag: `v0.1.0`",
+        "Repository administrator-confirmed",
+        "No version-specific DOI is claimed unless",
         "https://mkhasan23.github.io/empirical-finance-lab/",
     ):
         require(status, token, "docs/release_status.md", errors)
@@ -99,20 +112,23 @@ def main() -> None:
     policy = read("docs/governance/release_policy.md")
     for token in (
         "Stage VII — accepted release hardening",
-        "Stage VIII — Public Beta / external validation",
+        "Stage VIII — accepted real-data external validation",
         "Stage IX — formal `v0.1.0` release",
         "version `0.0.0`",
-        "version-specific DOI",
+        "tag == software version",
         "exact-commit",
+        "CRSP/WRDS/vendor endorsement",
     ):
         require(policy, token, "docs/governance/release_policy.md", errors)
 
     citation = read("CITATION.cff")
-    require(citation, "version: 0.0.0", "CITATION.cff", errors)
-    require(citation, "pre-release research-software project", "CITATION.cff", errors)
-    for line in citation.splitlines():
-        if line.strip().lower().startswith(("doi:", "identifiers:")):
-            errors.append("CITATION.cff: pre-release metadata must not claim a DOI/identifier block")
+    for token in (
+        "version: 0.1.0",
+        "date-released: 2026-08-19",
+        "/releases/tag/v0.1.0",
+        "Muhammad Kamrul",
+    ):
+        require(citation, token, "CITATION.cff", errors)
 
     spec = read("docs/specifications/STAGE_VII_F1_RELEASE_DOCUMENTATION.md")
     require(spec, "Passing F1 does **not** complete Stage VII", "F1 specification", errors)
@@ -130,11 +146,15 @@ def main() -> None:
     required_manifest_entries = {
         ".github/dependabot.yml",
         ".github/workflows/release-hardening.yml",
+        ".github/workflows/formal-release.yml",
+        ".github/ISSUE_TEMPLATE/researcher_feedback.yml",
         "docs/quickstart.md",
         "docs/release_status.md",
         "docs/specifications/STAGE_VII_F1_RELEASE_DOCUMENTATION.md",
+        "docs/specifications/STAGE_IX_FORMAL_RELEASE.md",
         "examples/efl_tutorial_synthetic.csv",
         "tools/check_stage7_f1_release_docs_gate.py",
+        "tools/check_stage9_release_gate.py",
         "web/package-lock.json",
         "web/playwright.stage7.live.config.ts",
         "web/src/buildProvenance.ts",
@@ -146,7 +166,7 @@ def main() -> None:
     missing_manifest = sorted(required_manifest_entries.difference(manifest_lines))
     if missing_manifest:
         errors.append(
-            "REPOSITORY_MANIFEST.txt: missing required Stage VII entries: "
+            "REPOSITORY_MANIFEST.txt: missing required release entries: "
             + ", ".join(missing_manifest)
         )
 
@@ -170,8 +190,11 @@ def main() -> None:
         )
 
     index = read("web/index.html")
-    require(index, '<meta name="robots" content="noindex,nofollow" />', "web/index.html", errors)
-    reject(index, "Public Beta", "web/index.html", errors)
+    reject(index, '<meta name="robots" content="noindex,nofollow" />', "web/index.html", errors)
+    require(index, "v0.1.0 · validated release", "web/index.html", errors)
+    require(index, 'id="citation-version">0.1.0', "web/index.html", errors)
+    require(index, "five real CRSP event-study cases", "web/index.html", errors)
+    reject(index, "Pre-alpha", "web/index.html", errors)
 
     if errors:
         print("STAGE VII-F1 RELEASE DOCUMENTATION GATE: FAIL")
@@ -180,12 +203,12 @@ def main() -> None:
         raise SystemExit(1)
 
     print("STAGE VII-F1 RELEASE DOCUMENTATION GATE: PASS")
-    print(" - Stage VII accepted / Stage VIII / Stage IX status boundary: PASS")
-    print(" - pre-release citation/DOI boundary: PASS")
+    print(" - Stage VII/Stage VIII historical acceptance ledger: PASS")
+    print(" - v0.1.0 release/citation boundary: PASS")
     print(" - current onboarding/security/release links: PASS")
     print(f" - repository manifest: {len(manifest_lines)} tracked paths")
     print(" - Stage VII workflow invocation: PASS")
-    print(" - accepted pre-release noindex boundary: PASS")
+    print(" - indexable validated-release boundary: PASS")
 
 
 if __name__ == "__main__":

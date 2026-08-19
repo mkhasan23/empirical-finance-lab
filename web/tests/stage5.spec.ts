@@ -12,7 +12,7 @@ test("pinned runtime preserves scientific parity without analysis-time network t
   expect(runtime.python_version).toBe("3.14.2");
   expect(runtime.numpy_version).toBe("2.4.3");
   expect(runtime.scipy_version).toBe("1.18.0");
-  expect(runtime.efl_version).toBe("0.0.0");
+  expect(runtime.efl_version).toBe("0.1.0");
 
   for (const request of initializationRequests) {
     expect(["GET", "HEAD"]).toContain(request.method);

@@ -1,10 +1,11 @@
 """Empirical Finance Lab — audit-first empirical-finance research software.
 
 Stage IV implements the validated v0.1 numerical core against the frozen Stage III corpus.
-The project remains pre-alpha and is not yet a formal scholarly release.
+Version 0.1.0 is the first formal EFL release line; the econometric implementation
+remains anchored to the frozen Stage III/IV authority and Stage VIII real-data evidence.
 """
 
-__version__ = "0.0.0"
+__version__ = "0.1.0"
 
 from .engine import run_analysis
 from .schema import AnalysisSpecification, AuditResult, AuditStatus
