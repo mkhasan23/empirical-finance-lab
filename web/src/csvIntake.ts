@@ -19,20 +19,34 @@ export type ParsedLocalCsv = {
   rawText: string;
 };
 
+export type DateSourceFormat = "YYYY-MM-DD" | "YYYY/MM/DD" | "YYYYMMDD";
+
+export type DateCanonicalization = {
+  sourceFormats: DateSourceFormat[];
+  canonicalFormat: "YYYY-MM-DD";
+  transformedRows: number;
+};
+
 export type IntakeValidation = {
   issues: IntakeIssue[];
   rowCount: number;
   unsorted: boolean;
   duplicateDates: string[];
+  canonicalDates: string[];
+  dateCanonicalization: DateCanonicalization;
 };
 
 export type NormalizedCsv = {
   csvText: string;
   normalizedToOriginalSourceRow: number[];
   sortedAscending: boolean;
+  canonicalDates: string[];
+  dateCanonicalization: DateCanonicalization;
 };
 
 const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})$/;
+const YMD_SLASH_DATE = /^(\d{4})\/(\d{2})\/(\d{2})$/;
+const YMD_COMPACT_DATE = /^(\d{4})(\d{2})(\d{2})$/;
 
 export function parseCsv(text: string): ParsedLocalCsv {
   const source = text.replace(/^\uFEFF/, "");
@@ -94,18 +108,45 @@ export function defaultColumnMapping(headers: string[]): ColumnMapping {
   };
 }
 
-function validIsoDate(value: string): boolean {
-  const match = ISO_DATE.exec(value.trim());
-  if (!match) return false;
-  const year = Number(match[1]);
-  const month = Number(match[2]);
-  const day = Number(match[3]);
+function validCalendarDate(year: number, month: number, day: number): boolean {
   const d = new Date(Date.UTC(year, month - 1, day));
   return d.getUTCFullYear() === year && d.getUTCMonth() === month - 1 && d.getUTCDate() === day;
 }
 
+function canonicalFromMatch(match: RegExpExecArray): string | null {
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+  if (!validCalendarDate(year, month, day)) return null;
+  return `${String(year).padStart(4, "0")}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+}
+
+export function canonicalizeUnambiguousDate(value: string): { canonical: string; sourceFormat: DateSourceFormat } | null {
+  const text = value.trim();
+  const iso = ISO_DATE.exec(text);
+  if (iso) {
+    const canonical = canonicalFromMatch(iso);
+    return canonical ? { canonical, sourceFormat: "YYYY-MM-DD" } : null;
+  }
+  const slash = YMD_SLASH_DATE.exec(text);
+  if (slash) {
+    const canonical = canonicalFromMatch(slash);
+    return canonical ? { canonical, sourceFormat: "YYYY/MM/DD" } : null;
+  }
+  const compact = YMD_COMPACT_DATE.exec(text);
+  if (compact) {
+    const canonical = canonicalFromMatch(compact);
+    return canonical ? { canonical, sourceFormat: "YYYYMMDD" } : null;
+  }
+  return null;
+}
+
 function columnIndex(headers: string[], name: string): number {
   return headers.indexOf(name);
+}
+
+function emptyDateCanonicalization(): DateCanonicalization {
+  return { sourceFormats: [], canonicalFormat: "YYYY-MM-DD", transformedRows: 0 };
 }
 
 export function validateIntake(parsed: ParsedLocalCsv, mapping: ColumnMapping): IntakeValidation {
@@ -113,6 +154,15 @@ export function validateIntake(parsed: ParsedLocalCsv, mapping: ColumnMapping): 
   const rowCount = parsed.rows.length;
   const nonemptyHeaders = parsed.headers.filter((header) => header !== "");
   const duplicateHeaders = nonemptyHeaders.filter((header, index) => nonemptyHeaders.indexOf(header) !== index);
+  const emptyResult = (extraIssues: IntakeIssue[]): IntakeValidation => ({
+    issues: [...issues, ...extraIssues],
+    rowCount,
+    unsorted: false,
+    duplicateDates: [],
+    canonicalDates: [],
+    dateCanonicalization: emptyDateCanonicalization(),
+  });
+
   if (parsed.headers.length === 0) {
     issues.push({ code: "INTAKE_NO_HEADER", severity: "CRITICAL", message: "The CSV has no header row." });
   }
@@ -128,52 +178,85 @@ export function validateIntake(parsed: ParsedLocalCsv, mapping: ColumnMapping): 
 
   const selected = [mapping.date, mapping.securityReturn, mapping.benchmarkReturn];
   if (selected.some((value) => value === "")) {
-    issues.push({ code: "INTAKE_MAPPING_REQUIRED", severity: "CRITICAL", message: "Map the date, security-return, and benchmark-return columns explicitly." });
-    return { issues, rowCount, unsorted: false, duplicateDates: [] };
+    return emptyResult([{ code: "INTAKE_MAPPING_REQUIRED", severity: "CRITICAL", message: "Map the date, security-return, and benchmark-return columns explicitly." }]);
   }
   if (new Set(selected).size !== 3) {
-    issues.push({ code: "INTAKE_MAPPING_COLLISION", severity: "CRITICAL", message: "Each required field must map to a different source column." });
-    return { issues, rowCount, unsorted: false, duplicateDates: [] };
+    return emptyResult([{ code: "INTAKE_MAPPING_COLLISION", severity: "CRITICAL", message: "Each required field must map to a different source column." }]);
   }
 
   const dateIndex = columnIndex(parsed.headers, mapping.date);
   const secIndex = columnIndex(parsed.headers, mapping.securityReturn);
   const benchIndex = columnIndex(parsed.headers, mapping.benchmarkReturn);
   if ([dateIndex, secIndex, benchIndex].some((index) => index < 0)) {
-    issues.push({ code: "INTAKE_MAPPING_UNKNOWN", severity: "CRITICAL", message: "One or more selected source columns do not exist in the CSV header." });
-    return { issues, rowCount, unsorted: false, duplicateDates: [] };
+    return emptyResult([{ code: "INTAKE_MAPPING_UNKNOWN", severity: "CRITICAL", message: "One or more selected source columns do not exist in the CSV header." }]);
   }
 
   const malformedDateRows: number[] = [];
-  const dates: string[] = [];
+  const canonicalDates: string[] = [];
+  const sourceFormats = new Set<DateSourceFormat>();
+  let transformedRows = 0;
   parsed.rows.forEach((record, index) => {
-    const dateValue = (record[dateIndex] ?? "").trim();
-    if (!validIsoDate(dateValue)) malformedDateRows.push(index + 2);
-    dates.push(dateValue);
+    const original = (record[dateIndex] ?? "").trim();
+    const parsedDate = canonicalizeUnambiguousDate(original);
+    if (!parsedDate) {
+      malformedDateRows.push(index + 2);
+      canonicalDates.push(original);
+      return;
+    }
+    canonicalDates.push(parsedDate.canonical);
+    sourceFormats.add(parsedDate.sourceFormat);
+    if (parsedDate.canonical !== original) transformedRows += 1;
   });
+  const dateCanonicalization: DateCanonicalization = {
+    sourceFormats: [...sourceFormats].sort(),
+    canonicalFormat: "YYYY-MM-DD",
+    transformedRows,
+  };
+
   if (malformedDateRows.length > 0) {
-    issues.push({ code: "DATA_INVALID_DATE", severity: "CRITICAL", message: "One or more mapped dates are not valid ISO dates (YYYY-MM-DD).", sourceRows: malformedDateRows });
+    issues.push({
+      code: "DATA_INVALID_DATE",
+      severity: "CRITICAL",
+      message: "One or more mapped dates are not valid supported unambiguous calendar dates (YYYY-MM-DD, YYYY/MM/DD, or YYYYMMDD).",
+      sourceRows: malformedDateRows,
+    });
+  }
+  if (dateCanonicalization.sourceFormats.length > 1 && malformedDateRows.length === 0) {
+    issues.push({
+      code: "DATA_DATE_FORMAT_MIXED",
+      severity: "WARNING",
+      message: `Multiple unambiguous date formats were detected (${dateCanonicalization.sourceFormats.join(", ")}); EFL will canonicalize them deterministically to YYYY-MM-DD without changing the original file.`,
+    });
+  }
+  if (transformedRows > 0 && malformedDateRows.length === 0) {
+    issues.push({
+      code: "DATA_DATE_CANONICALIZED",
+      severity: "PASS",
+      message: `${transformedRows.toLocaleString()} mapped date value${transformedRows === 1 ? "" : "s"} will be canonicalized to YYYY-MM-DD for the scientific engine; original file bytes remain unchanged.`,
+    });
   }
 
   const counts = new Map<string, number>();
-  for (const dateValue of dates) counts.set(dateValue, (counts.get(dateValue) ?? 0) + 1);
-  const duplicateDates = [...counts.entries()].filter(([dateValue, count]) => dateValue !== "" && count > 1).map(([dateValue]) => dateValue);
+  for (const dateValue of canonicalDates) counts.set(dateValue, (counts.get(dateValue) ?? 0) + 1);
+  const duplicateDates = malformedDateRows.length === 0
+    ? [...counts.entries()].filter(([dateValue, count]) => dateValue !== "" && count > 1).map(([dateValue]) => dateValue)
+    : [];
   if (duplicateDates.length > 0) {
-    issues.push({ code: "DATA_DUPLICATE_DATE", severity: "CRITICAL", message: `Duplicate dates are not permitted: ${duplicateDates.slice(0, 6).join(", ")}${duplicateDates.length > 6 ? "…" : ""}.` });
+    issues.push({ code: "DATA_DUPLICATE_DATE", severity: "CRITICAL", message: `Duplicate dates are not permitted after canonicalization: ${duplicateDates.slice(0, 6).join(", ")}${duplicateDates.length > 6 ? "…" : ""}.` });
   }
 
   let unsorted = false;
   if (malformedDateRows.length === 0 && duplicateDates.length === 0) {
-    unsorted = dates.some((dateValue, index) => index > 0 && dates[index - 1]! >= dateValue);
+    unsorted = canonicalDates.some((dateValue, index) => index > 0 && canonicalDates[index - 1]! >= dateValue);
     if (unsorted) {
-      issues.push({ code: "DATA_UNSORTED", severity: "WARNING", message: "Dates are not strictly ascending. EFL will not sort silently; explicit approval is required before normalization." });
+      issues.push({ code: "DATA_UNSORTED", severity: "WARNING", message: "Dates are not strictly ascending after canonicalization. EFL will not sort silently; explicit approval is required before normalization." });
     }
   }
 
   if (!issues.some((issue) => issue.severity === "CRITICAL")) {
     issues.unshift({ code: "INTAKE_STRUCTURE_READY", severity: "PASS", message: `Local intake checks completed for ${rowCount.toLocaleString()} data rows. Authoritative scientific validation still occurs in the Python core.` });
   }
-  return { issues, rowCount, unsorted, duplicateDates };
+  return { issues, rowCount, unsorted, duplicateDates, canonicalDates, dateCanonicalization };
 }
 
 function csvEscape(value: string): string {
@@ -185,11 +268,10 @@ export function normalizeMappedCsv(parsed: ParsedLocalCsv, mapping: ColumnMappin
   if (validation.issues.some((issue) => issue.severity === "CRITICAL")) throw new Error("INTAKE_BLOCKED");
   if (validation.unsorted && !sortApproved) throw new Error("SORT_APPROVAL_REQUIRED");
 
-  const dateIndex = columnIndex(parsed.headers, mapping.date);
   const secIndex = columnIndex(parsed.headers, mapping.securityReturn);
   const benchIndex = columnIndex(parsed.headers, mapping.benchmarkReturn);
   const rows = parsed.rows.map((record, index) => ({
-    date: (record[dateIndex] ?? "").trim(),
+    date: validation.canonicalDates[index]!,
     securityReturn: (record[secIndex] ?? "").trim(),
     benchmarkReturn: (record[benchIndex] ?? "").trim(),
     originalSourceRow: index + 2,
@@ -204,6 +286,8 @@ export function normalizeMappedCsv(parsed: ParsedLocalCsv, mapping: ColumnMappin
     csvText: `${lines.join("\n")}\n`,
     normalizedToOriginalSourceRow: rows.map((row) => row.originalSourceRow),
     sortedAscending: validation.unsorted && sortApproved,
+    canonicalDates: rows.map((row) => row.date),
+    dateCanonicalization: validation.dateCanonicalization,
   };
 }
 

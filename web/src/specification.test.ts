@@ -29,6 +29,14 @@ describe("Stage VI specification locking", () => {
     expect(suggestEffectiveTradingDate("2025-08-02", "uncertain", dates)).toBe("2025-08-04");
   });
 
+  it("uses canonicalized YMD source dates for effective trading-date suggestions", () => {
+    const slashDates = ["2024/05/22", "2024/05/23", "2024/05/24"];
+    expect(suggestEffectiveTradingDate("2024-05-22", "after_market", slashDates)).toBe("2024-05-23");
+    expect(suggestEffectiveTradingDate("2024-05-23", "during_or_before_market", slashDates)).toBe("2024-05-23");
+    const compactDates = ["20240522", "20240523", "20240524"];
+    expect(suggestEffectiveTradingDate("2024-05-23", "during_or_before_market", compactDates)).toBe("2024-05-23");
+  });
+
   it("records mapping and explicit normalization inside the locked specification without changing the scientific core", () => {
     const draft = cloneDraft(DEFAULT_SPECIFICATION);
     draft.calendarEventDate = "2025-07-31";

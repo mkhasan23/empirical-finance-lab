@@ -1,4 +1,4 @@
-import type { ColumnMapping } from "./csvIntake";
+import { canonicalizeUnambiguousDate, type ColumnMapping } from "./csvIntake";
 
 export type WindowDraft = { start: number; end: number };
 
@@ -68,9 +68,14 @@ export function validateSpecificationDraft(draft: SpecificationDraft): SpecIssue
 
 export function suggestEffectiveTradingDate(calendarDate: string, eventTiming: SpecificationDraft["eventTiming"], observedDates: string[]): string {
   if (!calendarDate || observedDates.length === 0) return "";
-  const sameDayIndex = observedDates.indexOf(calendarDate);
+  const canonicalDates = observedDates
+    .map((value) => canonicalizeUnambiguousDate(value)?.canonical ?? "")
+    .filter(Boolean)
+    .sort();
+  if (canonicalDates.length === 0) return "";
+  const sameDayIndex = canonicalDates.indexOf(calendarDate);
   if (sameDayIndex >= 0 && eventTiming !== "after_market") return calendarDate;
-  const later = observedDates.find((date) => date > calendarDate);
+  const later = canonicalDates.find((date) => date > calendarDate);
   return later ?? "";
 }
 
