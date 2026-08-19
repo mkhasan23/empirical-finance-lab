@@ -102,7 +102,7 @@ else:
         'window.__EFL_STAGE5__.runFixture("KA-003")',
         'pathname === `${BASE_PATH}efl-core.json`',
         'expect(analysisRequests, "production-like scientific analysis emitted a network request").toEqual([])',
-        'expect(runtime.efl_version).toBe("0.1.0")',
+        'expect(runtime.efl_version).toBe("0.1.1")',
     ):
         if required not in test_text:
             errors.append(f"Stage VII production browser invariant missing: {required}")
@@ -142,7 +142,7 @@ else:
         'pathname === `${BASE_PATH}efl-core.json`',
         'expect(analysisRequests, "live production scientific analysis emitted a network request").toEqual([])',
         'toBe("cdn.jsdelivr.net")',
-        'expect(runtime.efl_version).toBe("0.1.0")',
+        'expect(runtime.efl_version).toBe("0.1.1")',
     ):
         if required not in live_test_text:
             errors.append(f"Stage VII live deployed-site invariant missing: {required}")
