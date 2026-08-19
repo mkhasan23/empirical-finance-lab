@@ -2,9 +2,13 @@
 
 **Audit-first research software for credible, transparent, and reproducible empirical finance.**
 
-> **Current software line — v0.1.1 validated patch release line.** The frozen scientific/external-validation baseline remains `a694d49df9716f9f87d359385598237363e4c3fc` (tree `621b0cafdcad3711d2aba3bef698d2e78d022144`). The immutable historical `v0.1.0` release remains fixed at `faf3dc6c5702dad3f5abd1dd15f7697fab5a5831`. The formal v0.1.1 release authority will be the immutable `v0.1.1` tag after exact-main Stage III–X validation. The Stage VII release-engineering baseline remains `08d8b1b8f5953b1e5cf93ec6a298a731757e0c87`.
+> **Current software line — v0.1.1 validated patch release line (formal).** The frozen scientific/external-validation baseline remains `a694d49df9716f9f87d359385598237363e4c3fc` (tree `621b0cafdcad3711d2aba3bef698d2e78d022144`). The immutable historical `v0.1.0` release remains fixed at `faf3dc6c5702dad3f5abd1dd15f7697fab5a5831`. The formal v0.1.1 release authority is the immutable `v0.1.1` tag at `55bc447141dde59853e670687bf46e383679eb78`, after exact-main and tag-context Stage III–X validation. The Stage VII release-engineering baseline remains `08d8b1b8f5953b1e5cf93ec6a298a731757e0c87`.
 
 **Live validated application:** https://mkhasan23.github.io/empirical-finance-lab/
+
+**Archival DOI for exact v0.1.1:** [10.5281/zenodo.22018410](https://doi.org/10.5281/zenodo.22018410)
+
+**Concept DOI for all EFL versions:** [10.5281/zenodo.22018409](https://doi.org/10.5281/zenodo.22018409)
 
 Start with [`docs/quickstart.md`](docs/quickstart.md). For the current release boundary and acceptance record, see [`docs/release_status.md`](docs/release_status.md).
 
@@ -148,7 +152,11 @@ Scientific changes are classified separately from software/reporting changes. Th
 
 ## Citation
 
-`CITATION.cff` is configured for version `0.1.1`. The immutable `v0.1.0` tag remains historical release authority; the governed `v0.1.1` tag becomes the patch-release authority only after exact-main and tag-specific Stage X gates pass. No version-specific DOI is claimed unless an archival DOI is actually minted and recorded in the release metadata. Researchers should cite the exact released version they use.
+`CITATION.cff` is configured for version `0.1.1` and records the exact version DOI `10.5281/zenodo.22018410`. The immutable `v0.1.0` tag remains historical release authority, while the immutable `v0.1.1` tag at `55bc447141dde59853e670687bf46e383679eb78` is the formal patch-release authority. The Concept DOI `10.5281/zenodo.22018409` represents the EFL software collection across versions.
+
+Recommended exact-version citation: **Hasan, M. K. (2026). _Empirical Finance Lab: Audit-First Tools for Credible Empirical Finance Research_ (Version v0.1.1) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.22018410**
+
+Researchers reproducing or auditing v0.1.1 should cite the version-specific DOI rather than the all-versions Concept DOI.
 
 ## License
 

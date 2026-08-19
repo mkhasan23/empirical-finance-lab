@@ -10,7 +10,7 @@
 - Preserved the general researcher-editable browser estimation-window default at `[-250,-30]`; the Stage VIII validation design `[-256,-46]` remains evidence-specific.
 - Preserved every Stage IV econometric module and all accepted Stage VIII numerical evidence; the only current change inside `src/empirical_finance_lab/**` is the exact `__init__.py` software-version metadata state.
 - Added Stage X patch-release governance while converting the current Stage IX gate into a historical immutability check for the already-released `v0.1.0` tag.
-- No version-specific DOI is claimed unless an archival DOI is actually minted and recorded.
+- Zenodo archived the exact v0.1.1 release snapshot with version DOI `10.5281/zenodo.22018410`; the all-versions Concept DOI is `10.5281/zenodo.22018409`.
 
 ## 0.1.0 - 2026-08-19
 
