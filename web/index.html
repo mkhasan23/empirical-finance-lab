@@ -66,6 +66,16 @@
                 <label>Date column
                   <select id="map-date" disabled><option value="">Open a file first…</option></select>
                 </label>
+                <label>Date-format interpretation
+                  <select id="date-format">
+                    <option value="auto" selected>Auto — deterministic detection</option>
+                    <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                    <option value="YYYY/MM/DD">YYYY/MM/DD</option>
+                    <option value="YYYYMMDD">YYYYMMDD</option>
+                    <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                    <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                  </select>
+                </label>
                 <label>Security-return column
                   <select id="map-security" disabled><option value="">Open a file first…</option></select>
                 </label>
@@ -79,6 +89,7 @@
                   </select>
                 </label>
               </div>
+              <p class="field-help">Auto safely accepts YYYY-MM-DD, YYYY/MM/DD, and YYYYMMDD. For year-last slash dates, explicitly choose MM/DD/YYYY or DD/MM/YYYY. EFL never guesses an ambiguous date interpretation.</p>
               <div id="sort-approval-wrap" class="acknowledgement" hidden>
                 <label><input id="sort-approved" type="checkbox" /> I explicitly approve sorting the mapped observations ascending by date before scientific validation.</label>
                 <p>The original byte hash and normalized-to-original row provenance are retained in the reproducibility bundle. EFL never sorts silently.</p>

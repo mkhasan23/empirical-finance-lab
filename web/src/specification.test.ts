@@ -47,4 +47,38 @@ describe("Stage VI specification locking", () => {
     expect(locked.source_columns).toEqual({ date: "trade_date", security_return: "ret", benchmark_return: "mkt" });
     expect(locked.normalization).toEqual({ sorted_ascending_with_explicit_approval: true });
   });
+
+  it("locks date-parser provenance into the preprocessing specification", () => {
+    const draft = cloneDraft(DEFAULT_SPECIFICATION);
+    draft.calendarEventDate = "2025-07-31";
+    draft.effectiveEventDate = "2025-07-31";
+    draft.effectiveDateConfirmed = true;
+    const locked = buildLockedSpecification(
+      draft,
+      { date: "trade_date", securityReturn: "ret", benchmarkReturn: "mkt" },
+      {
+        sortedAscending: false,
+        dateCanonicalization: {
+          requestedFormat: "MM/DD/YYYY",
+          sourceFormats: ["MM/DD/YYYY"],
+          canonicalFormat: "YYYY-MM-DD",
+          transformedRows: 211,
+          detectionMethod: "explicit_user_selection",
+          explicitAmbiguousFormatSelection: true,
+        },
+      },
+    );
+    expect(locked.normalization).toEqual({
+      sorted_ascending_with_explicit_approval: false,
+      date_canonicalization: {
+        requested_format: "MM/DD/YYYY",
+        detected_source_formats: ["MM/DD/YYYY"],
+        canonical_format: "YYYY-MM-DD",
+        transformed_rows: 211,
+        detection_method: "explicit_user_selection",
+        explicit_ambiguous_format_selection: true,
+      },
+    });
+  });
+
 });

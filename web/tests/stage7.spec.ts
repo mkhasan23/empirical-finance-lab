@@ -82,6 +82,57 @@ test("production Pages candidate completes the privacy-preserving reproducibilit
   await exerciseD2RoundTrip(page, EXPECTED_BUILD_COMMIT);
 });
 
+test("ambiguous year-last dates require an explicit interpretation and lock parser provenance", async ({ page }) => {
+  await page.goto("./");
+  await page.getByLabel("Choose CSV file").setInputFiles({
+    name: "ambiguous-dates.csv",
+    mimeType: "text/csv",
+    buffer: Buffer.from(
+      "date,security_return,benchmark_return\n" +
+      "05/06/2024,0.01,0.00\n" +
+      "06/07/2024,0.02,0.01\n",
+      "utf8",
+    ),
+  });
+
+  await expect(page.locator("#intake-issues")).toContainText("DATA_AMBIGUOUS_DATE_FORMAT");
+  await expect(page.getByRole("button", { name: "Continue to research specification" })).toBeDisabled();
+
+  await page.getByLabel("Date-format interpretation").selectOption("MM/DD/YYYY");
+  await expect(page.locator("#intake-issues")).toContainText("DATA_DATE_FORMAT_EXPLICIT");
+  await expect(page.locator("#intake-issues")).not.toContainText("DATA_AMBIGUOUS_DATE_FORMAT");
+  await expect(page.getByRole("button", { name: "Continue to research specification" })).toBeEnabled();
+  await page.getByRole("button", { name: "Continue to research specification" }).click();
+  const intakeHashes = await page.evaluate(() => ({
+    original: window.__EFL_STAGE6__.getOriginalSha256(),
+    engine: window.__EFL_STAGE6__.getEngineInputSha256(),
+  }));
+  expect(intakeHashes.original).toMatch(/^[a-f0-9]{64}$/);
+  expect(intakeHashes.engine).toMatch(/^[a-f0-9]{64}$/);
+  expect(intakeHashes.engine).not.toBe(intakeHashes.original);
+
+  await page.getByLabel("Calendar announcement date").fill("2024-05-06");
+  await page.getByLabel("Announcement timing").selectOption("during_or_before_market");
+  await page.getByRole("button", { name: "Use suggestion" }).click();
+  await expect(page.getByLabel("Effective event trading date")).toHaveValue("2024-05-06");
+  await page.getByLabel(/I confirm the effective event trading date/).check();
+  await page.getByRole("button", { name: "Review & lock specification" }).click();
+  await expect(page.locator("#lock-summary")).toContainText("MM/DD/YYYY → YYYY-MM-DD");
+
+  const normalization = await page.evaluate(() => {
+    const spec = window.__EFL_STAGE6__.getLockedSpecification() as Record<string, unknown>;
+    return spec.normalization as Record<string, unknown>;
+  });
+  expect(normalization.date_canonicalization).toEqual({
+    requested_format: "MM/DD/YYYY",
+    detected_source_formats: ["MM/DD/YYYY"],
+    canonical_format: "YYYY-MM-DD",
+    transformed_rows: 2,
+    detection_method: "explicit_user_selection",
+    explicit_ambiguous_format_selection: true,
+  });
+});
+
 async function completeTutorialAnalysis(page: Page): Promise<void> {
   await page.getByLabel("Choose CSV file").setInputFiles(TUTORIAL_CSV);
   await expect(page.getByRole("button", { name: "Continue to research specification" })).toBeEnabled();

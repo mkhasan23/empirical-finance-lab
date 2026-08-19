@@ -128,7 +128,7 @@ export function buildReproducibilityFiles(context: BundleContext): Record<string
     "A full reproduction therefore requires this ZIP plus the exact original local CSV used for the run.",
     "manifest.json records the SHA-256 of the original local file and the transformed engine input separately.",
     "analysis_spec.json is the locked research specification sent to the validated Python core.",
-    "normalization.json documents column mapping, any explicitly approved sort, and normalized-to-original source-row provenance.",
+    "normalization.json documents column mapping, date interpretation/canonicalization provenance when applicable, any explicitly approved sort, and normalized-to-original source-row provenance.",
     "scientific_result.json records the complete deterministic scientific result returned by the authoritative Python core.",
     "The D2 round-trip contract verifies the ZIP structure and payload hashes, the original-file hash, reconstructed engine input, locked specification, AnalysisID, ExecutionID, build provenance, and scientific-result identity before requiring a byte-identical deterministic re-export.",
     "event_time.csv reports the event-window values returned by the scientific core; no econometric quantity is recomputed by the exporter.",

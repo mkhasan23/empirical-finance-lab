@@ -21,12 +21,14 @@ export type ParsedLocalCsv = {
 
 export type DateInputMode = "auto" | "YYYY-MM-DD" | "YYYY/MM/DD" | "YYYYMMDD" | "MM/DD/YYYY" | "DD/MM/YYYY";
 export type DateSourceFormat = Exclude<DateInputMode, "auto">;
+export type DateDetectionMethod = "unambiguous_auto_detection" | "explicit_user_selection";
 
 export type DateCanonicalization = {
   requestedFormat: DateInputMode;
   sourceFormats: DateSourceFormat[];
   canonicalFormat: "YYYY-MM-DD";
   transformedRows: number;
+  detectionMethod: DateDetectionMethod;
   explicitAmbiguousFormatSelection: boolean;
 };
 
@@ -51,6 +53,19 @@ const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})$/;
 const YMD_SLASH_DATE = /^(\d{4})\/(\d{2})\/(\d{2})$/;
 const YMD_COMPACT_DATE = /^(\d{4})(\d{2})(\d{2})$/;
 const YEAR_LAST_SLASH_DATE = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+
+const DATE_INPUT_MODES: readonly DateInputMode[] = [
+  "auto",
+  "YYYY-MM-DD",
+  "YYYY/MM/DD",
+  "YYYYMMDD",
+  "MM/DD/YYYY",
+  "DD/MM/YYYY",
+];
+
+export function isDateInputMode(value: unknown): value is DateInputMode {
+  return typeof value === "string" && (DATE_INPUT_MODES as readonly string[]).includes(value);
+}
 
 export function parseCsv(text: string): ParsedLocalCsv {
   const source = text.replace(/^\uFEFF/, "");
@@ -186,6 +201,7 @@ function emptyDateCanonicalization(mode: DateInputMode): DateCanonicalization {
     sourceFormats: [],
     canonicalFormat: "YYYY-MM-DD",
     transformedRows: 0,
+    detectionMethod: mode === "auto" ? "unambiguous_auto_detection" : "explicit_user_selection",
     explicitAmbiguousFormatSelection: mode === "MM/DD/YYYY" || mode === "DD/MM/YYYY",
   };
 }
@@ -242,6 +258,7 @@ export function validateIntake(parsed: ParsedLocalCsv, mapping: ColumnMapping, d
     sourceFormats: [...sourceFormats].sort(),
     canonicalFormat: "YYYY-MM-DD",
     transformedRows,
+    detectionMethod: dateInputMode === "auto" ? "unambiguous_auto_detection" : "explicit_user_selection",
     explicitAmbiguousFormatSelection: dateInputMode === "MM/DD/YYYY" || dateInputMode === "DD/MM/YYYY",
   };
 
@@ -269,7 +286,7 @@ export function validateIntake(parsed: ParsedLocalCsv, mapping: ColumnMapping, d
       message: `Multiple unambiguous date formats were detected (${dateCanonicalization.sourceFormats.join(", ")}); EFL will canonicalize them deterministically to YYYY-MM-DD without changing the original file.`,
     });
   }
-  if (dateCanonicalization.explicitAmbiguousFormatSelection && malformedDateRows.length === 0) {
+  if (dateInputMode !== "auto" && malformedDateRows.length === 0) {
     issues.push({
       code: "DATA_DATE_FORMAT_EXPLICIT",
       severity: "PASS",

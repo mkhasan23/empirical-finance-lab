@@ -15,7 +15,7 @@ describe("Stage VI local CSV intake", () => {
     const mapping = { date: "DlyCalDt", securityReturn: "DlyRet", benchmarkReturn: "vwretd" };
     const report = validateIntake(parsed, mapping);
     expect(report.issues.some((issue) => issue.code === "DATA_INVALID_DATE")).toBe(false);
-    expect(report.dateCanonicalization).toEqual({ requestedFormat: "auto", sourceFormats: ["YYYY/MM/DD"], canonicalFormat: "YYYY-MM-DD", transformedRows: 3, explicitAmbiguousFormatSelection: false });
+    expect(report.dateCanonicalization).toEqual({ requestedFormat: "auto", sourceFormats: ["YYYY/MM/DD"], canonicalFormat: "YYYY-MM-DD", transformedRows: 3, detectionMethod: "unambiguous_auto_detection", explicitAmbiguousFormatSelection: false });
     const normalized = normalizeMappedCsv(parsed, mapping, false);
     expect(normalized.csvText).toBe("date,security_return,benchmark_return\n2024-05-22,-0.004571,-0.003777\n2024-05-23,0.093196,-0.008627\n2024-05-24,0.025723,0.007304\n");
     expect(normalized.normalizedToOriginalSourceRow).toEqual([2, 3, 4]);
@@ -35,7 +35,7 @@ describe("Stage VI local CSV intake", () => {
     expect(canonicalizeDate("05/06/2024", "DD/MM/YYYY")?.canonical).toBe("2024-06-05");
     const us = normalizeMappedCsv(parsed, mapping, false, "MM/DD/YYYY");
     expect(us.canonicalDates).toEqual(["2024-05-06", "2024-06-07"]);
-    expect(us.dateCanonicalization.explicitAmbiguousFormatSelection).toBe(true);
+    expect(us.dateCanonicalization).toMatchObject({ detectionMethod: "explicit_user_selection", explicitAmbiguousFormatSelection: true });
   });
 
   it("rejects rows that do not match the explicitly selected format", () => {
@@ -50,6 +50,14 @@ describe("Stage VI local CSV intake", () => {
     const report = validateIntake(parsed, { date: "d", securityReturn: "s", benchmarkReturn: "m" });
     expect(report.issues.some((issue) => issue.code === "DATA_DUPLICATE_DATE" && issue.severity === "CRITICAL")).toBe(true);
     expect(report.duplicateDates).toEqual(["2025-01-02"]);
+  });
+
+  it("warns on mixed but unambiguous YMD representations while preserving deterministic canonicalization", () => {
+    const parsed = parseCsv("d,s,m\n2025-01-02,0.01,0.00\n2025/01/03,0.02,0.01\n20250104,0.03,0.02\n");
+    const mapping = { date: "d", securityReturn: "s", benchmarkReturn: "m" };
+    const report = validateIntake(parsed, mapping);
+    expect(report.issues.some((issue) => issue.code === "DATA_DATE_FORMAT_MIXED" && issue.severity === "WARNING")).toBe(true);
+    expect(normalizeMappedCsv(parsed, mapping, false).canonicalDates).toEqual(["2025-01-02", "2025-01-03", "2025-01-04"]);
   });
 
   it("never sorts silently and preserves original source-row provenance after canonicalization and explicit sorting", () => {

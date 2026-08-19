@@ -1,4 +1,4 @@
-import { canonicalizeUnambiguousDate, type ColumnMapping } from "./csvIntake";
+import { canonicalizeUnambiguousDate, type ColumnMapping, type DateCanonicalization } from "./csvIntake";
 
 export type WindowDraft = { start: number; end: number };
 
@@ -82,7 +82,7 @@ export function suggestEffectiveTradingDate(calendarDate: string, eventTiming: S
 export function buildLockedSpecification(
   draft: SpecificationDraft,
   mapping: ColumnMapping,
-  normalization: { sortedAscending: boolean },
+  normalization: { sortedAscending: boolean; dateCanonicalization?: DateCanonicalization },
 ): Record<string, unknown> {
   const issues = validateSpecificationDraft(draft);
   if (issues.length > 0) throw new Error(`SPECIFICATION_BLOCKED:${issues.map((issue) => issue.code).join(",")}`);
@@ -113,6 +113,16 @@ export function buildLockedSpecification(
     },
     normalization: {
       sorted_ascending_with_explicit_approval: normalization.sortedAscending,
+      ...(normalization.dateCanonicalization ? {
+        date_canonicalization: {
+          requested_format: normalization.dateCanonicalization.requestedFormat,
+          detected_source_formats: [...normalization.dateCanonicalization.sourceFormats],
+          canonical_format: normalization.dateCanonicalization.canonicalFormat,
+          transformed_rows: normalization.dateCanonicalization.transformedRows,
+          detection_method: normalization.dateCanonicalization.detectionMethod,
+          explicit_ambiguous_format_selection: normalization.dateCanonicalization.explicitAmbiguousFormatSelection,
+        },
+      } : {}),
     },
   };
 }
