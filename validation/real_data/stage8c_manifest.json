@@ -1,0 +1,63 @@
+{
+  "derived_inputs": {
+    "KO": {
+      "analysis_id": "94417bf85156f227a60e49fb82689bd4b25d1dd3ca3dde0a38ce80ca14f32abd",
+      "canonical_data_sha256": "cc7bbdab6b26a9160ca3c7f184c94c2f6713968f7fbecf253bbf4976d7c932e2",
+      "filename": "efl_stage8_ko_input.csv",
+      "json_file_sha256": "b02a5f71767383938dfaaa8c8785322deec6f70b2d18f46bf62f089f1c6f5c9b",
+      "raw_file_sha256": "04c365ebdd277659ca0df745d3d17bb4b43c193cd4ff9a44c1218cd72a61e930",
+      "rows": 1277,
+      "specification_sha256": "b182af748e15c083819d11bbe475002f37d266518c5f40d53ac37e92446ea058"
+    },
+    "MSFT": {
+      "analysis_id": "79dcd309c5f8daa1f8f5add433546d691c973d2bfb21675ab712c87489a40c9d",
+      "canonical_data_sha256": "5f15351918215db9e246dc2cd959191a547c64c0b7be50d0ca2cb6a9facf296b",
+      "filename": "efl_stage8_msft_input.csv",
+      "json_file_sha256": "5c8a2e0d5805dd6198be852d2ac12a2bb49367e5f2210d986933f8b030adc7a8",
+      "raw_file_sha256": "1ba8d4c223e68153e7a8ca2c857054c1bcddfb98a6d863022202468f90c3f48e",
+      "rows": 1277,
+      "specification_sha256": "45216ec7b5c0849e76bae1e33b4c79181ce8fe9a17ba086195e0678fca307f0d"
+    },
+    "NVDA": {
+      "analysis_id": "5d9b3bb9e866a1847d7f21b4945bbc90140be7fdee3ba7d6bb9ef1af0b13b02b",
+      "canonical_data_sha256": "53a64ce4624ee449b62f4af036131eb00306eaf1925b4fe67e5e95753e3201d3",
+      "filename": "efl_stage8_nvda_input.csv",
+      "json_file_sha256": "1e907f83b2e9abf6dd6b95263f7a7592fcdc79c1b55374f11c57f646b1f9a457",
+      "raw_file_sha256": "b1e2e319452fca14a1afce86a5d84d81943972079cac23afddf90ec9c246d278",
+      "rows": 1277,
+      "specification_sha256": "ae9a2c71819a4d4d8cbfb0c759c0d43e0fd928464a34cf3fe830c7bf36130a2a"
+    },
+    "PG": {
+      "analysis_id": "da9ca93b20241014b4644b6f9b5bc5c1b2f1fabf038c5b9f69135abe35810811",
+      "canonical_data_sha256": "ae57807bda7822163e2352e9312951b24fda7bcbd72ddcdbad952181e3706309",
+      "filename": "efl_stage8_pg_input.csv",
+      "json_file_sha256": "394574d6c04146681c977bdefca31eaf5a82075aeba6d9b36fbb8f3f0023da4d",
+      "raw_file_sha256": "11a52d965665982804b4e1504763db4f8f79f6dcb720bf15aecb06995da86ca7",
+      "rows": 1277,
+      "specification_sha256": "e96d6d850bce91b0894641470d64e8fb2b77c2fd39c0136de3c6ac2332062093"
+    },
+    "WMT": {
+      "analysis_id": "a22617f7be1ee84e71651be915e7ad8d5422da5432c582885553950da1f4879c",
+      "canonical_data_sha256": "5163beaf147b177f6d4456bff6c6d32502597e3c34d73be5537d87f1e5b68699",
+      "filename": "efl_stage8_wmt_input.csv",
+      "json_file_sha256": "061b839088a460ec81b40592c0e713cfd98b82d44c49e3fb37b99735c6e3cf1c",
+      "raw_file_sha256": "db99fbff850941d1839951ec2e47b16cfa7f7caf9966338d7f5afb484f1bc319",
+      "rows": 1277,
+      "specification_sha256": "c969841b5e882f34b340c2747b086b8c4982805ee4d9511e56cc2ecd416dc939"
+    }
+  },
+  "efl_commit": "ebbb1d0629f9fd1a128ff3d09f1494bbcaf1fb39",
+  "proprietary_data_policy": "Derived three-column CRSP inputs are private-use artifacts and must not be committed to the public repository.",
+  "raw_crsp_source": {
+    "filename": "efl_stage8_crsp_raw.csv",
+    "included_in_private_package": false,
+    "included_in_public_package": false,
+    "note": "Original uploaded CRSP source is intentionally not duplicated into either package.",
+    "sha256": "68d365faad1290ac01d9d07b64cdb037375d234aa5298e25b94897989d2a1557"
+  },
+  "result_files": {
+    "stage8c_parity_results.csv": "9500e87f47b0ec77fcbb84e6924f4e2568d49b6e72935e2af88fb52091a5b3b9",
+    "stage8c_parity_results.json": "2166705525a6ce4c5b263ea96d5341f8c107106ba36dabee582cba534ef6a981"
+  },
+  "stage": "VIII-C"
+}
