@@ -188,6 +188,7 @@ web/package.json
 web/playwright.config.ts
 web/playwright.stage7.config.ts
 web/playwright.stage7.live.config.ts
+web/public/sitemap.xml
 web/src/application.ts
 web/src/buildProvenance.ts
 web/src/csvIntake.test.ts

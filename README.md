@@ -2,11 +2,11 @@
 
 **Audit-first research software for credible, transparent, and reproducible empirical finance.**
 
-> **Current software line — v0.1.0 validated release.** The frozen scientific/external-validation baseline remains `a694d49df9716f9f87d359385598237363e4c3fc` (tree `621b0cafdcad3711d2aba3bef698d2e78d022144`). The exact formal release is the immutable `v0.1.0` tag after the Stage IX tag gate passes; before that tag exists, the same governed default-branch state is the release candidate. The Stage VII release-engineering baseline remains `08d8b1b8f5953b1e5cf93ec6a298a731757e0c87`.
+> **Current software line — v0.1.0 validated release.** The frozen scientific/external-validation baseline remains `a694d49df9716f9f87d359385598237363e4c3fc` (tree `621b0cafdcad3711d2aba3bef698d2e78d022144`). The exact formal v0.1.0 release is the immutable `v0.1.0` tag at commit `faf3dc6c5702dad3f5abd1dd15f7697fab5a5831`. The Stage VII release-engineering baseline remains `08d8b1b8f5953b1e5cf93ec6a298a731757e0c87`.
 
 **Live validated application:** https://mkhasan23.github.io/empirical-finance-lab/
 
-Start with [`docs/quickstart.md`](docs/quickstart.md). For the exact pre-release boundary and acceptance record, see [`docs/release_status.md`](docs/release_status.md).
+Start with [`docs/quickstart.md`](docs/quickstart.md). For the current release boundary and acceptance record, see [`docs/release_status.md`](docs/release_status.md).
 
 ## Scientific workflow
 
@@ -43,7 +43,7 @@ The `web/` application implements:
 6. **Audit** — PASS / WARNING / CRITICAL / NOT ASSESSABLE findings remain explicit;
 7. **Stress-test** — prespecified robustness and historical placebo outputs;
 8. **Interpret** — deterministic Referee Mode distinguishes association from causal attribution;
-9. **Reproduce/Cite** — deterministic local reproducibility ZIP with hashes, specification, results, audits, environment, build provenance, and pre-release citation status.
+9. **Reproduce/Cite** — deterministic local reproducibility ZIP with hashes, specification, results, audits, environment, build provenance, and release-specific citation metadata.
 
 The browser application does **not** re-estimate econometric quantities in TypeScript. Charts and tables display values returned by the scientific core.
 
@@ -132,7 +132,7 @@ Scientific changes are classified separately from software/reporting changes. Th
 
 ## Citation
 
-`CITATION.cff` is configured for version `0.1.0`. The immutable `v0.1.0` tag is the formal release authority once its Stage IX tag gate passes. No version-specific DOI is claimed unless an archival DOI is actually minted and recorded in the release metadata. Researchers should cite the exact released version they use.
+`CITATION.cff` is configured for version `0.1.0`. The immutable `v0.1.0` tag is the formal v0.1.0 release authority. No version-specific DOI is claimed unless an archival DOI is actually minted and recorded in the release metadata. Researchers should cite the exact released version they use.
 
 ## License
 
