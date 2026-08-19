@@ -20,35 +20,44 @@ Stage VIII independently validated EFL on five heterogeneous real CRSP event-stu
 
 Stage VIII supports a tested-case numerical-parity claim. It does not imply CRSP/WRDS/vendor endorsement, representativeness of the five events, universal empirical validity, or causal identification.
 
-A separate Public Beta waiting period is **not required** before the first formal release once Stage VIII and the complete release gates have passed. External issue discovery remains open after release.
+### Stage IX — immutable historical `v0.1.0` release
 
-### Stage IX — formal `v0.1.0` release
+`v0.1.0` is the first formal EFL release and is permanently fixed at commit `faf3dc6c5702dad3f5abd1dd15f7697fab5a5831`.
 
-The first formal release requires:
+Later repository states must not move, recreate, or redefine the `v0.1.0` tag. The current Stage IX gate verifies the historical tag and its release metadata rather than requiring the current development line to remain version `0.1.0`.
 
-- version `0.1.0` to be internally consistent across Python package/runtime metadata and citation metadata;
+### Stage X — governed `v0.1.1` patch release
+
+v0.1.1 is an interoperability/usability/citation/discoverability patch. It does not change market-model estimation, abnormal returns, CAR, classical inference, PCG64 permutation inference, placebo computation, robustness computation, or the accepted Stage VIII numerical evidence.
+
+The patch release requires:
+
+- version `0.1.1` to be internally consistent across Python package/runtime metadata, browser expectations, project metadata, and citation metadata;
 - the authoritative Stage III corpus to remain intact;
 - all Stage IV econometric modules to remain byte-identical to the accepted frozen scientific tree;
-- any release-time scientific-package metadata exception to be closed and exact, not an open path exemption;
+- the exact v0.1.1 `__init__.py` release-metadata state to be enumerated by the closed Stage VI/Stage X gates;
 - Stage V browser parity, Stage VI application gates, Stage VII release-hardening gates, and Stage VIII real-data evidence to remain green;
-- the Stage IX release gate to pass on the exact candidate commit;
+- the historical Stage IX v0.1.0 integrity gate to remain green;
+- the Stage X patch-release gate to pass on the exact candidate commit;
 - governed integration to `main`;
-- fresh Stage III–IX validation on the resulting exact `main` commit;
-- immutable tag `v0.1.0` to point to that exact validated main commit;
-- a tag-triggered Stage IX gate to verify `tag == software version` and `tag target == exact current origin/main commit`; and
+- fresh Stage III–X validation on the resulting exact `main` commit;
+- immutable tag `v0.1.1` to point to that exact validated main commit;
+- a tag-triggered Stage X gate to verify `tag == software version` and `tag target == exact current origin/main commit`; and
 - the GitHub Release to be published from that already-validated tag.
 
-The formal release tag must never be moved to a different commit.
+The v0.1.1 tag must never be moved to a different commit.
 
 ## Release version authority
 
-`pyproject.toml` and `src/empirical_finance_lab/__init__.py` must agree on the software version. `CITATION.cff` must cite the same release line. The private frontend workspace package version is not the scholarly software-version authority; browser runtime and reproducibility outputs report the validated Python-core software version.
+`pyproject.toml` and `src/empirical_finance_lab/__init__.py` must agree on the software version. `CITATION.cff` must cite the same release line. The private frontend workspace package version `0.0.0` is not the scholarly software-version authority; browser runtime and reproducibility outputs report the validated Python-core software version.
 
 ## Scientific-change rule
 
 Golden/reference results are independent authority. They must not be regenerated merely because production code disagrees with them.
 
-For `v0.1.0`, the Stage IV econometric implementation is unchanged. The only allowed frozen-core file delta is the exact `src/empirical_finance_lab/__init__.py` release-metadata state enumerated by the Stage VI/IX gates. Any future numerical or methodology change requires the classifications and evidence described in `CONTRIBUTING.md`.
+For v0.1.1, every Stage IV econometric module remains unchanged. The only allowed frozen-core delta is the exact `src/empirical_finance_lab/__init__.py` release-metadata state enumerated by the Stage VI/Stage X gates. Any future numerical or methodology change requires the classifications and evidence described in `CONTRIBUTING.md`.
+
+The general browser estimation-window default may remain researcher-editable at `[-250,-30]`. The Stage VIII validation design `[-256,-46]` is evidence-specific and is not silently imposed as a universal research default.
 
 ## Dependency and supply-chain rule
 
@@ -60,9 +69,9 @@ Licensed CRSP observations and private Stage VIII derived input CSVs must not be
 
 ## Citation and archival rule
 
-The formal GitHub release may exist without a DOI. `CITATION.cff` must identify the released version and release date.
+A formal GitHub release may exist without a DOI. `CITATION.cff` must identify the released version and release date.
 
-If a version-specific archival DOI is later minted, it must identify the exact immutable `v0.1.0` release. The DOI may be added to current metadata only after it actually exists. No placeholder, guessed, or unissued DOI may be advertised.
+If a version-specific archival DOI is later minted for v0.1.1, it must identify the exact immutable `v0.1.1` release. The DOI may be added to current metadata only after it actually exists. No placeholder, guessed, reserved-by-assumption, or unissued DOI may be advertised.
 
 ## External feedback rule
 

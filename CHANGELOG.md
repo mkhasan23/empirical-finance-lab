@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.1.1 - 2026-08-19
+
+- Added deterministic browser date interoperability for `YYYY-MM-DD`, `YYYY/MM/DD`, and `YYYYMMDD`, plus explicit researcher-controlled `MM/DD/YYYY` versus `DD/MM/YYYY` interpretation without ambiguous guessing.
+- Canonicalized accepted source dates to strict internal `YYYY-MM-DD` before duplicate, ordering, and effective-trading-date checks, while preserving original-file SHA-256, engine-input SHA-256, source-row provenance, and date-parser provenance.
+- Added visible CRSP-shaped mapping suggestions for `DlyCalDt`, `DlyRet`, and `vwretd` without changing the one-security/one-event scientific scope.
+- Added visible author and scholarly citation information, canonical/Open Graph metadata, exact Google Search Console verification metadata, and a public sitemap.
+- Removed stale pre-release wording from current documentation and derived reproducibility-bundle release tag/URL from the authoritative software version.
+- Preserved the general researcher-editable browser estimation-window default at `[-250,-30]`; the Stage VIII validation design `[-256,-46]` remains evidence-specific.
+- Preserved every Stage IV econometric module and all accepted Stage VIII numerical evidence; the only current change inside `src/empirical_finance_lab/**` is the exact `__init__.py` software-version metadata state.
+- Added Stage X patch-release governance while converting the current Stage IX gate into a historical immutability check for the already-released `v0.1.0` tag.
+- No version-specific DOI is claimed unless an archival DOI is actually minted and recorded.
+
 ## 0.1.0 - 2026-08-19
 
 - Established the first governed formal EFL release line, with version `0.1.0` synchronized across Python package metadata, runtime reporting, citation metadata, browser expectations, and reproducibility exports.

@@ -10,6 +10,7 @@
 .github/workflows/corpus-integrity.yml
 .github/workflows/formal-release.yml
 .github/workflows/numerical-core.yml
+.github/workflows/patch-release.yml
 .github/workflows/real-data-validation.yml
 .github/workflows/release-hardening.yml
 .gitignore
@@ -42,6 +43,7 @@ docs/specifications/STAGE_VII_F2_EVIDENCE_ACCEPTANCE.md
 docs/specifications/STAGE_VII_RELEASE_HARDENING.md
 docs/specifications/STAGE_VI_APPLICATION_UI.md
 docs/specifications/STAGE_V_BROWSER_RUNTIME.md
+docs/specifications/STAGE_X_V0.1.1_PATCH_RELEASE.md
 examples/README.md
 examples/efl_tutorial_specification.json
 examples/efl_tutorial_synthetic.csv
@@ -82,6 +84,7 @@ tests/unit/test_validation_and_event_time.py
 tools/benchmark_stage4.py
 tools/build_stage5_browser_assets.py
 tools/check_corpus_integrity.py
+tools/check_stage10_patch_release_gate.py
 tools/check_stage4_gate.py
 tools/check_stage5_static_gate.py
 tools/check_stage6_static_gate.py

@@ -2,28 +2,37 @@
 
 ## Current state
 
-Empirical Finance Lab is configured for the **v0.1.0 validated formal release line**.
+Empirical Finance Lab is configured for the **v0.1.1 validated patch release line**.
 
 - Accepted Stage VII release-hardening baseline: `08d8b1b8f5953b1e5cf93ec6a298a731757e0c87`.
 - Accepted Stage VIII scientific/external-validation baseline: `a694d49df9716f9f87d359385598237363e4c3fc`.
 - Accepted Stage VIII scientific repository tree: `621b0cafdcad3711d2aba3bef698d2e78d022144`.
-- Stage VIII acceptance-record main commit: `0d8dc18b751eb6bfda0b4285265d8a83bc816322`.
-- Formal release tag: `v0.1.0`.
-- Formal release authority: the exact commit named by `v0.1.0` **after** the tag-specific Stage IX gate passes.
-- Before that tag exists and passes Stage IX, the governed `main` state carrying these metadata is the release candidate.
+- Immutable historical v0.1.0 release tag: `v0.1.0`, fixed at `faf3dc6c5702dad3f5abd1dd15f7697fab5a5831`.
+- Intended patch release tag: `v0.1.1`.
+- Before `v0.1.1` exists and passes the Stage X tag gate, the governed candidate state is not yet the immutable formal patch-release authority.
 - No version-specific DOI is claimed unless an archival DOI is actually minted and recorded.
 
 The public GitHub Pages application is:
 
 `https://mkhasan23.github.io/empirical-finance-lab/`
 
-The released application remains privacy-preserving: research CSVs are opened locally in browser memory, EFL provides no research-data upload endpoint, and scientific analysis-phase network traffic is required to remain zero.
+Research CSVs are opened locally in browser memory. EFL provides no research-data upload endpoint, and scientific analysis-phase network traffic is required to remain zero.
+
+## v0.1.1 patch scope
+
+v0.1.1 is an interoperability/usability/citation/discoverability patch, not a numerical-method change.
+
+The browser now accepts deterministic year-first source dates (`YYYY-MM-DD`, `YYYY/MM/DD`, `YYYYMMDD`) and requires an explicit researcher choice for ambiguous year-last slash dates (`MM/DD/YYYY` versus `DD/MM/YYYY`). Accepted dates are canonicalized to `YYYY-MM-DD` before duplicate, ordering, and effective-trading-date checks. The locked specification and reproducibility bundle retain date-parser provenance, and original-file versus engine-input SHA-256 identities remain separate.
+
+CRSP-shaped headers `DlyCalDt`, `DlyRet`, and `vwretd` receive visible mapping suggestions. The application also exposes author/citation metadata and public search-discovery metadata.
+
+The general browser estimation-window default remains `[-250,-30]` and is researcher-editable. The accepted Stage VIII real-CRSP validation design remains `[-256,-46]`; v0.1.1 does not redefine that evidence.
 
 ## Scientific validation authority
 
-The formal release does not redefine the independent scientific authority.
+The formal patch release does not redefine the independent scientific authority.
 
-The accepted Stage III validation corpus and Stage IV numerical modules remain the scientific foundation. Stage VI byte-protection continues to preserve that corpus/core. For v0.1.0, the only permitted release-time change inside `src/empirical_finance_lab/**` is the exact `__init__.py` metadata transition from `0.0.0` to `0.1.0`; every econometric module remains byte-identical to the accepted frozen tree.
+The accepted Stage III validation corpus and Stage IV numerical modules remain the scientific foundation. Stage VI byte-protection continues to preserve that corpus/core. For v0.1.1, every econometric module remains byte-identical to the accepted frozen tree. The only permitted current delta inside `src/empirical_finance_lab/**` is the exact `__init__.py` release-metadata transition to version `0.1.1`.
 
 The accepted Stage VIII external-validation baseline remains:
 
@@ -32,8 +41,6 @@ The accepted Stage VIII external-validation baseline remains:
 with tree:
 
 `621b0cafdcad3711d2aba3bef698d2e78d022144`
-
-That baseline is intentionally retained even though the release metadata changes the software version and therefore runtime/reproducibility identifiers.
 
 ## Real-CRSP external validation
 
@@ -45,9 +52,7 @@ Across the scientific comparison fields:
 - all five cases satisfied the established numerical tolerances; and
 - all five permutation extreme counts matched exactly.
 
-The source CRSP extract and five derived EFL input CSVs remain private and are not distributed. The public repository contains only locked specifications, hashes, numerical summaries, and public-safe parity evidence.
-
-This supports the statement **"validated on five real CRSP event-study cases."** It does not mean CRSP, WRDS, S&P, LSEG, or another vendor endorses EFL; it does not establish universal validity; and it does not establish causal identification.
+Licensed CRSP observations and the five derived EFL input CSVs remain private and are not distributed. This is tested-case numerical parity, not CRSP/WRDS/vendor endorsement, universal validation, or causal certification.
 
 ## Stage VII evidence retained
 
@@ -58,42 +63,38 @@ The Stage VII release-engineering evidence remains consolidated in:
 
 The accepted Stage VII integration baseline remains `08d8b1b8f5953b1e5cf93ec6a298a731757e0c87`. Repository administrator-confirmed governance settings remain part of that historical acceptance record.
 
-## Stage VIII evidence retained
+## Historical v0.1.0 authority
 
-The scientific and licensing-boundary record is:
+Formal release tag: `v0.1.0`. The immutable `v0.1.0` tag remains the first formal EFL release. Current Stage IX governance verifies that historical tag rather than forcing later patch lines to masquerade as v0.1.0. The tag itself is never moved, recreated, or redefined.
 
-[`STAGE_VIII_REAL_DATA_VALIDATION.md`](STAGE_VIII_REAL_DATA_VALIDATION.md)
+## Stage X patch-release contract
 
-Pull request #10 integrated the Stage VIII evidence to exact main baseline `a694d49df9716f9f87d359385598237363e4c3fc`. Fresh Stage III–VIII workflows passed on that state. The first Stage VI WebKit main attempt stalled during browser-runtime initialization; the same-commit failed-job rerun passed without source changes, so the event remains recorded as transient rather than a scientific/application correction.
-
-## Stage IX formal-release contract
-
-The v0.1.0 release is accepted only after all of the following hold on the governed release candidate:
+The v0.1.1 release requires all of the following:
 
 1. Stages III–VIII pass on the exact candidate commit.
-2. `stage9-required` passes on that same commit.
-3. the candidate is integrated to `main` through the governed pull-request path;
-4. Stages III–IX pass again on the resulting exact `main` commit;
-5. the immutable tag `v0.1.0` is created at that exact validated `main` commit; and
-6. the tag-triggered Stage IX gate verifies that the tag name and source version are identical.
+2. The historical Stage IX v0.1.0 integrity gate remains green.
+3. `stage10-required` passes on that same candidate commit.
+4. The candidate is integrated to `main` through the governed pull-request path.
+5. Stages III–X pass again on the resulting exact `main` commit.
+6. The immutable tag `v0.1.1` is created at that exact validated main commit.
+7. The tag-triggered Stage X gate verifies `tag == software version` and `tag target == exact current origin/main commit`.
+8. The GitHub Release is published from that already-validated tag.
 
-The GitHub Release should then be published from that existing validated tag. The release must not be retagged to a different commit.
+The release tag must never be moved to a different commit.
 
 ## Citation and DOI boundary
 
-`CITATION.cff` identifies version `0.1.0` and the intended release date. The formal citation authority is the validated `v0.1.0` release.
+`CITATION.cff` identifies version `0.1.1` and release date `2026-08-19`. The formal patch-release citation authority becomes the validated `v0.1.1` tag.
 
-A DOI is optional to the GitHub software release itself. If an archival service later mints a version-specific DOI, that DOI must refer to the exact `v0.1.0` release and may then be added to current citation/release metadata in a separately governed metadata-only update. EFL must never invent, reserve by guess, or advertise a DOI that has not actually been issued.
+A DOI is optional to the GitHub software release itself. If an archival service mints a version-specific DOI, that DOI must refer to the exact immutable `v0.1.1` release. EFL must never invent, guess, or advertise an identifier that has not actually been issued.
 
 ## External feedback
 
-Post-release issue discovery remains open through the structured **Researcher feedback** issue form.
-
-Public issues must not contain proprietary, licensed, confidential, or observation-level research data. Minimal synthetic reproductions are preferred.
+Post-release issue discovery remains open through the structured **Researcher feedback** issue form. Public issues must not contain proprietary, licensed, confidential, or observation-level research data; minimal synthetic reproductions are preferred.
 
 ## First run
 
-Use the deterministic synthetic tutorial in [`quickstart.md`](quickstart.md). It is a workflow/known-answer demonstration, not a real security, investment recommendation, or causal claim.
+Use the deterministic synthetic tutorial in [`quickstart.md`](quickstart.md). Its `[-140,-20]` estimation window is a short synthetic known-answer tutorial specification, not the general browser default and not the Stage VIII real-CRSP validation design.
 
 ## Release policy
 

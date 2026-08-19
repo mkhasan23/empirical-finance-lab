@@ -114,6 +114,8 @@ def main() -> None:
         '"repository_governance_settings_machine_verified": False',
         '"release_candidate_v0_1_0"',
         '"stage9_release_tag_required"',
+        '"release_candidate_current"',
+        '"current_release_tag_required"',
     ):
         require(writer, token, "F2 evidence writer", errors)
 
@@ -147,18 +149,22 @@ def main() -> None:
         "STAGE_VII_ACCEPTANCE_CHECKLIST.md",
         "Repository administrator-confirmed",
         "v0.1.0",
+        "faf3dc6c5702dad3f5abd1dd15f7697fab5a5831",
+        "v0.1.1",
         "Stage VIII",
         "Stage IX",
+        "Stage X",
         "Formal release tag: `v0.1.0`",
+        "Intended patch release tag: `v0.1.1`",
         "No version-specific DOI is claimed unless",
     ):
         require(status, token, "docs/release_status.md", errors)
     reject(status, "Stage VII as a whole is **not yet accepted**", "docs/release_status.md", errors)
 
     citation = read("CITATION.cff")
-    require(citation, "version: 0.1.0", "CITATION.cff", errors)
+    require(citation, "version: 0.1.1", "CITATION.cff", errors)
     require(citation, "date-released: 2026-08-19", "CITATION.cff", errors)
-    require(citation, "/releases/tag/v0.1.0", "CITATION.cff", errors)
+    require(citation, "/releases/tag/v0.1.1", "CITATION.cff", errors)
 
     manifest_lines = [
         line.strip()
